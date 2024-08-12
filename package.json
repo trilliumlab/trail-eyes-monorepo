@@ -4,7 +4,7 @@
 	"description": "Elysia Backend + React Native + Next.js",
 	"workspaces": ["apps/*", "packages/*"],
 	"scripts": {
-		"dev": "concurrently \"cd apps/backend && bun dev\" \"cd apps/web-old && bun --bun run dev\"",
+		"dev": "concurrently -n 'backend,panel' -c '#007755,#550077' 'cd apps/backend && bun dev' 'cd apps/panel && bun --bun run dev'",
 		"typecheck": "bunx --bun tsc",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --apply .",
