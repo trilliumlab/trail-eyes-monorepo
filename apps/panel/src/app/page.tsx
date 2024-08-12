@@ -1,5 +1,8 @@
-import { api } from 'backend-api';
+import { edenTreaty } from '@elysiajs/eden';
+import { Api } from 'backend-api';
 import Image from 'next/image';
+
+const api = edenTreaty<Api>('http://localhost:8000');
 
 async function getData() {
   const response = await api['hello-world'].get();

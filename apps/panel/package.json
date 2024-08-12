@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "backend-api": "workspace:*",
+    "@elysiajs/eden": "^1.1.2",
     "react": "^18",
     "react-dom": "^18",
     "next": "14.2.5"
   },
   "devDependencies": {
+    "backend-api": "workspace:*",
+    "elysia": "^1.1.5",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",

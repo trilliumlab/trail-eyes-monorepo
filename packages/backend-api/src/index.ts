@@ -1,1 +1,1 @@
-export { api } from './eden';
+export type { App as Api } from 'backend';
