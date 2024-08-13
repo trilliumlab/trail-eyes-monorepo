@@ -1,19 +1,6 @@
-import { edenTreaty } from '@elysiajs/eden';
-import { Api } from 'backend-api';
 import Image from 'next/image';
 
-const api = edenTreaty<Api>('http://localhost:8000');
-
-async function getData() {
-  const response = await api['hello-world'].get();
-  return response;
-}
-
 export default async function Home() {
-  const response = await getData();
-
-  console.log('Response from backend', response.data);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -28,7 +15,15 @@ export default async function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By <Image src="/vercel.svg" alt="Vercel Logo" className="dark:invert" width={100} height={24} priority />
+            By{' '}
+            <Image
+              src="/vercel.svg"
+              alt="Vercel Logo"
+              className="dark:invert"
+              width={100}
+              height={24}
+              priority
+            />
           </a>
         </div>
       </div>
@@ -91,7 +86,9 @@ export default async function Home() {
               -&gt;
             </span>
           </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">Explore starter templates for Next.js.</p>
+          <p className="m-0 max-w-[30ch] text-sm opacity-50">
+            Explore starter templates for Next.js.
+          </p>
         </a>
 
         <a
