@@ -2,7 +2,9 @@ import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import swagger from '@elysiajs/swagger';
 import { ThemeId } from '@elysiajs/swagger/scalar/types';
+
 import routes from '~data/routes/routes.json';
+import startMarkers from '~data/routes/start-markers.json';
 
 const app = new Elysia()
   .use(
@@ -18,6 +20,9 @@ const app = new Elysia()
   .use(cors())
   .get('/routes', () => {
     return routes;
+  })
+  .get('/start-markers', () => {
+    return startMarkers;
   })
   .listen(8000);
 
