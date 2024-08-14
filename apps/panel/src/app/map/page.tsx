@@ -1,8 +1,15 @@
 'use client';
-import { Map as MapComponent, Source, Layer, LineLayer, CircleLayer } from 'react-map-gl/maplibre';
+import {
+  Map as MapComponent,
+  Source,
+  Layer,
+  LineLayer,
+  CircleLayer,
+  SymbolLayer,
+} from 'react-map-gl/maplibre';
 
 export default function MapPage() {
-  const darkMode = true;
+  const darkMode = false;
 
   const lineWidth = 2;
   const routes: LineLayer = {
@@ -14,10 +21,10 @@ export default function MapPage() {
       'line-cap': 'round',
     },
     paint: {
-      'line-color': darkMode ? '#aa1100' : '#FF2200',
-      // 'line-width': ['interpolate', ['exponential', 2], ['zoom'], 10, 1, 12, 2, 16, 8, 20, 32],
-      'line-width': ['interpolate', ['exponential', 2], ['zoom'], 6, 0, 12, 2, 22, 256],
-      'line-opacity': ['interpolate', ['exponential', 2], ['zoom'], 6, 0, 10, 1],
+      // 'line-color': darkMode ? '#aa1100' : '#FF2200',
+      'line-color': ['get', 'stroke'],
+      'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 6, 0, 12, 2, 22, 128],
+      'line-opacity': ['interpolate', ['exponential', 1.6], ['zoom'], 6, 0, 10, 1],
     },
   };
 
@@ -27,7 +34,23 @@ export default function MapPage() {
     source: 'start-markers',
     paint: {
       'circle-color': darkMode ? '#305530' : '#308830',
-      'circle-radius': ['interpolate', ['exponential', 2], ['zoom'], 10, 2, 12, 4, 16, 12, 20, 32],
+      'circle-radius': ['interpolate', ['exponential', 1.6], ['zoom'], 6, 0, 12, 6, 22, 256],
+    },
+  };
+
+  const symbolLayer: SymbolLayer = {
+    id: 'route-arrows',
+    type: 'symbol',
+    source: 'routes',
+    layout: {
+      'symbol-placement': 'line',
+      'symbol-spacing': 100,
+      'icon-allow-overlap': true,
+      'icon-image': 'townspot',
+      'icon-size': 1,
+    },
+    paint: {
+      'icon-color': '#ff0000',
     },
   };
 
@@ -39,12 +62,13 @@ export default function MapPage() {
         zoom: 11.5,
       }}
       style={{ width: '100vw', height: '100vh' }}
-      mapStyle={`https://api.protomaps.com/styles/v2/${darkMode ? 'dark' : 'light'}.json?key=${
+      mapStyle={`http://localhost:8000/${darkMode ? 'dark' : 'light'}?key=${
         process.env.NEXT_PUBLIC_PROTO_API_KEY
       }`}
     >
       <Source id="routes" type="geojson" data="http://localhost:8000/routes">
         <Layer {...routes} />
+        <Layer {...symbolLayer} />
       </Source>
       <Source id="start-markers" type="geojson" data="http://localhost:8000/start-markers">
         <Layer {...startMarkers} />
