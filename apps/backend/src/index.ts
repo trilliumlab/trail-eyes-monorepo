@@ -9,24 +9,7 @@ import startMarkers from '~data/routes/start-markers.json';
 import light from '~data/styles/light.json';
 import dark from '~data/styles/dark.json';
 
-const app = new Elysia()
-  .use(
-    swagger({
-      path: 'docs',
-      scalarConfig: {
-        // Kepler theme is supported by swagger,
-        // but hasn't been added to the list of supported elysia themes
-        theme: 'kepler' as ThemeId,
-      },
-    }),
-  )
-  .use(cors())
-  .get('/routes', () => {
-    return routes;
-  })
-  .get('/start-markers', () => {
-    return startMarkers;
-  })
+const styles = new Elysia({ prefix: 'styles' })
   .get(
     'light',
     ({ query: { key } }) => {
@@ -64,7 +47,27 @@ const app = new Elysia()
         key: t.String(),
       }),
     },
+  );
+
+const app = new Elysia()
+  .use(
+    swagger({
+      path: 'docs',
+      scalarConfig: {
+        // Kepler theme is supported by swagger,
+        // but hasn't been added to the list of supported elysia themes
+        theme: 'kepler' as ThemeId,
+      },
+    }),
   )
+  .use(cors())
+  .get('/routes', () => {
+    return routes;
+  })
+  .get('/start-markers', () => {
+    return startMarkers;
+  })
+  .use(styles)
   .listen(8000);
 
 export type App = typeof app;
