@@ -9,7 +9,7 @@ import {
 } from 'react-map-gl/maplibre';
 
 export default function MapPage() {
-  const darkMode = false;
+  const darkMode = true;
 
   const lineWidth = 2;
   const routes: LineLayer = {
@@ -62,16 +62,16 @@ export default function MapPage() {
         zoom: 11.5,
       }}
       style={{ width: '100vw', height: '100vh' }}
-      mapStyle={`http://localhost:8000/${darkMode ? 'dark' : 'light'}?key=${
+      mapStyle={`http://localhost:8000/styles/${darkMode ? 'dark' : 'light'}?key=${
         process.env.NEXT_PUBLIC_PROTO_API_KEY
       }`}
     >
-      <Source id="routes" type="geojson" data="http://localhost:8000/routes">
-        <Layer {...routes} />
-        <Layer {...symbolLayer} />
+      <Source id="routes" type="geojson" data="http://localhost:8000/geojson/routes">
+        <Layer {...routes} beforeId="physical_line_waterway_label" />
+        <Layer {...symbolLayer} beforeId="physical_line_waterway_label" />
       </Source>
-      <Source id="start-markers" type="geojson" data="http://localhost:8000/start-markers">
-        <Layer {...startMarkers} />
+      <Source id="start-markers" type="geojson" data="http://localhost:8000/geojson/start-markers">
+        <Layer {...startMarkers} beforeId="physical_line_waterway_label" />
       </Source>
     </MapComponent>
   );

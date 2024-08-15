@@ -9,7 +9,9 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --apply .",
     "format": "biome format .",
-    "format:fix": "biome format --write ."
+    "format:fix": "biome format --write .",
+
+    "build-sprites": "cd apps/scripts && bun build-sprites"
   },
   "devDependencies": {
     "@biomejs/biome": "1.2.2",
