@@ -17,7 +17,7 @@
     "@paralleldrive/cuid2": "^2.2.2"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@repo/typescript-config": "workspace:*",
     "drizzle-kit": "^0.24.0",
     "bun-types": "latest"
   }

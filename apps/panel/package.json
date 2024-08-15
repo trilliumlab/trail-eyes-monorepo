@@ -9,13 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@repo/ui": "*",
+    "@repo/ui": "workspace:*",
+    "@elysiajs/eden": "^1.1.2",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522",
     "next": "15.0.0-rc.0"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/backend-api": "workspace:*",
+    "elysia": "^1.1.5",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
