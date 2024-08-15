@@ -1,5 +1,5 @@
 {
-  "name": "bun-turbo",
+  "name": "trail-eyes-monorepo",
   "private": true,
   "scripts": {
     "build": "turbo build",
