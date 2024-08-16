@@ -8,9 +8,7 @@
     "moduleResolution": "Bundler",
     "jsx": "preserve",
     "noEmit": true,
-    "types": [
-      "bun-types"
-    ],
+    "types": ["bun-types"],
     "resolveJsonModule": true
   }
 }

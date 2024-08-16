@@ -5,10 +5,7 @@
   "exports": {
     "./tailwind.config": "./tailwind.config.ts",
     "./globals.css": "./src/globals.css",
-    "./components/*": [
-      "./src/components/ui/*.tsx",
-      "./src/components/ui/*.ts"
-    ],
+    "./components/*": ["./src/components/ui/*.tsx", "./src/components/ui/*.ts"],
     "./lib/*": "./src/lib/*.ts",
     "./code": "./src/code.tsx"
   },
