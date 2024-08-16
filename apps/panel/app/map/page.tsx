@@ -63,15 +63,19 @@ export default function MapPage() {
         zoom: 11.5,
       }}
       style={{ width: '100vw', height: '100vh' }}
-      mapStyle={`http://localhost:8000/styles/${darkMode ? 'dark' : 'light'}?key=${
+      mapStyle={`http://localhost:8000/styles/${darkMode ? 'dark' : 'light'}.json?key=${
         process.env.NEXT_PUBLIC_PROTO_API_KEY
       }`}
     >
-      <Source id="routes" type="geojson" data="http://localhost:8000/geojson/routes">
+      <Source id="routes" type="geojson" data="http://localhost:8000/geojson/routes.json">
         <Layer {...routes} beforeId="physical_line_waterway_label" />
         <Layer {...symbolLayer} beforeId="physical_line_waterway_label" />
       </Source>
-      <Source id="start-markers" type="geojson" data="http://localhost:8000/geojson/start-markers">
+      <Source
+        id="start-markers"
+        type="geojson"
+        data="http://localhost:8000/geojson/start-markers.json"
+      >
         <Layer {...startMarkers} beforeId="physical_line_waterway_label" />
       </Source>
     </MapComponent>

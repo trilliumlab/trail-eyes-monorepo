@@ -1,8 +1,8 @@
 {
   "townspot": {
-    "height": 10,
-    "pixelRatio": 1,
-    "width": 10,
+    "height": 20,
+    "pixelRatio": 2,
+    "width": 20,
     "x": 0,
     "y": 0
   }

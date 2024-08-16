@@ -11,7 +11,7 @@
       "cache": false,
       "persistent": true
     },
-    "build-sprites": {
+    "scripts#build-sprites": {
       "inputs": ["../../data/sprites/dark", "../../data/sprites/light", "src/**"],
       "outputs": ["../../data/sprites/**"]
     }

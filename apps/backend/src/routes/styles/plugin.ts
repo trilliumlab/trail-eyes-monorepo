@@ -1,4 +1,5 @@
 import { Elysia, t } from 'elysia';
+import normalizeUrl from 'normalize-url';
 
 import dark from '~data/styles/dark.json';
 import light from '~data/styles/light.json';
@@ -8,17 +9,20 @@ const querySchema = t.Object({
   mobile: t.BooleanString({ default: false }),
 });
 
-function createTheme(key: string, darkMode = false, mobile = false) {
-  const base = darkMode ? dark : light;
+function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = false) {
+  const base = theme === 'light' ? light : dark;
   return {
     ...base,
+    glyphs: 'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
+    sprite: normalizeUrl(`${process.env.BASE_URL}/sprites/${theme}`),
     sources: {
       protomaps: {
-        ...base.sources.protomaps,
         attribution: mobile
           ? '<a href="https://github.com/protomaps/basemaps">© Protomaps</a> <a href="https://openstreetmap.org">© OpenStreetMap</a>'
-          : base.sources.protomaps.attribution,
-        tiles: [base.sources.protomaps.tiles[0] + key],
+          : '<a href="https://github.com/protomaps/basemaps">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+        type: 'vector',
+        tiles: [`https://api.protomaps.com/tiles/v3/{z}/{x}/{y}.mvt?key=${key}`],
+        maxzoom: 15,
       },
     },
   };
@@ -26,18 +30,18 @@ function createTheme(key: string, darkMode = false, mobile = false) {
 
 export const styles = new Elysia({ prefix: 'styles' })
   .get(
-    'light',
+    'light.json',
     ({ query: { key, mobile } }) => {
-      return createTheme(key, false, mobile);
+      return createTheme(key, 'light', mobile);
     },
     {
       query: querySchema,
     },
   )
   .get(
-    'dark',
+    'dark.json',
     ({ query: { key, mobile } }) => {
-      return createTheme(key, true, mobile);
+      return createTheme(key, 'dark', mobile);
     },
     {
       query: querySchema,

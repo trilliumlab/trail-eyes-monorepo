@@ -1,15 +1,9 @@
-import { $ } from 'bun';
-
-async function run(cmd: TemplateStringsArray, ...params: string[]) {
-  for await (const line of $(cmd, ...params).lines()) {
-    console.log(line);
-  }
-}
+import { run } from './util';
 
 // Change working dir to sprites directory
 process.chdir(Bun.fileURLToPath(import.meta.resolve('../../../data/sprites')));
 
-run`spreet light out/light`;
-run`spreet light out/light@2x`;
-run`spreet dark out/dark`;
-run`spreet dark out/dark@2x`;
+run`spreet --unique light out/light`;
+run`spreet --unique --retina light out/light@2x`;
+run`spreet --unique dark out/dark`;
+run`spreet --unique --retina dark out/dark@2x`;
