@@ -5,6 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
 
+    "build-sprites": "turbo build-sprites",
+
     "lint": "biome lint .",
     "format": "biome format .",
     "check": "biome check .",

@@ -28,6 +28,7 @@ coverage
 # Build Outputs
 .next/
 out/
+!data/**/out/
 build
 dist
 
