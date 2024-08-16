@@ -5,7 +5,7 @@ import dark from '~data/styles/dark.json';
 
 const querySchema = t.Object({
   key: t.String(),
-  mobile: t.BooleanString(),
+  mobile: t.BooleanString({ default: false }),
 });
 
 function createTheme(key: string, darkMode = false, mobile = false) {
