@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": "",
+	"extends": "@repo/typescript-config/bun.json",
 	"include": ["."],
 	"exclude": ["dist", "build", "node_modules"]
 }
