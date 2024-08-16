@@ -132,7 +132,7 @@ export default function Dashboard() {
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">Noah Williams</div>
+                      <div className="font-medium">Route 16</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
                         noah@example.com
                       </div>
@@ -146,11 +146,11 @@ export default function Dashboard() {
                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                       2023-06-25
                     </TableCell>
-                    <TableCell className="text-right">$350.00</TableCell>
+                    <TableCell className="text-right">4</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">Emma Brown</div>
+                      <div className="font-medium">Route 11</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
                         emma@example.com
                       </div>
@@ -164,11 +164,11 @@ export default function Dashboard() {
                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                       2023-06-26
                     </TableCell>
-                    <TableCell className="text-right">$450.00</TableCell>
+                    <TableCell className="text-right">3</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
+                      <div className="font-medium">Route 12</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
                         liam@example.com
                       </div>
@@ -182,7 +182,7 @@ export default function Dashboard() {
                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                       2023-06-27
                     </TableCell>
-                    <TableCell className="text-right">$550.00</TableCell>
+                    <TableCell className="text-right">1</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
