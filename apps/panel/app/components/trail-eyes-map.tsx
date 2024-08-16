@@ -96,56 +96,60 @@ export function TrailEyesMap() {
   const [activeRoute, setActiveRoute] = useState<number>();
 
   return (
-    <MapComponent
-      ref={mapRef}
-      initialViewState={{
-        longitude: -122.76892379502566,
-        latitude: 45.57416784067063,
-        zoom: 11.5,
-      }}
-      mapStyle={
-        resolvedTheme !== 'system'
-          ? `http://localhost:8000/styles/${resolvedTheme}.json?key=${
-              process.env.NEXT_PUBLIC_PROTO_API_KEY
-            }`
-          : undefined
-      }
-      interactiveLayerIds={['routes-hit']}
-      onMouseMove={(event) => {
-        const map = mapRef.current;
-        if (event.features && event.features.length > 0) {
-          const id = event.features[0]?.id as number | undefined;
-          if (id) {
-            if (map) {
-              if (id !== activeRoute && activeRoute) {
-                map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
-              }
-              map.setFeatureState({ source: 'routes', id: id }, { hover: true });
-            }
-            setActiveRoute(id);
-          }
-        } else if (activeRoute) {
-          if (map) {
-            map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
-          }
-          setActiveRoute(undefined);
+    <div className="h-full w-full select-none">
+      <MapComponent
+        ref={mapRef}
+        initialViewState={{
+          longitude: -122.76892379502566,
+          latitude: 45.57416784067063,
+          zoom: 11.5,
+        }}
+        mapStyle={
+          resolvedTheme === 'dark' || resolvedTheme === 'light'
+            ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/styles/${resolvedTheme}.json?key=${process.env.NEXT_PUBLIC_PROTO_API_KEY}`
+            : undefined
         }
-      }}
-    >
-      <Source id="routes" type="geojson" data="http://localhost:8000/geojson/routes.json">
-        <Layer {...routesLayer} />
-        <Layer {...arrowLayer} />
-        <Layer {...hoverRoutesLayer} />
-        <Layer {...hoverArrowLayer} />
-        <Layer {...hitRoutesLayer} />
-      </Source>
-      <Source
-        id="start-markers"
-        type="geojson"
-        data="http://localhost:8000/geojson/start-markers.json"
+        interactiveLayerIds={['routes-hit']}
+        onMouseMove={(event) => {
+          const map = mapRef.current;
+          if (event.features && event.features.length > 0) {
+            const id = event.features[0]?.id as number | undefined;
+            if (id) {
+              if (map) {
+                if (id !== activeRoute && activeRoute) {
+                  map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
+                }
+                map.setFeatureState({ source: 'routes', id: id }, { hover: true });
+              }
+              setActiveRoute(id);
+            }
+          } else if (activeRoute) {
+            if (map) {
+              map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
+            }
+            setActiveRoute(undefined);
+          }
+        }}
       >
-        <Layer {...startMarkers} />
-      </Source>
-    </MapComponent>
+        <Source
+          id="routes"
+          type="geojson"
+          data={`${process.env.NEXT_PUBLIC_BACKEND_URL}/geojson/routes.json`}
+        >
+          <Layer {...routesLayer} />
+          <Layer {...arrowLayer} />
+          <Layer {...hoverRoutesLayer} />
+          <Layer {...hoverArrowLayer} />
+          <Layer {...hitRoutesLayer} />
+        </Source>
+        <Source
+          id="start-markers"
+          type="geojson"
+          data={`${process.env.NEXT_PUBLIC_BACKEND_URL}/geojson/start-markers.json`}
+        >
+          <Layer {...startMarkers} />
+        </Source>
+      </MapComponent>
+    </div>
   );
 }

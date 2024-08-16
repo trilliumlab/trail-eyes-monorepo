@@ -17,11 +17,11 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
     sprite: [
       {
         id: 'default',
-        url: normalizeUrl(`${process.env.BASE_URL}/sprites/${theme}`),
+        url: normalizeUrl(`${process.env.BACKEND_URL}/sprites/${theme}`),
       },
       {
         id: 'sdf',
-        url: normalizeUrl(`${process.env.BASE_URL}/sprites/sdf`),
+        url: normalizeUrl(`${process.env.BACKEND_URL}/sprites/sdf`),
       },
     ],
     sources: {
