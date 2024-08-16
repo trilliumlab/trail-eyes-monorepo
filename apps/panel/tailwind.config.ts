@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss';
 import baseConfig from '@repo/ui/tailwind.config';
+import type { Config } from 'tailwindcss';
 
 export default {
   ...baseConfig,

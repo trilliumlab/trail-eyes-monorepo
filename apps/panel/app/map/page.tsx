@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  Map as MapComponent,
-  Source,
+  type CircleLayer,
   Layer,
   type LineLayer,
-  type CircleLayer,
+  Map as MapComponent,
+  Source,
   type SymbolLayer,
 } from 'react-map-gl/maplibre';
 

@@ -1,7 +1,7 @@
-import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import swagger from '@elysiajs/swagger';
 import type { ThemeId } from '@elysiajs/swagger/scalar/types';
+import { Elysia } from 'elysia';
 import { routes } from './routes/plugin';
 
 const app = new Elysia()

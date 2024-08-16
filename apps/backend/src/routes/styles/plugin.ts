@@ -1,7 +1,7 @@
 import { Elysia, t } from 'elysia';
 
-import light from '~data/styles/light.json';
 import dark from '~data/styles/dark.json';
+import light from '~data/styles/light.json';
 
 const querySchema = t.Object({
   key: t.String(),
