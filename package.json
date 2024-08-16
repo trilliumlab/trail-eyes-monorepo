@@ -4,11 +4,11 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "biome lint --write .",
+    "format": "biome format --write ."
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
+    "@biomejs/biome": "^1.8.3",
     "turbo": "^2.0.14",
     "typescript": "^5.4.5"
   },
@@ -16,8 +16,5 @@
     "node": ">=18"
   },
   "packageManager": "bun@1.1.22",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "workspaces": ["apps/*", "packages/*"]
 }
