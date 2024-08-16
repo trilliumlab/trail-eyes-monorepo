@@ -188,7 +188,7 @@ export default function Dashboard() {
               </Table>
             </CardContent>
           </Card>
-          <Card className="overflow-clip">
+          <Card className="overflow-clip min-h-[32rem]">
             <TrailEyesMap />
           </Card>
         </div>
