@@ -14,7 +14,16 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
   return {
     ...base,
     glyphs: 'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
-    sprite: normalizeUrl(`${process.env.BASE_URL}/sprites/${theme}`),
+    sprite: [
+      {
+        id: 'default',
+        url: normalizeUrl(`${process.env.BASE_URL}/sprites/${theme}`),
+      },
+      {
+        id: 'sdf',
+        url: normalizeUrl(`${process.env.BASE_URL}/sprites/sdf`),
+      },
+    ],
     sources: {
       protomaps: {
         attribution: mobile

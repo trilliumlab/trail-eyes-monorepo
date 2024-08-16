@@ -45,13 +45,14 @@ export default function MapPage() {
     source: 'routes',
     layout: {
       'symbol-placement': 'line',
-      'symbol-spacing': 100,
+      'symbol-spacing': ['interpolate', ['exponential', 1.6], ['zoom'], 12, 100, 22, 1000],
       'icon-allow-overlap': true,
-      'icon-image': 'townspot',
-      'icon-size': 1,
+      'icon-image': 'sdf:arrow-head',
+      'icon-rotate': 90,
+      'icon-size': ['interpolate', ['exponential', 1.6], ['zoom'], 6, 0, 12, 0.14, 22, 6.4],
     },
     paint: {
-      'icon-color': '#ff0000',
+      'icon-color': ['get', 'stroke'],
     },
   };
 

@@ -12,8 +12,13 @@
       "persistent": true
     },
     "scripts#build-sprites": {
-      "inputs": ["../../data/sprites/dark", "../../data/sprites/light", "src/**"],
-      "outputs": ["../../data/sprites/**"]
+      "inputs": [
+        "../../data/sprites/dark",
+        "../../data/sprites/light",
+        "../../data/sprites/sdf",
+        "src/**"
+      ],
+      "outputs": ["../../data/sprites/out/**"]
     }
   }
 }
