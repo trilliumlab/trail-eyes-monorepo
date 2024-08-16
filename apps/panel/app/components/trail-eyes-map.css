@@ -1,0 +1,20 @@
+.maplibregl-ctrl-attrib {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  border: 1px !important;
+  border-style: solid !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: hsl(var(--foreground)) !important;
+}
+
+.maplibregl-ctrl-attrib-button {
+  background-color: transparent !important;
+  filter: invert(var(--invert-amount));
+}
+
+.maplibregl-ctrl-attrib-button:focus {
+  box-shadow: none !important;
+}

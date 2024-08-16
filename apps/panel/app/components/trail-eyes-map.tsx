@@ -10,14 +10,16 @@ import {
   Source,
   type SymbolLayer,
 } from 'react-map-gl/maplibre';
+import { useTheme } from 'next-themes';
 
 // maplibre stylesheet
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { useTheme } from 'next-themes';
+// Custom dark mode for ui elements
+import './trail-eyes-map.css';
 
 export function TrailEyesMap() {
-  const { resolvedTheme: theme } = useTheme();
-  const darkMode = theme === 'dark';
+  const { resolvedTheme } = useTheme();
+  const darkMode = resolvedTheme === 'dark';
 
   const routesLayer: LineLayer = {
     id: 'routes',
@@ -101,21 +103,27 @@ export function TrailEyesMap() {
         latitude: 45.57416784067063,
         zoom: 11.5,
       }}
-      mapStyle={`http://localhost:8000/styles/${theme}.json?key=${
-        process.env.NEXT_PUBLIC_PROTO_API_KEY
-      }`}
+      mapStyle={
+        resolvedTheme !== 'system'
+          ? `http://localhost:8000/styles/${resolvedTheme}.json?key=${
+              process.env.NEXT_PUBLIC_PROTO_API_KEY
+            }`
+          : undefined
+      }
       interactiveLayerIds={['routes-hit']}
       onMouseMove={(event) => {
         const map = mapRef.current;
         if (event.features && event.features.length > 0) {
-          const id = event.features[0]?.id as number;
-          if (map) {
-            if (id !== activeRoute) {
-              map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
+          const id = event.features[0]?.id as number | undefined;
+          if (id) {
+            if (map) {
+              if (id !== activeRoute && activeRoute) {
+                map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
+              }
+              map.setFeatureState({ source: 'routes', id: id }, { hover: true });
             }
-            map.setFeatureState({ source: 'routes', id: id }, { hover: true });
+            setActiveRoute(id);
           }
-          setActiveRoute(id);
         } else if (activeRoute) {
           if (map) {
             map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
@@ -125,10 +133,10 @@ export function TrailEyesMap() {
       }}
     >
       <Source id="routes" type="geojson" data="http://localhost:8000/geojson/routes.json">
-        <Layer {...routesLayer} beforeId="physical_line_waterway_label" />
-        <Layer {...arrowLayer} beforeId="physical_line_waterway_label" />
-        <Layer {...hoverRoutesLayer} beforeId="physical_line_waterway_label" />
-        <Layer {...hoverArrowLayer} beforeId="physical_line_waterway_label" />
+        <Layer {...routesLayer} />
+        <Layer {...arrowLayer} />
+        <Layer {...hoverRoutesLayer} />
+        <Layer {...hoverArrowLayer} />
         <Layer {...hitRoutesLayer} />
       </Source>
       <Source
@@ -136,7 +144,7 @@ export function TrailEyesMap() {
         type="geojson"
         data="http://localhost:8000/geojson/start-markers.json"
       >
-        <Layer {...startMarkers} beforeId="physical_line_waterway_label" />
+        <Layer {...startMarkers} />
       </Source>
     </MapComponent>
   );
