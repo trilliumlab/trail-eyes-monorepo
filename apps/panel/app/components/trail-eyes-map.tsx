@@ -1,22 +1,23 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   type CircleLayer,
   Layer,
   type LineLayer,
   Map as MapComponent,
-  type MapLayerMouseEvent,
   type MapRef,
   Source,
   type SymbolLayer,
-  useMap,
 } from 'react-map-gl/maplibre';
 
-export default function MapPage() {
-  const darkMode = true;
+// maplibre stylesheet
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { useTheme } from 'next-themes';
 
-  const hoverMod = 1.5;
+export function TrailEyesMap() {
+  const { resolvedTheme: theme } = useTheme();
+  const darkMode = theme === 'dark';
 
   const routesLayer: LineLayer = {
     id: 'routes',
@@ -32,30 +33,23 @@ export default function MapPage() {
     },
   };
   const hoverRoutesLayer: LineLayer = {
+    ...routesLayer,
     id: 'routes-hover',
-    type: 'line',
-    source: 'routes',
-    layout: {
-      'line-join': 'round',
-      'line-cap': 'round',
-    },
     paint: {
-      'line-color': ['get', 'stroke'],
+      ...routesLayer.paint,
       'line-width': 4,
       'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
     },
   };
   const hitRoutesLayer: LineLayer = {
+    ...routesLayer,
     id: 'routes-hit',
-    type: 'line',
-    source: 'routes',
     paint: {
       'line-width': 10,
       'line-opacity': 0,
     },
   };
 
-  const markerWidth = 1;
   const startMarkers: CircleLayer = {
     id: 'start-markers',
     type: 'circle',
@@ -66,7 +60,6 @@ export default function MapPage() {
     },
   };
 
-  const arrowWidth = 1;
   const arrowLayer: SymbolLayer = {
     id: 'route-arrows',
     type: 'symbol',
@@ -84,19 +77,14 @@ export default function MapPage() {
     },
   };
   const hoverArrowLayer: SymbolLayer = {
+    ...arrowLayer,
     id: 'route-arrows-hover',
-    type: 'symbol',
-    source: 'routes',
     layout: {
-      'symbol-placement': 'line',
-      'symbol-spacing': 100,
-      'icon-allow-overlap': true,
-      'icon-image': 'sdf:arrow-head',
-      'icon-rotate': 90,
+      ...arrowLayer.layout,
       'icon-size': 0.3,
     },
     paint: {
-      'icon-color': ['get', 'stroke'],
+      ...arrowLayer.paint,
       'icon-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
     },
   };
@@ -113,8 +101,7 @@ export default function MapPage() {
         latitude: 45.57416784067063,
         zoom: 11.5,
       }}
-      style={{ width: '100vw', height: '100vh' }}
-      mapStyle={`http://localhost:8000/styles/${darkMode ? 'dark' : 'light'}.json?key=${
+      mapStyle={`http://localhost:8000/styles/${theme}.json?key=${
         process.env.NEXT_PUBLIC_PROTO_API_KEY
       }`}
       interactiveLayerIds={['routes-hit']}
