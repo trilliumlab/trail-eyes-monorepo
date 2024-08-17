@@ -9,7 +9,7 @@ export function NavLink({ href, children }: { href: string; children: string }) 
   return (
     <Link
       href={href}
-      className={`${pathname === href ? 'text-foreground' : 'text-muted-foreground'} transition-colors hover:text-foreground`}
+      className={`${pathname === href ? 'text-foreground' : 'text-muted-foreground'} transition-colors hover:text-foreground whitespace-nowrap`}
     >
       {children}
     </Link>

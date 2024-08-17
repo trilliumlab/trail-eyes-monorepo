@@ -2,10 +2,10 @@
   "name": "trail-eyes-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
+    "build": "dotenv -- turbo build",
+    "dev": "dotenv -- turbo dev",
 
-    "build-sprites": "turbo build-sprites",
+    "build-sprites": "dotenv -- turbo build-sprites",
 
     "lint": "biome lint .",
     "format": "biome format .",
@@ -17,7 +17,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "turbo": "^2.0.14",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "dotenv-cli": "^7.4.2"
   },
   "engines": {
     "node": ">=18"

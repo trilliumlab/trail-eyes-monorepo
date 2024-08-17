@@ -1,16 +1,10 @@
 {
-  "name": "backend",
+  "name": "database",
   "version": "1.0.0",
   "main": "./src/index.ts",
-  "module": "src/index.ts",
-  "scripts": {
-    "dev": "bun run --watch src/index.ts"
-  },
+  "module": "./src/index.ts",
   "dependencies": {
-    "elysia": "1.1.6",
-    "@elysiajs/cors": "^1.1.0",
-    "@elysiajs/swagger": "^1.1.1",
-    "@sinclair/typebox": "0.32.34",
+    "@sinclair/typebox": "^0.32.34",
     "@electric-sql/pglite": "^0.2.0",
     "drizzle-orm": "^0.33.0",
     "drizzle-typebox": "^0.1.1",

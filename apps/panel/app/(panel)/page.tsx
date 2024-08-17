@@ -72,8 +72,8 @@ export default function Dashboard() {
           <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
-                <CardDescription>Recent transactions from your store.</CardDescription>
+                <CardTitle>Reports</CardTitle>
+                <CardDescription>Recent hazard reports.</CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
                 <Link href="#">
@@ -86,7 +86,7 @@ export default function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Customer</TableHead>
+                    <TableHead>Route</TableHead>
                     <TableHead className="hidden xl:table-column">Type</TableHead>
                     <TableHead className="hidden xl:table-column">Status</TableHead>
                     <TableHead className="hidden xl:table-column">Date</TableHead>
@@ -96,7 +96,7 @@ export default function Dashboard() {
                 <TableBody>
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">Liam Johnson</div>
+                      <div className="font-medium">Route 14</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
                         liam@example.com
                       </div>
@@ -110,11 +110,11 @@ export default function Dashboard() {
                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                       2023-06-23
                     </TableCell>
-                    <TableCell className="text-right">$250.00</TableCell>
+                    <TableCell className="text-right">1</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
-                      <div className="font-medium">Olivia Smith</div>
+                      <div className="font-medium">Route 13</div>
                       <div className="hidden text-sm text-muted-foreground md:inline">
                         olivia@example.com
                       </div>
@@ -128,7 +128,7 @@ export default function Dashboard() {
                     <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
                       2023-06-24
                     </TableCell>
-                    <TableCell className="text-right">$150.00</TableCell>
+                    <TableCell className="text-right">6</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
