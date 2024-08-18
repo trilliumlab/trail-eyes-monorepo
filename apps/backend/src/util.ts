@@ -35,7 +35,11 @@ export function RenameFields<T extends TObject, M extends { [Key in keyof Static
         delete val[key];
       }
       return val as {
-        [Key in keyof MReversed]: MReversed[Key] extends string ? Static<T>[MReversed[Key]] : never;
+        [Key in keyof MReversed as MReversed[Key] extends string
+          ? IfEquals<Static<T>[MReversed[Key]], unknown, never, Key>
+          : never]: MReversed[Key] extends string
+          ? IfEquals<Static<T>[MReversed[Key]], unknown, never, Static<T>[MReversed[Key]]>
+          : never;
       } & {
         [Key in keyof Static<T> as M[Key] extends string ? never : Key]: M[Key] extends string
           ? never
