@@ -1,4 +1,5 @@
-import { RenameFields } from './typebox';
+import { resolve } from 'import-meta-resolve';
+import { parseEnv, RenameFields } from './typebox';
 import { Type } from '@sinclair/typebox';
 
 export const SharedEnvSchema = RenameFields(
@@ -10,3 +11,5 @@ export const SharedEnvSchema = RenameFields(
     NEXT_PUBLIC_BACKEND_URL: 'BACKEND_URL',
   },
 );
+
+export const sharedEnv = parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url));
