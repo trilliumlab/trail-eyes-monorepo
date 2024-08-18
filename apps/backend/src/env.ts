@@ -1,12 +1,10 @@
 import { t } from 'elysia';
-import { RenameFields } from './util';
-import { parse } from './util';
+import { RenameFields, parse } from '@repo/util';
 
 export const envSchema = RenameFields(
   t.Object({
     // Http server settings
     NEXT_PUBLIC_BACKEND_URL: t.String(),
-    // test: t.Number(),
   }),
   {
     NEXT_PUBLIC_BACKEND_URL: 'BACKEND_URL',

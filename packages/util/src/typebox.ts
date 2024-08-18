@@ -10,16 +10,20 @@ export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: 
   return Value.Decode(schema, cleaned); // run decode transforms (optional)
 }
 
+// Narrows T to a literal
 type Narrow<T> = { [Key in keyof T]: T[Key] };
+// Type of T with the keys and values swapped
 type Reverse<T extends Record<PropertyKey, PropertyKey | undefined>> = {
   [Key in keyof T as T[Key] extends PropertyKey ? T[Key] : never]: Key;
 };
+// Evaluates to Y if T and U are same type, otherwise evaluates to N
 type IfEquals<T, U, Y = unknown, N = never> = (<G>() => G extends T ? 1 : 2) extends <
   G,
 >() => G extends U ? 1 : 2
   ? Y
   : N;
 
+// Rename/map the fields on a TObject using objectbox transform.
 export function RenameFields<T extends TObject, M extends { [Key in keyof Static<T>]?: string }>(
   schema: T,
   map: Narrow<M>,

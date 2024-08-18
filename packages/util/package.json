@@ -1,0 +1,16 @@
+{
+  "name": "@repo/util",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.33.7"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "bun-types": "latest"
+  }
+}
