@@ -3,7 +3,6 @@ import swagger from '@elysiajs/swagger';
 import type { ThemeId } from '@elysiajs/swagger/scalar/types';
 import { Elysia } from 'elysia';
 import { routes } from './routes/plugin';
-import { env } from './env';
 
 const app = new Elysia()
   .use(
@@ -23,5 +22,3 @@ const app = new Elysia()
 export type App = typeof app;
 
 console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
-
-console.log(env);

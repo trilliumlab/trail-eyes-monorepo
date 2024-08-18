@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import normalizeUrl from 'normalize-url';
+import { env } from '~/env';
 
 import dark from '~data/styles/dark.json';
 import light from '~data/styles/light.json';
@@ -17,11 +18,11 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
     sprite: [
       {
         id: 'default',
-        url: normalizeUrl(`${process.env.BACKEND_URL}/sprites/${theme}`),
+        url: normalizeUrl(`${env.BACKEND_URL}/sprites/${theme}`),
       },
       {
         id: 'sdf',
-        url: normalizeUrl(`${process.env.BACKEND_URL}/sprites/sdf`),
+        url: normalizeUrl(`${env.BACKEND_URL}/sprites/sdf`),
       },
     ],
     sources: {

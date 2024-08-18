@@ -1,5 +1,5 @@
 import type { TSchema, StaticDecode, TObject, Static } from '@sinclair/typebox';
-import { Type as t } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 import { Value } from '@sinclair/typebox/value';
 
 export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: unknown): R {
@@ -30,8 +30,7 @@ export function RenameFields<T extends TObject, M extends { [Key in keyof Static
 ) {
   type MReversed = Reverse<typeof map>;
 
-  return t
-    .Transform(schema)
+  return Type.Transform(schema)
     .Decode((v) => {
       const val = v as Static<T>;
       for (const [key, value] of Object.entries(map)) {
