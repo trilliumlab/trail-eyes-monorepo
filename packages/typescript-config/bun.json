@@ -9,6 +9,7 @@
     "jsx": "preserve",
     "noEmit": true,
     "types": ["bun-types"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   }
 }

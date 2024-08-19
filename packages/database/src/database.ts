@@ -3,7 +3,7 @@ import * as schema from './schema';
 import type * as models from './models';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { env } from './env';
-import type { Static } from '@sinclair/typebox';
+import { Type } from '@sinclair/typebox';
 
 const client = postgres({
   host: env.DB_HOST,
@@ -15,8 +15,18 @@ const client = postgres({
 });
 const db = drizzle(client, { schema });
 
-export async function addRoute(route: models.RouteInsert) {
+export async function drizzleTypeboxSchemaTest(route: models.RouteInsert) {
   await db.insert(schema.routes).values(route);
 }
 
-await addRoute({});
+const Schema = Type.Object({
+  test2: Type.String(),
+});
+export function typeboxSchemaTest(test: typeof Schema.static) {}
+
+export function typescriptTest(input: { test: string }) {}
+
+// All three show typescript errors that {} is not assignable to parameter of type ...
+drizzleTypeboxSchemaTest({});
+typeboxSchemaTest({});
+typescriptTest({});
