@@ -8,17 +8,19 @@
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@repo/util": "workspace:*",
     "@sinclair/typebox": "^0.33.7",
-    "@electric-sql/pglite": "^0.2.0",
+    "postgres": "^3.4.4",
     "drizzle-orm": "^0.33.0",
     "drizzle-typebox": "^0.1.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "normalize-url": "^8.0.1",
-    "import-meta-resolve": "^4.1.0"
+    "import-meta-resolve": "^4.1.0",
+    "drizzle-postgis": "^1.1.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

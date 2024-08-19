@@ -21,6 +21,10 @@
       "persistent": true,
       "inputs": ["drizzle/**", "drizzle.config.ts", ".env"]
     },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
     "scripts#build-sprites": {
       "inputs": [
         "../../data/sprites/dark",

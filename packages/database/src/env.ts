@@ -9,6 +9,7 @@ export const EnvSchema = Type.Object({
   DB_PASSWORD: Type.String(),
   DB_PORT: Type.Number(),
   DB_SSL: Type.Boolean(),
+  DB_APP_NAME: Type.Optional(Type.String()),
 });
 
 export const env = parseEnv(EnvSchema, resolve('../.env', import.meta.url));

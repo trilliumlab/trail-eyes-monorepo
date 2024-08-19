@@ -2,7 +2,11 @@
   "name": "scripts",
   "version": "1.0.0",
   "scripts": {
-    "build-sprites": "bun run src/build-sprites.ts"
+    "build-sprites": "bun run src/build-sprites.ts",
+    "db:import-routes": "bun run src/db/import-routes.ts"
+  },
+  "dependencies": {
+    "@repo/database": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"

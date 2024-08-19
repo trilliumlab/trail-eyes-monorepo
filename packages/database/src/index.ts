@@ -1,3 +1,2 @@
-console.log('Hello from database');
-
-export const testDb = 'hello from db' as const;
+export * as db from './database';
+export * as models from './models';
