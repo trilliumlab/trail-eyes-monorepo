@@ -23,3 +23,5 @@ for (const [i, route] of routes.features.entries()) {
     });
   }
 }
+
+process.exit(0);
