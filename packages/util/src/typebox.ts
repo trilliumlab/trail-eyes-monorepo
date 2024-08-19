@@ -3,7 +3,7 @@ import { Type } from '@sinclair/typebox';
 import { TransformDecodeCheckError, Value, ValueErrorType } from '@sinclair/typebox/value';
 import url from 'node:url';
 import dotenv from 'dotenv';
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 
 export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: unknown): R {
   const cloned = Value.Clone(value); // clone because value ops can be mutable
@@ -13,16 +13,16 @@ export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: 
   return Value.Decode(schema, cleaned); // run decode transforms (optional)
 }
 
-export async function parseEnv<T extends TSchema, R = StaticDecode<T>>(
+export function parseEnv<T extends TSchema, R = StaticDecode<T>>(
   schema: T,
   envPath?: string,
   { loadEnv = true }: { loadEnv?: boolean } = {},
-): Promise<R> {
+): R {
   let customEnv = {};
   // If loadEnv is true, we should load the .env file and add it to the available variables.
   if (loadEnv && envPath) {
     const path = envPath.startsWith('file://') ? url.fileURLToPath(envPath) : envPath;
-    const buffer = await fs.readFile(path);
+    const buffer = fs.readFileSync(path);
     customEnv = dotenv.parse(buffer);
   }
 

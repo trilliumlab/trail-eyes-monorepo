@@ -12,4 +12,4 @@ export const EnvSchema = Type.Object({
   DB_APP_NAME: Type.Optional(Type.String()),
 });
 
-export const env = await parseEnv(EnvSchema, resolve('../.env', import.meta.url));
+export const env = parseEnv(EnvSchema, resolve('../.env', import.meta.url));
