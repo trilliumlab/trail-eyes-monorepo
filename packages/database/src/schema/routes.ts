@@ -4,7 +4,7 @@ import { lineString } from 'drizzle-postgis/models';
 
 export const routes = pgTable('routes', {
   id: serial('id').primaryKey(),
-  originalId: text('original_id'),
+  originalId: text('original_id').unique(),
   title: text('title').notNull(),
   description: text('description'),
   creator: text('creator'),

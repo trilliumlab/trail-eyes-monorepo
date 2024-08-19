@@ -9,6 +9,7 @@
     "@repo/database": "workspace:*"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/geojson": "^7946.0.14"
   }
 }

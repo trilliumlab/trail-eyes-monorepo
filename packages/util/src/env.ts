@@ -12,4 +12,4 @@ export const SharedEnvSchema = RenameFields(
   },
 );
 
-export const sharedEnv = parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url));
+export const sharedEnv = await parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url));

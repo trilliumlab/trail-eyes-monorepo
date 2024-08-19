@@ -12,6 +12,7 @@
       "cache": false,
       "persistent": true
     },
+
     "db:generate": {
       "persistent": true,
       "inputs": ["drizzle.config.ts", "src/**", ".env"],
@@ -24,6 +25,10 @@
     "db:studio": {
       "cache": false,
       "persistent": true
+    },
+
+    "scripts#db:import-routes": {
+      "inputs": ["../../data/routes/**", "src/**"]
     },
     "scripts#build-sprites": {
       "inputs": [

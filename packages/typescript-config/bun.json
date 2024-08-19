@@ -7,9 +7,10 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    "noEmit": true,
     "types": ["bun-types"],
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "composite": true,
+    "incremental": true
   }
 }

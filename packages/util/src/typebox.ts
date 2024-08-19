@@ -1,6 +1,9 @@
 import type { TSchema, StaticDecode, TObject, Static } from '@sinclair/typebox';
 import { Type } from '@sinclair/typebox';
 import { TransformDecodeCheckError, Value, ValueErrorType } from '@sinclair/typebox/value';
+import url from 'node:url';
+import dotenv from 'dotenv';
+import fs from 'node:fs/promises';
 
 export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: unknown): R {
   const cloned = Value.Clone(value); // clone because value ops can be mutable
@@ -10,9 +13,21 @@ export function parse<T extends TSchema, R = StaticDecode<T>>(schema: T, value: 
   return Value.Decode(schema, cleaned); // run decode transforms (optional)
 }
 
-export function parseEnv<T extends TSchema, R = StaticDecode<T>>(schema: T, envPath?: string): R {
+export async function parseEnv<T extends TSchema, R = StaticDecode<T>>(
+  schema: T,
+  envPath?: string,
+  { loadEnv = true }: { loadEnv?: boolean } = {},
+): Promise<R> {
+  let customEnv = {};
+  // If loadEnv is true, we should load the .env file and add it to the available variables.
+  if (loadEnv && envPath) {
+    const path = envPath.startsWith('file://') ? url.fileURLToPath(envPath) : envPath;
+    const buffer = await fs.readFile(path);
+    customEnv = dotenv.parse(buffer);
+  }
+
   try {
-    return parse(schema, { ...process.env }); // run decode transforms (optional)
+    return parse(schema, { ...process.env, ...customEnv }); // run decode transforms (optional)
   } catch (e) {
     if (e instanceof TransformDecodeCheckError) {
       const varName = e.error.path.substring(1);
