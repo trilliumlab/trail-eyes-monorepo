@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
 import normalizeUrl from 'normalize-url';
-import { sharedEnv } from '@repo/util';
+import { sharedEnv } from '@repo/util/shared-env';
 
 import dark from '~data/styles/dark.json';
 import light from '~data/styles/light.json';

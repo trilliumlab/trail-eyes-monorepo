@@ -18,4 +18,6 @@ export const SharedEnvSchema = RenameFields(
 /**
  * Validated project wide env variables.
  */
-export const sharedEnv = parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url));
+export const sharedEnv = parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url), {
+  loadEnv: false,
+});
