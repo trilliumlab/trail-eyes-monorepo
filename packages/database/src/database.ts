@@ -14,6 +14,10 @@ const client = postgres({
 });
 const db = drizzle(client, { schema });
 
-export async function drizzleTypeboxSchemaTest(route: models.RouteInsert) {
+export async function addRoute(route: models.RouteInsert) {
   await db.insert(schema.routes).values(route);
+}
+
+export async function getAllRoutes() {
+  return (await db.query.routes.findMany()) as models.RouteSelect[];
 }

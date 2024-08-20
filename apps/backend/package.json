@@ -7,16 +7,18 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@repo/util": "workspace:*",
+    "@repo/database": "workspace:*",
     "elysia": "1.1.6",
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/swagger": "^1.1.1",
     "@sinclair/typebox": "^0.33.7",
     "@paralleldrive/cuid2": "^2.2.2",
-    "normalize-url": "^8.0.1",
-    "@repo/util": "workspace:*"
+    "normalize-url": "^8.0.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "@types/geojson": "^7946.0.14"
   }
 }
