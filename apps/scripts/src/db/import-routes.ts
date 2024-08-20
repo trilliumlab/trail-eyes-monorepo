@@ -1,8 +1,29 @@
 import { db } from '@repo/database';
 import type { FeatureCollection } from 'geojson';
 import { addElevationToLine } from './elevation';
+import { resolve } from 'node:path';
 
-const routesFile = Bun.file(Bun.fileURLToPath(import.meta.resolve('~data/routes/routes.json')));
+const cmdWorkingDir = process.env.CMD_WD;
+if (!cmdWorkingDir) {
+  console.error('Script must be called from root package.json!');
+  console.error('Usage: bun db:import-routes path/to/routes.json');
+  process.exit(1);
+}
+
+if (process.argv.length !== 3) {
+  console.error('Invalid number of cli arguments!');
+  console.error('Usage: bun db:import-routes path/to/routes.json');
+  process.exit(2);
+}
+const path = resolve(cmdWorkingDir, process.argv[2] as string);
+console.log(path);
+const routesFile = Bun.file(path);
+if (!(await routesFile.exists())) {
+  console.error(`File 'file://${path}' does not exist!`);
+  console.error('Usage: bun db:import-routes path/to/routes.json');
+  process.exit(1);
+}
+
 const routes: FeatureCollection = await routesFile.json();
 console.log(`Loaded routes json with ${routes.features.length} entries.`);
 

@@ -28,6 +28,8 @@
     },
 
     "scripts#db:import-routes": {
+      "cache": false,
+      "env": ["CMD_WD"],
       "inputs": ["../../data/routes/**", "src/**"]
     },
     "scripts#build-sprites": {
