@@ -134,3 +134,15 @@ export function RenameFields<T extends TObject, M extends { [Key in keyof Static
       return v;
     });
 }
+
+/**
+ * Creates a literal union from an array of literals.
+ *
+ * @param values The array of literals.
+ * @returns A literal union consisting of all the literals.
+ */
+export const StringEnum = <T extends string[]>(values: [...T]) =>
+  Type.Unsafe<T[number]>({
+    type: 'string',
+    enum: values,
+  });

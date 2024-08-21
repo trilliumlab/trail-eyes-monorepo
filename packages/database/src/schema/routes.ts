@@ -1,5 +1,4 @@
 import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
-import 'drizzle-postgis';
 import { lineString } from 'drizzle-postgis/models';
 
 export const routes = pgTable('routes', {

@@ -72,8 +72,8 @@ export default function Dashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-                <CardTitle>Reports</CardTitle>
-                <CardDescription>Recent hazard reports.</CardDescription>
+                <CardTitle>Routes</CardTitle>
+                <CardDescription>Rapid response route status</CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
                 <Link href="#">
