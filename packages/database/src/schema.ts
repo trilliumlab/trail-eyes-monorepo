@@ -7,3 +7,4 @@ export * from './schema/auth/users';
 export * from './schema/auth/email-mfa';
 export * from './schema/auth/email-mfa-codes';
 export * from './schema/auth/totp-mfa';
+export * from './schema/auth/roles';
