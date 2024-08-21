@@ -31,7 +31,7 @@ export function TrailEyesMap() {
     },
     paint: {
       'line-color': ['get', 'stroke'],
-      'line-width': 3,
+      'line-width': 2,
     },
   };
   const hoverRoutesLayer: LineLayer = {
@@ -39,8 +39,17 @@ export function TrailEyesMap() {
     id: 'routes-hover',
     paint: {
       ...routesLayer.paint,
-      'line-width': 4,
+      'line-width': 2,
       'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
+    },
+  };
+  const hoverRoutesOutlineLayer: LineLayer = {
+    ...routesLayer,
+    id: 'routes-hover-outline',
+    paint: {
+      ...routesLayer.paint,
+      'line-width': 10,
+      'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.25, 0],
     },
   };
   const hitRoutesLayer: LineLayer = {
@@ -68,14 +77,15 @@ export function TrailEyesMap() {
     source: 'routes',
     layout: {
       'symbol-placement': 'line',
-      'symbol-spacing': 100,
+      'symbol-spacing': 50,
       'icon-allow-overlap': true,
       'icon-image': 'sdf:arrow-head',
       'icon-rotate': 90,
-      'icon-size': 0.25,
+      'icon-size': 0.75,
     },
     paint: {
       'icon-color': ['get', 'stroke'],
+      'icon-opacity': 0.75,
     },
   };
   const hoverArrowLayer: SymbolLayer = {
@@ -83,7 +93,7 @@ export function TrailEyesMap() {
     id: 'route-arrows-hover',
     layout: {
       ...arrowLayer.layout,
-      'icon-size': 0.3,
+      'icon-size': 0.85,
     },
     paint: {
       ...arrowLayer.paint,
@@ -138,6 +148,7 @@ export function TrailEyesMap() {
         >
           <Layer {...routesLayer} />
           <Layer {...arrowLayer} />
+          <Layer {...hoverRoutesOutlineLayer} />
           <Layer {...hoverRoutesLayer} />
           <Layer {...hoverArrowLayer} />
           <Layer {...hitRoutesLayer} />
