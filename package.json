@@ -9,6 +9,7 @@
     "db:generate": "dotenv -- turbo db:generate --",
     "db:migrate": "dotenv -- turbo db:migrate --",
     "db:studio": "dotenv -- turbo db:studio --",
+    "db:drizzle-kit": "dotenv -- turbo db:drizzle-kit --",
     "db:import-routes": "CMD_WD=$(pwd) dotenv -- turbo db:import-routes --",
 
     "build-sprites": "dotenv -- turbo build-sprites --",

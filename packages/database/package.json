@@ -9,7 +9,8 @@
   "scripts": {
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:drizzle-kit": "drizzle-kit"
   },
   "dependencies": {
     "@repo/util": "workspace:*",

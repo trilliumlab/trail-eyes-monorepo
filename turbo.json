@@ -30,6 +30,11 @@
       "cache": false,
       "persistent": true
     },
+    "db:drizzle-kit": {
+      "cache": false,
+      "interactive": true,
+      "persistent": true
+    },
 
     "scripts#db:import-routes": {
       "cache": false,
