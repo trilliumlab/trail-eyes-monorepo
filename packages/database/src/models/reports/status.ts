@@ -1,5 +1,5 @@
 import { StringEnum } from '@repo/util';
-import { statusEnum } from '~/schema/status';
+import { statusEnum } from '~/schema/reports/status';
 import type { PgEnumToObject } from '~/utils';
 
 export const statusEnumValues = {

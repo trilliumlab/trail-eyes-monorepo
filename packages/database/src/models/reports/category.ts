@@ -1,5 +1,5 @@
 import { StringEnum } from '@repo/util';
-import { categoryEnum } from '~/schema/category';
+import { categoryEnum } from '~/schema/reports/category';
 import type { PgEnumToObject } from '~/utils';
 
 export const categoryEnumValues = {
