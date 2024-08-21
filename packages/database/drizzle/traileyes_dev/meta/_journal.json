@@ -36,6 +36,20 @@
       "when": 1724274827078,
       "tag": "0004_greedy_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1724277937618,
+      "tag": "0005_cute_talisman",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724280027693,
+      "tag": "0006_brave_sumo",
+      "breakpoints": true
     }
   ]
 }

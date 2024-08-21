@@ -6,7 +6,8 @@ import { statusEnum } from './status';
 export const commonReportsColumns = {
   id: serial('id').primaryKey(),
   localId: uuid('local_id').unique(),
-  creatorId: text('creator_id').notNull(),
+  creatorDeviceId: text('creator_device_id').notNull(),
+  creatorUserId: text('creator_user_id'),
   category: categoryEnum('category').notNull(),
   route: integer('route').notNull(),
   trail: integer('trail').notNull(),

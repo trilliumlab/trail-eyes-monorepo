@@ -9,6 +9,6 @@ const routesRefine = {
   }),
 };
 export const RouteInsertSchema = createInsertSchema(routes, routesRefine);
-export type RouteInsert = typeof RouteInsertSchema.static;
 export const RouteSelectSchema = createSelectSchema(routes, routesRefine);
+export type RouteInsert = typeof RouteInsertSchema.static;
 export type RouteSelect = typeof RouteSelectSchema.static;

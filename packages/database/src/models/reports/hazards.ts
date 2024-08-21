@@ -9,6 +9,6 @@ const hazardsRefine = {
   }),
 };
 export const HazardInsertSchema = createInsertSchema(hazards, hazardsRefine);
-export type HazardInsert = typeof HazardInsertSchema.static;
 export const HazardSelectSchema = createSelectSchema(hazards, hazardsRefine);
+export type HazardInsert = typeof HazardInsertSchema.static;
 export type HazardSelect = typeof HazardSelectSchema.static;

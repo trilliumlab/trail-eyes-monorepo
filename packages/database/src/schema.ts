@@ -3,3 +3,7 @@ export * from './schema/reports/category';
 export * from './schema/reports/reports';
 export * from './schema/reports/hazards';
 export * from './schema/reports/status';
+export * from './schema/auth/users';
+export * from './schema/auth/email-mfa';
+export * from './schema/auth/email-mfa-codes';
+export * from './schema/auth/totp-mfa';

@@ -9,6 +9,6 @@ const reportsRefine = {
   }),
 };
 export const ReportInsertSchema = createInsertSchema(reports, reportsRefine);
-export type ReportInsert = typeof ReportInsertSchema.static;
 export const ReportSelectSchema = createSelectSchema(reports, reportsRefine);
+export type ReportInsert = typeof ReportInsertSchema.static;
 export type ReportSelect = typeof ReportSelectSchema.static;
