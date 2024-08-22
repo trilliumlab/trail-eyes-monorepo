@@ -1,0 +1,24 @@
+{
+  "name": "@repo/email",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "email dev -p 3001 -d src/emails"
+  },
+  "dependencies": {
+    "@repo/util": "workspace:*",
+    "@sinclair/typebox": "^0.33.7",
+    "@react-email/components": "^0.0.23",
+    "react-email": "^3.0.0",
+    "nodemailer": "^6.9.14"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/nodemailer": "^6.4.15",
+    "bun-types": "latest"
+  }
+}

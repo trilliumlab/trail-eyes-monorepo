@@ -6,7 +6,8 @@
     "db:import-routes": "bun run src/db/import-routes.ts"
   },
   "dependencies": {
-    "@repo/database": "workspace:*"
+    "@repo/database": "workspace:*",
+    "@repo/email": "workspace:*"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
