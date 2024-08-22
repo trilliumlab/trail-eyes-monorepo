@@ -33,7 +33,7 @@ for (const [i, route] of routes.features.entries()) {
     const geometry = await addElevationToLine(route.geometry);
     console.log(`Route ${i}: Elevation added, inserting into db.`);
 
-    await db.addRoute({
+    await db.paths.addRoute({
       originalId: route.id?.toString(),
       description: route.properties?.description,
       creator: route.properties?.creator,

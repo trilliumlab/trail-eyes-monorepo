@@ -1,3 +1,3 @@
 export { client } from './db-client';
 
-export * as reports from './database';
+export * as paths from './database/paths';
