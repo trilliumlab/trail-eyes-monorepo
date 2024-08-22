@@ -1,10 +1,3 @@
-export * from './schema/paths/routes.schema';
-export * from './schema/reports/category.schema';
-export * from './schema/reports/reports.schema';
-export * from './schema/reports/hazards.schema';
-export * from './schema/reports/status.schema';
-export * from './schema/auth/users.schema';
-export * from './schema/auth/email-mfa.schema';
-export * from './schema/auth/email-mfa-codes.schema';
-export * from './schema/auth/totp-mfa.schema';
-export * from './schema/auth/roles.schema';
+export * as paths from './schema/paths';
+export * as reports from './schema/reports';
+export * as auth from './schema/auth';
