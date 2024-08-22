@@ -11,6 +11,9 @@ export const users = pgTable('users', {
   lastName: text('last_name').notNull(),
   verified: boolean('verified').default(false).notNull(),
   role: roleEnum('role').default('member').notNull(),
+  inviteDate: timestamp('registration_date', {
+    withTimezone: true,
+  }),
   registrationDate: timestamp('registration_date', {
     withTimezone: true,
   })

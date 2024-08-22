@@ -92,6 +92,13 @@
       "when": 1724349816178,
       "tag": "0012_parallel_genesis",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1724353055387,
+      "tag": "0013_smart_katie_power",
+      "breakpoints": true
     }
   ]
 }
