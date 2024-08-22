@@ -3,7 +3,7 @@ import { env } from '~/env';
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: './src/schema/*',
+  schema: ['./src/schema/**/*.schema.ts', './src/schema/**/schema.ts'],
   out: `./drizzle/${env.DB_NAME}`,
   dbCredentials: {
     host: env.DB_HOST,

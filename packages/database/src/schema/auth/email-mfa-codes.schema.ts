@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { users } from './users';
+import { users } from './users.schema';
 import { createId } from '@paralleldrive/cuid2';
 
 export const emailMfaCodes = pgTable('email_mfa_codes', {

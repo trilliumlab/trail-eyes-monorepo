@@ -1,7 +1,7 @@
 import { serial, text, timestamp, integer, uuid } from 'drizzle-orm/pg-core';
 import { point } from 'drizzle-postgis/models';
-import { categoryEnum } from './category';
-import { statusEnum } from './status';
+import { categoryEnum } from './category.schema';
+import { statusEnum } from './status.schema';
 
 export const commonReportsColumns = {
   id: serial('id').primaryKey(),

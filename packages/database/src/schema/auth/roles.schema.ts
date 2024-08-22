@@ -1,5 +1,5 @@
 import { pgEnum, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
-import { users } from './users';
+import { users } from './users.schema';
 
 export const roleEnum = pgEnum('role', ['developer', 'superAdmin', 'admin', 'volunteer']);
 
