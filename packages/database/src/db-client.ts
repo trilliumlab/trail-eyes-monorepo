@@ -12,5 +12,11 @@ export const client = drizzle(
     database: env.DB_NAME,
     ssl: env.DB_SSL,
   }),
-  { schema },
+  {
+    schema: {
+      ...schema.auth,
+      ...schema.paths,
+      ...schema.reports,
+    },
+  },
 );

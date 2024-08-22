@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { hazards } from '~/schema';
+import { reports } from '~/schema';
 
 const hazardsRefine = {
   geometry: Type.Object({
@@ -8,7 +8,7 @@ const hazardsRefine = {
     type: Type.Literal('Point'),
   }),
 };
-export const HazardInsertSchema = createInsertSchema(hazards, hazardsRefine);
-export const HazardSelectSchema = createSelectSchema(hazards, hazardsRefine);
+export const HazardInsertSchema = createInsertSchema(reports.hazards, hazardsRefine);
+export const HazardSelectSchema = createSelectSchema(reports.hazards, hazardsRefine);
 export type HazardInsert = typeof HazardInsertSchema.static;
 export type HazardSelect = typeof HazardSelectSchema.static;

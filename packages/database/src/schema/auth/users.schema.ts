@@ -1,14 +1,16 @@
 import { createId } from '@paralleldrive/cuid2';
 import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { roleEnum } from './role.schema';
 
 export const users = pgTable('users', {
   id: text('id')
     .$default(() => createId())
     .primaryKey(),
   email: text('email').unique().notNull(),
-  verified: boolean('verified').default(false).notNull(),
   firstName: text('first_name').notNull(),
   lastName: text('last_name').notNull(),
+  verified: boolean('verified').default(false).notNull(),
+  role: roleEnum('role').default('member').notNull(),
   registrationDate: timestamp('registration_date', {
     withTimezone: true,
   })

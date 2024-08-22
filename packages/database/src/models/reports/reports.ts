@@ -8,7 +8,7 @@ const reportsRefine = {
     type: Type.Literal('Point'),
   }),
 };
-export const ReportInsertSchema = createInsertSchema(reports, reportsRefine);
-export const ReportSelectSchema = createSelectSchema(reports, reportsRefine);
+export const ReportInsertSchema = createInsertSchema(reports.reports, reportsRefine);
+export const ReportSelectSchema = createSelectSchema(reports.reports, reportsRefine);
 export type ReportInsert = typeof ReportInsertSchema.static;
 export type ReportSelect = typeof ReportSelectSchema.static;
