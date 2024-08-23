@@ -7,6 +7,23 @@ export interface EmailBaseProps {
 }
 
 const globalCss = `
+.light-only {
+  display: block;
+}
+.dark-only {
+  display: none;
+}
+
+/* Styles here only apply to dark mode (outlook, apple mail) */
+@media (prefers-color-scheme: dark) {
+  .light-only {
+    display: none !important;
+  }
+  .dark-only {
+    display: block !important;
+  }
+}
+
 .traileyes-image {
   background-image: url("https://github.com/trilliumlab/forest-park-reports-app/blob/dev/assets/icon/icon-64px.jpeg?raw=true");
   width: 64px;
@@ -15,9 +32,9 @@ const globalCss = `
 
 .foreground-button {
   background-color: ${tailwindConfig.theme.extend.colors.foreground};
-  // transition-property: background-color;
-  // transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  // transition-duration: 150ms;
+  transition-property: background-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 
 .foreground-button:hover {
