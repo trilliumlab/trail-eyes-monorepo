@@ -3,24 +3,24 @@ import { EmailBase } from './_components/email-base';
 import { Card, CardContent, CardFooter, CardHeader } from './_components/card';
 import { VerificationCode } from './_components/verification-code';
 
-export interface VerifyEmailProps {
+export interface OtpEmailProps {
   code: string;
   firstName: string;
   lastName: string;
 }
 
-export default function VerifyEmail({
+export default function OtpEmail({
   code = '123456',
   firstName = 'Jane',
   lastName = 'Doe',
-}: VerifyEmailProps) {
+}: OtpEmailProps) {
   const previewText = `Your TrailEyes verification code is ${code}`;
 
   return (
     <EmailBase previewText={previewText}>
       <Card>
         <CardHeader>
-          Verify your <strong>TrailEyes</strong> email
+          Your <strong>TrailEyes</strong> verification code
         </CardHeader>
         <CardContent>
           <Text className="text-black text-sm leading-6">
@@ -33,7 +33,11 @@ export default function VerifyEmail({
           <span className="text-foreground">
             {firstName} {lastName}
           </span>
-          . If you did not request this code, you can safely ignore this email.
+          . If you did not request this code, your account may be compromised:{' '}
+          <a className="muted-link" href="reset">
+            reset your password
+          </a>
+          .
         </CardFooter>
       </Card>
     </EmailBase>

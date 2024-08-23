@@ -1,8 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  prefix: '',
-  content: ['./src/emails/**/*.{ts,tsx}'],
+  content: [],
   theme: {
     // Use px instead of rem - 1rem=16px
     container: {

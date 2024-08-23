@@ -14,14 +14,11 @@ export function CardContent({ children }: React.PropsWithChildren) {
   return <>{children}</>;
 }
 
-export function CardHeader({
-  imgSrc = 'https://github.com/trilliumlab/forest-park-reports-app/blob/dev/assets/icon/icon-medium.jpeg?raw=true',
-  children,
-}: { imgSrc?: string; children: React.ReactNode }) {
+export function CardHeader({ children }: { imgSrc?: string; children: React.ReactNode }) {
   return (
     <>
-      <Section className="mt-6">
-        <Img src={imgSrc} width="40" height="37" alt="Vercel" className="my-0 mx-auto rounded" />
+      <Section className="mt-4">
+        <div className="traileyes-image my-0 mx-auto rounded-[12px]" />
       </Section>
       <Heading className="text-black text-2xl font-normal text-center p-0 my-6 mx-0">
         {children}

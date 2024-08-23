@@ -42,10 +42,10 @@ export default function InviteEmail({
           </Text>
           <Section className="text-center mt-8 mb-8">
             <Button
-              className="bg-primary rounded text-background text-xs font-semibold no-underline text-center px-4 py-3"
+              className="foreground-button rounded text-background text-xs font-semibold no-underline text-center px-4 py-3"
               href={signupUrl}
             >
-              Create an account
+              <span className="foreground-button-text">Create an account</span>
             </Button>
           </Section>
           <Text className="text-black text-xs leading-6">
