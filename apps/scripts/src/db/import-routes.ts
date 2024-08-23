@@ -3,9 +3,21 @@
 // import { addElevationToLine } from './elevation';
 // import { resolve } from 'node:path';
 
-import { sendTest } from '@repo/email';
+import { mailer } from '@repo/email';
 
-await sendTest('elliotnash@gmail.com');
+// await mailer.sendInvite('elliotnash@gmail.com', {
+//   firstName: 'Elliot',
+//   lastName: 'Nash',
+//   inviteRole: 'volunteer',
+//   invitedByEmail: 'admin@traileyes.net',
+//   invitedByFirstName: 'TrailEyes',
+//   invitedByLastName: 'Admin',
+// });
+await mailer.sendEmailVerification('elliotnash@gmail.com', {
+  code: '142623',
+  firstName: 'Elliot',
+  lastName: 'Nash',
+});
 
 // const cmdWorkingDir = process.env.CMD_WD;
 // if (!cmdWorkingDir) {

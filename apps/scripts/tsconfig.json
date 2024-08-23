@@ -9,5 +9,5 @@
       "~data/*": ["../../data/*"]
     }
   },
-  "references": [{ "path": "../../packages/database" }]
+  "references": [{ "path": "../../packages/database" }, { "path": "../../packages/email" }]
 }
