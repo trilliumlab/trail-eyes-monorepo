@@ -9,6 +9,8 @@ export interface OtpEmailProps {
   lastName: string;
 }
 
+const resetUrl = 'reset';
+
 export default function OtpEmail({
   code = '123456',
   firstName = 'Jane',
@@ -33,8 +35,8 @@ export default function OtpEmail({
           <span className="text-foreground">
             {firstName} {lastName}
           </span>
-          . If you did not request this code, your account may be compromised:{' '}
-          <a className="muted-link" href="reset">
+          . If you did not request this code, an attacker may know your credentials:{' '}
+          <a className="muted-link" href={resetUrl}>
             reset your password
           </a>
           .
