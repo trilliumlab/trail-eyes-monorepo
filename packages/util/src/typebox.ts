@@ -92,6 +92,34 @@ type IfEquals<T, U, Y = unknown, N = never> = (<G>() => G extends T ? 1 : 2) ext
   ? Y
   : N;
 
+// Sorry for how cursed this is but it is kinda cool
+type LengthOfString<
+  T extends string,
+  TLenAcum extends string[] = [],
+> = T extends `${string}${infer TRest}`
+  ? LengthOfString<TRest, [...TLenAcum, string]>
+  : TLenAcum['length'];
+
+type TruncateTo<
+  T extends string,
+  TLen extends number,
+  TLenAcum extends number[] = [],
+  TStrAcum extends string = '',
+> = TLen extends TLenAcum['length']
+  ? TStrAcum
+  : T extends `${infer TFirst}${infer TRest}`
+    ? TruncateTo<TRest, TLen, [0, ...TLenAcum], `${TStrAcum}${TFirst}`>
+    : TStrAcum;
+
+type WithoutPrefixInsensitive<
+  TPrefix extends string,
+  T extends string,
+> = Lowercase<T> extends `${Lowercase<TPrefix>}${string}`
+  ? T extends `${TruncateTo<T, LengthOfString<TPrefix>>}${infer TInner}`
+    ? TInner
+    : T
+  : T;
+
 /**
  * A typesafe way to rename fields on a Typebox object schema using Typebox transform.
  *

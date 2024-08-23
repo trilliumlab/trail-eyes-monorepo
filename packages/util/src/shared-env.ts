@@ -9,9 +9,13 @@ export const SharedEnvSchema = RenameFields(
   Type.Object({
     // Http server settings
     NEXT_PUBLIC_BACKEND_URL: Type.String(),
+    NEXT_PUBLIC_PANEL_URL: Type.String(),
+    NEXT_PUBLIC_AUTH_URL: Type.String(),
   }),
   {
     NEXT_PUBLIC_BACKEND_URL: 'BACKEND_URL',
+    NEXT_PUBLIC_PANEL_URL: 'PANEL_URL',
+    NEXT_PUBLIC_AUTH_URL: 'AUTH_URL',
   },
 );
 
