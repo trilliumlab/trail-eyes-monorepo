@@ -1,4 +1,4 @@
-import { Body, Container, Heading, Hr, Img, Section, Text } from '@react-email/components';
+import { Body, Container, Heading, Hr, Section, Text } from '@react-email/components';
 
 export function Card({ children }: React.PropsWithChildren) {
   return (

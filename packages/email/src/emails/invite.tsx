@@ -1,6 +1,7 @@
 import { Button, Heading, Hr, Img, Link, Section, Text } from '@react-email/components';
 import { EmailBase } from './_components/email-base';
 import { Card, CardContent, CardFooter, CardHeader } from './_components/card';
+import { ThemedButton } from './_components/themed-button';
 
 export interface InviteEmailProps {
   firstName: string;
@@ -41,12 +42,7 @@ export default function InviteEmail({
             ) has invited you to <strong>TrailEyes</strong> as a <strong>{inviteRole}</strong>.
           </Text>
           <Section className="text-center mt-8 mb-8">
-            <Button
-              className="foreground-button rounded text-background text-xs font-semibold no-underline text-center px-4 py-3"
-              href={signupUrl}
-            >
-              <span className="foreground-button-text">Create an account</span>
-            </Button>
+            <ThemedButton href={signupUrl}>Create an account</ThemedButton>
           </Section>
           <Text className="text-black text-xs leading-6">
             or copy and paste this URL into your browser:{' '}

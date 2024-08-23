@@ -49,11 +49,33 @@ const globalCss = `
 }
 `;
 
+/*
+Css with \0 will only apply to outlook. This style block will be removed in gmail.
+
+Outlook inverts the button color if it's white, so we set the background as a 1x1 white pixel to prevent it from being inverted.
+Outlook adds a data-ogsc attribute whenver it changes a color in dark mode, so we have a dummy span as the sibling
+Of the button, and so this selector only applies when the siblings color has changed (ie we're in dark mode)
+
+We use the same concept with the text, but we use background-clip: text to render the text as a clip of a tiled 1x1 black pixel
+*/
+const outlookCss = `
+[data-ogsc] + .foreground-button\0{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=);
+}
+
+[data-ogsc] + .foreground-button-text\0{
+  background-clip: text;
+  color: transparent;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=);
+}
+`;
+
 export function EmailBase({ children, previewText }: EmailBaseProps) {
   return (
     <Html>
       <Head>
         <style type="text/css">{globalCss}</style>
+        <style type="text/css">{outlookCss}</style>
       </Head>
       <Preview>{previewText}</Preview>
       <Tailwind config={tailwindConfig}>{children}</Tailwind>
