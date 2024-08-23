@@ -1,6 +1,6 @@
-import { Heading, Hr, Img, Section, Text } from '@react-email/components';
+import { Heading, Section, Text } from '@react-email/components';
 import { EmailBase } from './_components/email-base';
-import { EmailCard } from './_components/email-card';
+import { Card, CardContent, CardFooter, CardHeader } from './_components/card';
 
 export interface VerifyEmailProps {
   code: string;
@@ -17,32 +17,24 @@ export default function VerifyEmail({
 
   return (
     <EmailBase previewText={previewText}>
-      <EmailCard>
-        <Section className="mt-6">
-          <Img
-            src="https://github.com/trilliumlab/forest-park-reports-app/blob/dev/assets/icon/icon-compressed.png?raw=true"
-            width="40"
-            height="37"
-            alt="Vercel"
-            className="my-0 mx-auto rounded"
-          />
-        </Section>
-        <Heading className="text-black text-2xl font-normal text-center p-0 my-6 mx-0">
+      <Card>
+        <CardHeader>
           Verify your <strong>TrailEyes</strong> email
-        </Heading>
-        <Text className="text-black text-sm leading-6">
-          Enter it in your open browser window. This code will expire in 15 minutes.
-        </Text>
-        <VerificationCode>{code}</VerificationCode>
-        <Hr className="border border-solid border-border my-6 mx-0 w-full" />
-        <Text className="text-muted-foreground text-xs leading-6">
+        </CardHeader>
+        <CardContent>
+          <Text className="text-black text-sm leading-6">
+            Enter it in your open browser window. This code will expire in 15 minutes.
+          </Text>
+          <VerificationCode>{code}</VerificationCode>
+        </CardContent>
+        <CardFooter>
           This email was intended for{' '}
           <span className="text-foreground">
             {firstName} {lastName}
           </span>
           . If you did not request this code, you can safely ignore this email.
-        </Text>
-      </EmailCard>
+        </CardFooter>
+      </Card>
     </EmailBase>
   );
 }
