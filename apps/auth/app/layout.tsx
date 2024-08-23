@@ -13,8 +13,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'TrailEyes Panel',
-  description: 'TrailEyes admin panel',
+  title: 'TrailEyes Auth',
+  description: 'TrailEyes authentication service',
 };
 
 export default function RootLayout({

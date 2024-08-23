@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "dev": "email dev -p 3001 -d src/emails"
+    "dev": "email dev -p 4000 -d src/emails"
   },
   "dependencies": {
     "@repo/util": "workspace:*",

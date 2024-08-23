@@ -7,7 +7,7 @@ import startMarkers from '~data/routes/start-markers.json';
 
 const routesJsonMemo = memoize(
   async () => {
-    const routes = await db.getAllRoutes();
+    const routes = await db.paths.getAllRoutes();
     const features = routes.map(
       (route) =>
         ({
