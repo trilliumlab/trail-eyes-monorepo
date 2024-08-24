@@ -1,6 +1,6 @@
 import { Button, Heading, Hr, Img, Link, Section, Text } from '@react-email/components';
-import { EmailBase } from './_components/email-base';
 import { Card, CardContent, CardFooter, CardHeader } from './_components/card';
+import { EmailBase } from './_components/email-base';
 import { ThemedButton } from './_components/themed-button';
 
 export interface InviteEmailProps {

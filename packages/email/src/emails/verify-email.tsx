@@ -1,6 +1,6 @@
 import { Text } from '@react-email/components';
-import { EmailBase } from './_components/email-base';
 import { Card, CardContent, CardFooter, CardHeader } from './_components/card';
+import { EmailBase } from './_components/email-base';
 import { VerificationCode } from './_components/verification-code';
 
 export interface VerifyEmailProps {

@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/avatar';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import {
@@ -18,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from '@repo/ui/components/table';
+import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
+import Link from 'next/link';
 import { NavBar } from '~/components/nav/nav-bar';
 import { TrailEyesMap } from '~/components/trail-eyes-map';
 

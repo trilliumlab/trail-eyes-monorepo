@@ -1,8 +1,8 @@
 import { Elysia } from 'elysia';
 
 import darkJson from '~data/sprites/out/dark.json';
-import lightJson from '~data/sprites/out/light.json';
 import dark2xJson from '~data/sprites/out/dark@2x.json';
+import lightJson from '~data/sprites/out/light.json';
 import light2xJson from '~data/sprites/out/light@2x.json';
 import sdfJson from '~data/sprites/out/sdf.json';
 import sdf2xJson from '~data/sprites/out/sdf@2x.json';

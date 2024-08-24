@@ -1,7 +1,7 @@
+import { resolve } from 'node:path';
 import { db } from '@repo/database';
 import type { FeatureCollection } from 'geojson';
 import { addElevationToLine } from './elevation';
-import { resolve } from 'node:path';
 
 const cmdWorkingDir = process.env.CMD_WD;
 if (!cmdWorkingDir) {

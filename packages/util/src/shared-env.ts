@@ -1,6 +1,6 @@
+import { Type } from '@sinclair/typebox';
 import { parseEnv } from './typebox/parse';
 import * as TEType from './typebox/types';
-import { Type } from '@sinclair/typebox';
 
 /**
  * Typebox schema of the repository wide env variables.

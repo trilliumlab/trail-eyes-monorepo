@@ -1,8 +1,8 @@
-import { Menu, Package2, Search } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Sheet, SheetContent, SheetTrigger } from '@repo/ui/components/sheet';
+import { Menu, Package2, Search } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@repo/ui/components/button';
 import { NavLink } from './nav-link';
 import { UserMenu } from './user-menu';
 

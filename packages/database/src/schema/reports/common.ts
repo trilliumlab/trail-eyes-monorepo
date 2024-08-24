@@ -1,4 +1,4 @@
-import { serial, text, timestamp, integer, uuid } from 'drizzle-orm/pg-core';
+import { integer, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { point } from 'drizzle-postgis/models';
 import { categoryEnum } from './category.schema';
 import { statusEnum } from './status.schema';

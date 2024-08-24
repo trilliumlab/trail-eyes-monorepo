@@ -1,5 +1,7 @@
 'use client';
 
+import { sharedEnv } from '@repo/util/shared-env';
+import { useTheme } from 'next-themes';
 import { useRef, useState } from 'react';
 import {
   type CircleLayer,
@@ -10,8 +12,6 @@ import {
   Source,
   type SymbolLayer,
 } from 'react-map-gl/maplibre';
-import { useTheme } from 'next-themes';
-import { sharedEnv } from '@repo/util/shared-env';
 
 // maplibre stylesheet
 import 'maplibre-gl/dist/maplibre-gl.css';

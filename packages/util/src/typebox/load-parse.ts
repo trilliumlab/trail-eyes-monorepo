@@ -1,7 +1,7 @@
-import type { TSchema, StaticDecode } from '@sinclair/typebox';
-import url from 'node:url';
-import dotenv from 'dotenv';
 import fs from 'node:fs';
+import url from 'node:url';
+import type { StaticDecode, TSchema } from '@sinclair/typebox';
+import dotenv from 'dotenv';
 import { parseEnv } from './parse';
 
 /**

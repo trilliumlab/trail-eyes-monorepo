@@ -1,4 +1,4 @@
-import { parseEnv, TEType } from '@repo/util';
+import { TEType, parseEnv } from '@repo/util';
 import { Type } from '@sinclair/typebox';
 
 /**
