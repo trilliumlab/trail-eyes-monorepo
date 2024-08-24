@@ -1,4 +1,4 @@
-import { loadParseEnv } from '@repo/util';
+import { loadParseEnv } from '@repo/util/load-parse';
 import { Type } from '@sinclair/typebox';
 
 export const EnvSchema = Type.Object({

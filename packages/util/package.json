@@ -6,7 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./types": "./src/types.ts",
-    "./parse": "./src/typebox/parse.ts",
+    "./load-parse": "./src/typebox/load-parse.ts",
     "./shared-env": "./src/shared-env.ts"
   },
   "dependencies": {

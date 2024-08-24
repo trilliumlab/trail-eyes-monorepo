@@ -33,6 +33,7 @@ export function parseEnv<T extends TSchema, R = StaticDecode<T>>(
     return parse(schema, { ...process.env, ...additionalVars }); // run decode transforms (optional)
   } catch (e) {
     if (e instanceof TransformDecodeCheckError) {
+      console.log(process.env);
       const varName = e.error.path.substring(1);
       const varValue = e.error.value;
       const varType = e.error.schema.type;

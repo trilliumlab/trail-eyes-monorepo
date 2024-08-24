@@ -11,16 +11,15 @@ import {
   type SymbolLayer,
 } from 'react-map-gl/maplibre';
 import { useTheme } from 'next-themes';
+import { sharedEnv } from '@repo/util/shared-env';
 
 // maplibre stylesheet
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
-import { sharedEnv } from '@repo/util/shared-env';
+import { env } from '~/env';
 
 export function TrailEyesMap() {
-  console.log(sharedEnv);
-
   const { resolvedTheme } = useTheme();
   const darkMode = resolvedTheme === 'dark';
 
@@ -119,7 +118,7 @@ export function TrailEyesMap() {
         }}
         mapStyle={
           resolvedTheme === 'dark' || resolvedTheme === 'light'
-            ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/styles/${resolvedTheme}.json?key=${process.env.NEXT_PUBLIC_PROTO_API_KEY}`
+            ? `${sharedEnv.BACKEND_URL}/styles/${resolvedTheme}.json?key=${env.PROTO_API_KEY}`
             : undefined
         }
         interactiveLayerIds={['routes-hit']}
@@ -144,11 +143,7 @@ export function TrailEyesMap() {
           }
         }}
       >
-        <Source
-          id="routes"
-          type="geojson"
-          data={`${process.env.NEXT_PUBLIC_BACKEND_URL}/geojson/routes.json`}
-        >
+        <Source id="routes" type="geojson" data={`${sharedEnv.BACKEND_URL}/geojson/routes.json`}>
           <Layer {...routesLayer} />
           <Layer {...arrowLayer} />
           <Layer {...hoverRoutesOutlineLayer} />
@@ -159,7 +154,7 @@ export function TrailEyesMap() {
         <Source
           id="start-markers"
           type="geojson"
-          data={`${process.env.NEXT_PUBLIC_BACKEND_URL}/geojson/start-markers.json`}
+          data={`${sharedEnv.BACKEND_URL}/geojson/start-markers.json`}
         >
           <Layer {...startMarkers} />
         </Source>
