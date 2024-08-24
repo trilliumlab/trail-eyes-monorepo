@@ -12,7 +12,6 @@ export const PrivateEnvSchema = Type.Object({
   DB_PASSWORD: Type.String(),
   DB_PORT: Type.Number(),
   DB_SSL: Type.Boolean(),
-  DB_APP_NAME: Type.Optional(Type.String()),
   // packages/email
   SMTP_HOST: Type.String(),
   SMTP_PORT: Type.Number(),

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@repo/ui/globals.css';
 import { ThemeProvider } from 'next-themes';
+import { publicEnv } from '@repo/util/public-env';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -13,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'TrailEyes Auth',
-  description: 'TrailEyes authentication service',
+  title: `${publicEnv.APP_NAME} Auth`,
+  description: `${publicEnv.APP_NAME} authentication service`,
 };
 
 export default function RootLayout({
