@@ -1,13 +1,13 @@
 import { render } from '@react-email/components';
 import nodemailer from 'nodemailer';
-import { env } from './env';
+import { privateEnv } from '@repo/util/private-env';
 
 const transporter = nodemailer.createTransport({
-  port: env.SMTP_PORT,
-  host: env.SMTP_HOST,
+  port: privateEnv.SMTP_PORT,
+  host: privateEnv.SMTP_HOST,
   auth: {
-    user: env.SMTP_USER,
-    pass: env.SMTP_PASS,
+    user: privateEnv.SMTP_USER,
+    pass: privateEnv.SMTP_PASS,
   },
 });
 
@@ -18,8 +18,8 @@ export async function sendEmail({
 }: { email: React.ReactElement; to: string; subject: string }) {
   await transporter.sendMail({
     from: {
-      name: env.SMTP_SENDER_NAME,
-      address: env.SMTP_SENDER,
+      name: privateEnv.SMTP_SENDER_NAME,
+      address: privateEnv.SMTP_SENDER,
     },
     to,
     subject,

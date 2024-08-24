@@ -1,16 +1,16 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { env } from '~/env';
+import { privateEnv } from '@repo/util/private-env';
 import * as schema from '~/schema';
 
 export const client = drizzle(
   postgres({
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    ssl: env.DB_SSL,
+    host: privateEnv.DB_HOST,
+    port: privateEnv.DB_PORT,
+    user: privateEnv.DB_USER,
+    password: privateEnv.DB_PASSWORD,
+    database: privateEnv.DB_NAME,
+    ssl: privateEnv.DB_SSL,
   }),
   {
     schema: {
