@@ -4,6 +4,7 @@ import { TransformDecodeCheckError, Value, ValueErrorType } from '@sinclair/type
 import url from 'node:url';
 import dotenv from 'dotenv';
 import fs from 'node:fs';
+import type { IfEquals, Narrow, Reverse, WithoutPrefixInsensitive } from './types';
 
 /**
  * Parses a value from a Typebox schema.
@@ -74,53 +75,6 @@ export function parseEnv<T extends TSchema, R = StaticDecode<T>>(
 }
 
 /**
- * Narrows `T` to a literal
- */
-type Narrow<T> = { [Key in keyof T]: T[Key] };
-/**
- * Type of `T` with the keys and values swapped
- */
-type Reverse<T extends Record<PropertyKey, PropertyKey | undefined>> = {
-  [Key in keyof T as T[Key] extends PropertyKey ? T[Key] : never]: Key;
-};
-/**
- * Evaluates to `Y` if `T` and `U` are same type, otherwise evaluates to `N`
- */
-type IfEquals<T, U, Y = unknown, N = never> = (<G>() => G extends T ? 1 : 2) extends <
-  G,
->() => G extends U ? 1 : 2
-  ? Y
-  : N;
-
-// Sorry for how cursed this is but it is kinda cool
-type LengthOfString<
-  T extends string,
-  TLenAcum extends string[] = [],
-> = T extends `${string}${infer TRest}`
-  ? LengthOfString<TRest, [...TLenAcum, string]>
-  : TLenAcum['length'];
-
-type TruncateTo<
-  T extends string,
-  TLen extends number,
-  TLenAcum extends number[] = [],
-  TStrAcum extends string = '',
-> = TLen extends TLenAcum['length']
-  ? TStrAcum
-  : T extends `${infer TFirst}${infer TRest}`
-    ? TruncateTo<TRest, TLen, [0, ...TLenAcum], `${TStrAcum}${TFirst}`>
-    : TStrAcum;
-
-type WithoutPrefixInsensitive<
-  TPrefix extends string,
-  T extends string,
-> = Lowercase<T> extends `${Lowercase<TPrefix>}${string}`
-  ? T extends `${TruncateTo<T, LengthOfString<TPrefix>>}${infer TInner}`
-    ? TInner
-    : T
-  : T;
-
-/**
  * A typesafe way to rename fields on a Typebox object schema using Typebox transform.
  *
  * @param schema The object schema.
@@ -158,6 +112,44 @@ export function RenameFields<T extends TObject, M extends { [Key in keyof Static
       for (const [key, value] of Object.entries(map)) {
         val[key] = val[value];
         delete val[value];
+      }
+      return v;
+    });
+}
+
+/**
+ * A typesafe way to remove a prefix from all fields on a Typebox object schema using Typebox transform.
+ *
+ * @param schema The object schema.
+ * @param prefix The prefix to remove.
+ * @returns The renamed schema.
+ */
+export function RemovePrefix<T extends TObject, TPrefix extends string>(
+  schema: T,
+  prefix: TPrefix,
+) {
+  return Type.Transform(schema)
+    .Decode((v) => {
+      const val = v as Record<string, unknown>;
+      for (const [key, value] of Object.entries(val)) {
+        if (key.toLowerCase().startsWith(prefix.toLowerCase())) {
+          val[key.substring(prefix.length)] = value;
+          delete val[key];
+        }
+      }
+      return val as {
+        [Key in keyof Static<T> as Key extends string
+          ? WithoutPrefixInsensitive<Key, TPrefix>
+          : never]: Static<T>[Key];
+      };
+    })
+    .Encode((v) => {
+      const val = v as Record<string, unknown>;
+      for (const key of Object.keys(schema.properties)) {
+        if (key.toLowerCase().startsWith(prefix.toLowerCase())) {
+          val[key] = val[key.substring(prefix.length)];
+          delete val[key.substring(prefix.length)];
+        }
       }
       return v;
     });
