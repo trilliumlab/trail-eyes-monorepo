@@ -16,8 +16,11 @@ import { useTheme } from 'next-themes';
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
+import { sharedEnv } from '@repo/util/shared-env';
 
 export function TrailEyesMap() {
+  console.log(sharedEnv);
+
   const { resolvedTheme } = useTheme();
   const darkMode = resolvedTheme === 'dark';
 

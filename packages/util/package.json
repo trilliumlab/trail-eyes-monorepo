@@ -6,11 +6,11 @@
   "exports": {
     ".": "./src/index.ts",
     "./types": "./src/types.ts",
+    "./parse": "./src/typebox/parse.ts",
     "./shared-env": "./src/shared-env.ts"
   },
   "dependencies": {
     "@sinclair/typebox": "^0.33.7",
-    "import-meta-resolve": "^4.1.0",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {

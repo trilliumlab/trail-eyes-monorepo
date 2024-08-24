@@ -1,11 +1,11 @@
-import { resolve } from 'import-meta-resolve';
-import { parseEnv, RemovePrefix, RenameFields } from './typebox';
+import { parseEnv } from './typebox/parse';
+import * as TEType from './typebox/types';
 import { Type } from '@sinclair/typebox';
 
 /**
  * Typebox schema of the project wide env variables.
  */
-export const SharedEnvSchema = RemovePrefix(
+export const SharedEnvSchema = TEType.RemovePrefix(
   Type.Object({
     // Http server settings
     NEXT_PUBLIC_BACKEND_URL: Type.String(),
@@ -18,6 +18,7 @@ export const SharedEnvSchema = RemovePrefix(
 /**
  * Validated project wide env variables.
  */
-export const sharedEnv = parseEnv(SharedEnvSchema, resolve('../../../.env', import.meta.url), {
-  loadEnv: false,
-});
+export const sharedEnv = parseEnv(
+  SharedEnvSchema,
+  (import.meta.resolve as unknown) ? import.meta.resolve('../../../.env') : undefined,
+);

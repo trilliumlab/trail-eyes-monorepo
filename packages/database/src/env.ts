@@ -1,4 +1,4 @@
-import { parseEnv } from '@repo/util';
+import { loadParseEnv } from '@repo/util';
 import { Type } from '@sinclair/typebox';
 import { resolve } from 'import-meta-resolve';
 
@@ -12,4 +12,4 @@ export const EnvSchema = Type.Object({
   DB_APP_NAME: Type.Optional(Type.String()),
 });
 
-export const env = parseEnv(EnvSchema, resolve('../.env', import.meta.url));
+export const env = loadParseEnv(EnvSchema, resolve('../.env', import.meta.url));
