@@ -1,6 +1,6 @@
 import type { Static, TObject } from '@sinclair/typebox';
 import { Type } from '@sinclair/typebox';
-import type { IfEquals, Narrow, Reverse, WithoutPrefixInsensitive } from '~/types';
+import type { IfEquals, Narrow, Reverse, WithoutPrefixInsensitive } from '../types';
 
 /**
  * A typesafe way to rename fields on a Typebox object schema using Typebox transform.
