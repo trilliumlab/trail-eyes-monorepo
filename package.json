@@ -6,10 +6,10 @@
     "dev": "bunx --bun turbo dev --",
     "start": "bunx --bun turbo start --",
 
-    "db:generate": "bunx --bun turbo db:generate --",
-    "db:migrate": "bunx --bun turbo db:migrate --",
-    "db:studio": "bunx --bun turbo db:studio --",
-    "db:drizzle-kit": "bunx --bun turbo db:drizzle-kit --",
+    "db:generate": "bunx turbo db:generate --",
+    "db:migrate": "bunx turbo db:migrate --",
+    "db:studio": "bunx turbo db:studio --",
+    "db:drizzle-kit": "bunx turbo db:drizzle-kit --",
     "db:import-routes": "CMD_WD=$(pwd) bunx --bun turbo db:import-routes --",
 
     "build-sprites": "bunx --bun turbo build-sprites --",
