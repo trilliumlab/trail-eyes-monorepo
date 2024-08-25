@@ -22,7 +22,7 @@ export const PublicEnvSchema = TEType.RemovePrefix(
  */
 export const publicEnv = parseEnv(
   PublicEnvSchema,
-  (import.meta.resolve as unknown) ? import.meta.resolve('../../../.env') : undefined,
+  (import.meta?.resolve as unknown) ? import.meta.resolve('../../../.env') : undefined,
   {
     // For some reason process.env = {}, but all these are defined. Thanks nextjs
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,

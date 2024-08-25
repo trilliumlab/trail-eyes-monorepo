@@ -1,17 +1,17 @@
 import { defineConfig } from 'drizzle-kit';
-import { env } from '~/env';
+import { privateEnv } from '@repo/util/private-env';
 
 export default defineConfig({
   dialect: 'postgresql',
   schema: ['./src/schema/**/*.schema.ts', './src/schema/**/schema.ts'],
-  out: `./drizzle/${env.DB_NAME}`,
+  out: `./drizzle/${privateEnv.DB_USER}@${privateEnv.DB_HOST}:${privateEnv.DB_PORT}`,
   dbCredentials: {
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-    ssl: env.DB_SSL,
+    host: privateEnv.DB_HOST,
+    port: privateEnv.DB_PORT,
+    user: privateEnv.DB_USER,
+    password: privateEnv.DB_PASSWORD,
+    database: privateEnv.DB_NAME,
+    ssl: privateEnv.DB_SSL,
   },
   extensionsFilters: ['postgis'],
 });

@@ -1,1 +1,0 @@
-ALTER TABLE "routes" ALTER COLUMN "geometry" SET DATA TYPE geometry(LineStringZ);

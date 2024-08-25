@@ -26,5 +26,5 @@ export const PrivateEnvSchema = Type.Object({
  */
 export const privateEnv = parseEnv(
   PrivateEnvSchema,
-  (import.meta.resolve as unknown) ? import.meta.resolve('../../../.env') : undefined,
+  (import.meta?.resolve as unknown) ? import.meta.resolve('../../../.env') : undefined,
 );
