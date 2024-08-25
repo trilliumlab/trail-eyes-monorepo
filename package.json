@@ -2,17 +2,17 @@
   "name": "trail-eyes-monorepo",
   "private": true,
   "scripts": {
-    "build": "dotenv -- turbo build --",
-    "dev": "dotenv -- turbo dev --",
-    "start": "dotenv -- turbo start --",
+    "build": "bun run ./cmd.ts build",
+    "dev": "bun run ./cmd.ts dev",
+    "start": "bun run ./cmd.ts start",
 
-    "db:generate": "dotenv -- turbo db:generate --",
-    "db:migrate": "dotenv -- turbo db:migrate --",
-    "db:studio": "dotenv -- turbo db:studio --",
-    "db:drizzle-kit": "dotenv -- turbo db:drizzle-kit --",
-    "db:import-routes": "CMD_WD=$(pwd) dotenv -- turbo db:import-routes --",
+    "db:generate": "bun run ./cmd.ts db:generate",
+    "db:migrate": "bun run ./cmd.ts db:migrate",
+    "db:studio": "bun run ./cmd.ts db:studio",
+    "db:drizzle-kit": "bun run ./cmd.ts db:drizzle-kit",
+    "db:import-routes": "bun run ./cmd.ts db:import-routes",
 
-    "build-sprites": "dotenv -- turbo build-sprites --",
+    "build-sprites": "bun run ./cmd.ts build-sprites",
 
     "lint": "biome lint .",
     "format": "biome format .",
@@ -22,10 +22,13 @@
     "check:fix": "biome check --write ."
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@biomejs/biome": "^1.8.3",
     "turbo": "^2.0.14",
     "typescript": "^5.4.5",
-    "dotenv-cli": "^7.4.2"
+    "@dotenvx/dotenvx": "^1.10.2",
+    "cross-spawn": "^7.0.3",
+    "@types/cross-spawn": "^6.0.6"
   },
   "overrides": {
     "@sinclair/typebox": "^0.33.7"
