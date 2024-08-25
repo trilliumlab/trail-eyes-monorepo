@@ -1,4 +1,11 @@
 import { createLoggerOptions } from '@repo/util/logger';
-import { pino } from 'pino';
+import { pino, type Logger } from 'pino';
 
-export const logger = pino(createLoggerOptions('auth'));
+let logger: Logger | undefined;
+export function getLogger() {
+  if (logger) {
+    return logger;
+  }
+  logger = pino(createLoggerOptions('auth'));
+  return logger;
+}

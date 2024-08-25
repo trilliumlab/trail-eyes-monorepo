@@ -6,9 +6,9 @@ export function createLoggerOptions(name: string) {
     name,
     level: publicEnv.LOG_LEVEL,
     transport:
-      typeof window !== 'undefined' && publicEnv.LOG_FORMAT === 'pretty'
+      typeof window === 'undefined' && publicEnv.LOG_FORMAT === 'pretty'
         ? {
-            target: 'pino-pretty-browser',
+            target: 'pino-pretty',
             options: {
               colorize: true,
             },

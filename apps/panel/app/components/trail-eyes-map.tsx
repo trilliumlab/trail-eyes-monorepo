@@ -17,6 +17,7 @@ import {
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
+import { getLogger } from '~/logger';
 
 export function TrailEyesMap() {
   const { resolvedTheme } = useTheme();
@@ -122,6 +123,7 @@ export function TrailEyesMap() {
         }
         interactiveLayerIds={['routes-hit']}
         onMouseMove={(event) => {
+          getLogger().warn('This is warning');
           const map = mapRef.current;
           if (event.features && event.features.length > 0) {
             const id = event.features[0]?.id as number | undefined;
