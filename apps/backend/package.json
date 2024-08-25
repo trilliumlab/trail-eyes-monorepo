@@ -15,7 +15,10 @@
     "@elysiajs/swagger": "^1.1.1",
     "@sinclair/typebox": "^0.33.7",
     "@paralleldrive/cuid2": "^2.2.2",
-    "normalize-url": "^8.0.1"
+    "normalize-url": "^8.0.1",
+    "@bogeychan/elysia-logger": "^0.1.2",
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

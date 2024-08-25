@@ -3,8 +3,12 @@ import swagger from '@elysiajs/swagger';
 import type { ThemeId } from '@elysiajs/swagger/scalar/types';
 import { Elysia } from 'elysia';
 import { routes } from './routes/plugin';
+import { logger } from './logger';
+import { logger as elysiaLogger } from '@bogeychan/elysia-logger';
+import { createLoggerOptions } from '@repo/util/logger';
 
 const app = new Elysia()
+  .use(elysiaLogger(createLoggerOptions('backend-elysia')))
   .use(
     swagger({
       path: 'docs',
@@ -21,4 +25,4 @@ const app = new Elysia()
 
 export type App = typeof app;
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+logger.info(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);

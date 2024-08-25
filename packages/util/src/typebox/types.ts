@@ -1,4 +1,4 @@
-import type { Static, TObject } from '@sinclair/typebox';
+import type { Static, TLiteral, TObject, TUnion } from '@sinclair/typebox';
 import { Type } from '@sinclair/typebox';
 import type { IfEquals, Narrow, Reverse, WithoutPrefixInsensitive } from '../types';
 
@@ -83,14 +83,27 @@ export function RemovePrefix<T extends TObject, TPrefix extends string>(
     });
 }
 
+type IntoStringLiteralUnion<T> = { [K in keyof T]: T[K] extends string ? TLiteral<T[K]> : never };
+
 /**
  * Creates a literal union from an array of literals.
  *
  * @param values The array of literals.
+ * @param options.default The default value to use if no value supplied.
  * @returns A literal union consisting of all the literals.
  */
-export const StringEnum = <T extends string[]>(values: [...T]) =>
-  Type.Unsafe<T[number]>({
-    type: 'string',
-    enum: values,
-  });
+export function StringEnum<T extends string[]>(values: [...T], options?: { default?: T[number] }) {
+  const literals = values.map((value) => Type.Literal(value));
+  return Type.Union(literals, options) as TUnion<IntoStringLiteralUnion<T>>;
+}
+// export function StringEnum<T extends string[]>(
+//   values: [...T],
+//   options?: { default?: T[number] },
+// ): TUnion<IntoUnion<T>> {
+//   return {
+//     type: 'string',
+//     enum: values,
+//     default: options?.default,
+//     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+//   } as any;
+// }
