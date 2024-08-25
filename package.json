@@ -2,17 +2,17 @@
   "name": "trail-eyes-monorepo",
   "private": true,
   "scripts": {
-    "build": "bunx --bun turbo build --",
-    "dev": "bunx --bun turbo dev --",
-    "start": "bunx --bun turbo start --",
+    "build": "turbo build --",
+    "dev": "turbo dev --",
+    "start": "turbo start --",
 
     "db:generate": "turbo db:generate --",
     "db:migrate": "turbo db:migrate --",
     "db:studio": "turbo db:studio --",
     "db:drizzle-kit": "turbo db:drizzle-kit --",
-    "db:import-routes": "CMD_WD=$(pwd) bunx --bun turbo db:import-routes --",
+    "db:import-routes": "CMD_WD=$(pwd) turbo db:import-routes --",
 
-    "build-sprites": "bunx --bun turbo build-sprites --",
+    "build-sprites": "turbo build-sprites --",
 
     "lint": "biome lint .",
     "format": "biome format .",
