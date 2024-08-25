@@ -68,7 +68,7 @@ export function TrailEyesMap() {
     source: 'start-markers',
     paint: {
       'circle-color': darkMode ? '#305530' : '#308830',
-      'circle-radius': 2,
+      'circle-radius': 4,
     },
   };
 
