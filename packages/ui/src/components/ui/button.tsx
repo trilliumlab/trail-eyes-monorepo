@@ -69,7 +69,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
-        data-active={isAnimating}
+        data-active={isAnimating || isPressed}
         ref={ref}
         {...props}
         onMouseDown={(e) => {
@@ -87,6 +87,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onTouchEnd={(e) => {
           handleRelease();
           props.onTouchEnd?.(e);
+        }}
+        onKeyDown={(e) => {
+          if (e.code === 'Enter' || e.code === 'Space') {
+            handlePress();
+          }
+          props.onKeyDown?.(e);
+        }}
+        onKeyUp={(e) => {
+          if (e.code === 'Enter' || e.code === 'Space') {
+            handleRelease();
+          }
+          props.onKeyUp?.(e);
+        }}
+        onClick={() => {
+          console.log('YOU CLICKED ME');
         }}
       />
     );
