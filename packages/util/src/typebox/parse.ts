@@ -61,7 +61,7 @@ export function parseEnv<T extends TSchema, R = StaticDecode<T>>(
       const varValue = e.error.value;
       const varType = getErrorTypeString(e.error.schema);
 
-      if (e.error.type === ValueErrorType.ObjectRequiredProperty) {
+      if (e.error.type === ValueErrorType.ObjectRequiredProperty || !varValue) {
         // Missing property error
         let message = `Missing required ENV variable '${varName}' '${varType}'.`;
         if (envPath) {
