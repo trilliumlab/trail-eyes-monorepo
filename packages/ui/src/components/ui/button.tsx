@@ -41,15 +41,25 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const [animating, setAnimating] = React.useState(false);
+    const [isAnimating, setIsAnimating] = React.useState(false);
+    const [isPressed, setIsPressed] = React.useState(false);
     const timerRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
     // On press, set animation to true for duration of animation
+    // Store the press state to not duplicate animations during a press if multiple events fired.
     function handlePress() {
-      setAnimating(true);
-      timerRef.current = setTimeout(() => {
-        setAnimating(false);
-      }, animationDuration);
+      if (!isPressed) {
+        setIsPressed(true);
+        setIsAnimating(true);
+        clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          setIsAnimating(false);
+        }, animationDuration);
+      }
+    }
+
+    function handleRelease() {
+      setIsPressed(false);
     }
 
     // Clear timer on unmount
@@ -59,12 +69,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
-        data-active={animating}
+        data-active={isAnimating}
         ref={ref}
         {...props}
         onMouseDown={(e) => {
           handlePress();
           props.onMouseDown?.(e);
+        }}
+        onTouchStart={(e) => {
+          handlePress();
+          props.onTouchStart?.(e);
+        }}
+        onMouseUp={(e) => {
+          handleRelease();
+          props.onMouseUp?.(e);
+        }}
+        onTouchEnd={(e) => {
+          handleRelease();
+          props.onTouchEnd?.(e);
         }}
       />
     );
