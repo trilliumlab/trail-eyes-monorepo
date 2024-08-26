@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from '@repo/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu';
+} from '@repo/ui/dropdown-menu';
 import { CircleUser } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
