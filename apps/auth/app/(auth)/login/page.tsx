@@ -7,7 +7,7 @@ import { Link } from '@repo/ui/link';
 
 export default function LoginForm() {
   return (
-    <div className="grid place-items-center h-screen p-4">
+    <div className="absolute inset-0 grid place-items-center p-4">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Log in</CardTitle>
