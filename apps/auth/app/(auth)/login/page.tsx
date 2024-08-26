@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { Button } from '@repo/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
 import { Input } from '@repo/ui/input';
 import { Label } from '@repo/ui/label';
 import { Separator } from '@repo/ui/separator';
+import { Link } from '@repo/ui/link';
 
 export default function LoginForm() {
   return (
@@ -17,25 +17,40 @@ export default function LoginForm() {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="janedoe@example.com" required />
+              <Input
+                // biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs
+                tabIndex={1}
+                id="email"
+                type="email"
+                placeholder="janedoe@example.com"
+                required
+              />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link href="/reset-password" className="ml-auto inline-block text-sm underline">
+                <Link
+                  // biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs
+                  tabIndex={4}
+                  href="/reset-password"
+                  className="ml-auto inline-block text-sm"
+                >
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              {/* biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs */}
+              <Input tabIndex={2} id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
+            {/* biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs */}
+            <Button tabIndex={3} type="submit" className="w-full">
               Log in
             </Button>
             <Separator />
           </div>
           <div className="mt-4 text-center text-sm">
             Don't have an account?{' '}
-            <Link href="/register" className="underline">
+            {/* biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs */}
+            <Link tabIndex={5} href="/register" className="underline">
               Sign up
             </Link>
           </div>

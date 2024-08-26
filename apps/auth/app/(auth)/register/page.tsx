@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { Button } from '@repo/ui/button';
 import { Separator } from '@repo/ui/separator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
 import { Input } from '@repo/ui/input';
 import { Label } from '@repo/ui/label';
+import { Link } from '@repo/ui/link';
 
 export default function RegisterForm() {
   return (
