@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   description: `${publicEnv.APP_NAME} authentication service`,
 };
 
-// <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,

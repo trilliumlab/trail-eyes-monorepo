@@ -1,11 +1,41 @@
+import { hashAlgo, verificationCodeExpirationMinutes } from '~/consts';
 import { client } from '~/db-client';
-import type * as models from '~/models';
-import * as schema from '~/schema';
+import type { auth as authModels } from '~/models';
+import { auth as authSchema } from '~/schema';
+import { mailer } from '@repo/email';
+import { createVerificationCode } from '~/util';
+import { addMinute } from '@formkit/tempo';
 
-export async function addRoute(route: models.paths.RouteInsert) {
-  await client.insert(schema.paths.routes).values(route);
-}
+export async function createUser({ password, ...user }: authModels.UserCreate) {
+  // Hash password with argon2.
+  const hash = await Bun.password.hash(password, hashAlgo);
+  const verificationCode = createVerificationCode();
 
-export async function getAllRoutes() {
-  return (await client.query.routes.findMany()) as models.paths.RouteSelect[];
+  // Put insertion into transaction to make sure a user doesn't get created without a password.
+  await client.transaction(async (txn) => {
+    const [{ userId }] = (await txn
+      .insert(authSchema.users)
+      .values(user)
+      .returning({ userId: authSchema.passwords.userId })) as [{ userId: string | undefined }];
+    if (!userId) {
+      txn.rollback();
+    } else {
+      await txn.insert(authSchema.passwords).values({
+        userId,
+        hash,
+      });
+      await txn.insert(authSchema.emailVerificationCodes).values({
+        userId,
+        code: verificationCode,
+        expiresAt: addMinute(new Date(), verificationCodeExpirationMinutes),
+      });
+    }
+  });
+
+  // Send verification code
+  await mailer.sendVerification(user.email, {
+    code: verificationCode,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  });
 }

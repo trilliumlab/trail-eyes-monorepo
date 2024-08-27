@@ -8,6 +8,6 @@ export const routes = pgTable('routes', {
   description: text('description'),
   creator: text('creator'),
   stroke: text('stroke').notNull(),
-  updated: timestamp('updated', { mode: 'date' }).notNull(),
+  updated: timestamp('updated', { withTimezone: true }).notNull(),
   geometry: lineString('geometry', { is3D: true, srid: 4326 }).notNull(),
 });

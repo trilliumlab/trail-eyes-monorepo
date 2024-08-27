@@ -39,10 +39,7 @@ export default function RegisterForm() {
             <Separator />
           </div>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
-            <Link href="/login" className="underline">
-              Sign in
-            </Link>
+            Already have an account? <Link href="/login">Sign in</Link>
           </div>
         </CardContent>
       </Card>

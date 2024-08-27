@@ -7,10 +7,8 @@ export const invites = pgTable('invites', {
     .$default(() => createId())
     .primaryKey(),
   email: text('email').unique().notNull(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name').notNull(),
   role: roleEnum('role').default('member').notNull(),
-  inviteDate: timestamp('registration_date', {
-    withTimezone: true,
-  })
-    .defaultNow()
-    .notNull(),
+  inviteDate: timestamp('registration_date', { withTimezone: true }).defaultNow().notNull(),
 });

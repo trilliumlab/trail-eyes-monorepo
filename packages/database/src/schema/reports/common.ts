@@ -15,8 +15,8 @@ export function commonReportsColumns() {
     image: text('image'),
     blurHash: text('blur_hash'),
     status: statusEnum('status').default('open').notNull(),
-    reportedAt: timestamp('reported_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    reportedAt: timestamp('reported_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
     geometry: point('geometry', { is3D: true, srid: 4326 }).notNull(),
   };
 }

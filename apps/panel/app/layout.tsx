@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import '@repo/ui/globals.css';
 import { publicEnv } from '@repo/util/public-env';
@@ -16,6 +16,12 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: `${publicEnv.APP_NAME} Panel`,
   description: `${publicEnv.APP_NAME} admin panel`,
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({

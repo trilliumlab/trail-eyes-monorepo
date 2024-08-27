@@ -84,6 +84,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           handleRelease();
           props.onMouseUp?.(e);
         }}
+        onMouseLeave={(e) => {
+          handleRelease();
+          props.onMouseLeave?.(e);
+        }}
         onTouchEnd={(e) => {
           handleRelease();
           props.onTouchEnd?.(e);
@@ -99,9 +103,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             handleRelease();
           }
           props.onKeyUp?.(e);
-        }}
-        onClick={() => {
-          console.log('YOU CLICKED ME');
         }}
       />
     );
