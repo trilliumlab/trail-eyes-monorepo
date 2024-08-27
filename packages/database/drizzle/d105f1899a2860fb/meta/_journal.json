@@ -8,6 +8,13 @@
       "when": 1724557316768,
       "tag": "0000_sticky_killmonger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724722807442,
+      "tag": "0001_watery_hydra",
+      "breakpoints": true
     }
   ]
 }

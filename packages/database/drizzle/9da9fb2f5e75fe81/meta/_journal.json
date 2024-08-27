@@ -8,6 +8,13 @@
       "when": 1724624702003,
       "tag": "0000_whole_johnny_blaze",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724722784419,
+      "tag": "0001_lean_jack_murdock",
+      "breakpoints": true
     }
   ]
 }
