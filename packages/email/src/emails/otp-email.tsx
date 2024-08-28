@@ -11,6 +11,14 @@ export interface OtpEmailProps {
 
 const resetUrl = 'reset';
 
+/**
+ * Renders an OTP (One-Time Password) email.
+ *
+ * @param code - The verification code.
+ * @param firstName - The first name of the recipient.
+ * @param lastName - The last name of the recipient.
+ * @returns The rendered OTP email component.
+ */
 export default function OtpEmail({
   code = '123456',
   firstName = 'Jane',
