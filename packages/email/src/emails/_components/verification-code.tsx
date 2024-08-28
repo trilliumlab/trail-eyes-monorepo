@@ -1,5 +1,11 @@
 import { Heading, Section } from '@react-email/components';
 
+/**
+ * Renders a verification code component.
+ * 
+ * @param children - The verification code to be displayed.
+ * @returns The rendered verification code component.
+ */
 export function VerificationCode({ children }: { children: string }) {
   const group1 = children.slice(0, 3);
   const group2 = children.slice(3);

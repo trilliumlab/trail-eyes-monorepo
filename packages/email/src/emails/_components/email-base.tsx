@@ -70,6 +70,14 @@ const outlookCss = `
 }
 `;
 
+/**
+ * Renders the base structure for an email and adds tailwind support + custom css.
+ * 
+ * @component
+ * @param props.children - The content of the email.
+ * @param props.previewText - The preview text for the email.
+ * @returns The rendered email base component.
+ */
 export function EmailBase({ children, previewText }: EmailBaseProps) {
   return (
     <Html>

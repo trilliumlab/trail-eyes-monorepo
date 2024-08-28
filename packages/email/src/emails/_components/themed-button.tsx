@@ -1,5 +1,12 @@
 import { Button } from '@react-email/components';
 
+/**
+ * Renders a themed button component.
+ *
+ * @param href - The URL to navigate to when the button is clicked.
+ * @param children - The button text.
+ * @returns The rendered themed button component.
+ */
 export function ThemedButton({ href, children }: { href: string; children: string }) {
   return (
     <>

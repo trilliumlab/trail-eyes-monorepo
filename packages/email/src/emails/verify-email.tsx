@@ -9,6 +9,14 @@ export interface VerifyEmailProps {
   lastName: string;
 }
 
+/**
+ * Renders a verification email.
+ *
+ * @param code - The verification code.
+ * @param firstName - The first name of the recipient.
+ * @param lastName - The last name of the recipient.
+ * @returns The rendered verification email.
+ */
 export default function VerifyEmail({
   code = '123456',
   firstName = 'Jane',

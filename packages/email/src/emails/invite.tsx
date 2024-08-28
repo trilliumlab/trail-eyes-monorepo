@@ -14,6 +14,18 @@ export interface InviteEmailProps {
 
 const signupUrl = 'https://traileyes.net/signup';
 
+/**
+ * Represents an email for inviting users to TrailEyes.
+ *
+ * @param firstName - The first name of the user being invited.
+ * @param lastName - The last name of the user being invited.
+ * @param inviteRole - The role for which the user is being invited.
+ * @param invitedByFirstName - The first name of the user who sent the invitation.
+ * @param invitedByLastName - The last name of the user who sent the invitation.
+ * @param invitedByEmail - The email address of the user who sent the invitation.
+ *
+ * @returns The rendered invitation email.
+ */
 export default function InviteEmail({
   firstName = 'Jane',
   lastName = 'Doe',

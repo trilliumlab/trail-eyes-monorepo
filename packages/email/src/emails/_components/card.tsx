@@ -1,8 +1,15 @@
 import { Body, Container, Heading, Hr, Section, Text } from '@react-email/components';
 
+
+/**
+ * Renders a card component with a background color, border, and rounded corners.
+ *
+ * @param props - The component props.
+ * @returns The rendered card component.
+ */
 export function Card({ children }: React.PropsWithChildren) {
   return (
-    <Body className="bg-white my-auto mx-auto font-sans">
+    <Body className="bg-background my-auto mx-auto font-sans">
       <Container className="border border-solid border-border rounded-lg my-10 mx-auto p-5 max-w-[400px]">
         {children}
       </Container>
@@ -10,11 +17,23 @@ export function Card({ children }: React.PropsWithChildren) {
   );
 }
 
+/**
+ * Renders the content of a card component.
+ *
+ * @param children - The content to be rendered inside the card.
+ * @returns The rendered card content.
+ */
 export function CardContent({ children }: React.PropsWithChildren) {
   return <>{children}</>;
 }
 
-export function CardHeader({ children }: { imgSrc?: string; children: React.ReactNode }) {
+/**
+ * Renders the header of a card component.
+ *
+ * @param children - The content to be rendered inside the card header.
+ * @returns The rendered card header.
+ */
+export function CardHeader({ children }: React.PropsWithChildren) {
   return (
     <>
       <Section className="mt-4">
@@ -27,6 +46,12 @@ export function CardHeader({ children }: { imgSrc?: string; children: React.Reac
   );
 }
 
+/**
+ * Renders the footer of a card component.
+ *
+ * @param children - The content to be rendered inside the card footer.
+ * @returns The rendered card footer.
+ */
 export function CardFooter({ children }: React.PropsWithChildren) {
   return (
     <>
