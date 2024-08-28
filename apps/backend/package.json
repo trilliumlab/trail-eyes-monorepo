@@ -5,7 +5,8 @@
   "module": "src/index.ts",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts"
+    "start": "bun run src/index.ts",
+    "test": "bun test test"
   },
   "dependencies": {
     "@repo/util": "workspace:*",
@@ -22,7 +23,8 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "bun-types": "latest",
-    "@types/geojson": "^7946.0.14"
+    "@types/geojson": "^7946.0.14",
+    "@elysiajs/eden": "^1.1.2",
+    "@types/bun": "latest"
   }
 }

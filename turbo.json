@@ -16,6 +16,9 @@
       "cache": false,
       "persistent": true
     },
+    "test": {
+      "inputs": [".env", "test/**"]
+    },
 
     "db:generate": {
       "persistent": true,

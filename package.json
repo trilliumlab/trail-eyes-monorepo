@@ -5,6 +5,7 @@
     "build": "turbo build --",
     "dev": "turbo dev --",
     "start": "turbo start --",
+    "test": "turbo test --",
 
     "db:generate": "turbo db:generate --",
     "db:migrate": "turbo db:migrate --",

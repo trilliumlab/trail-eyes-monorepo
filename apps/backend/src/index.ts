@@ -7,7 +7,7 @@ import { logger } from './logger';
 import { logger as elysiaLogger } from '@bogeychan/elysia-logger';
 import { createLoggerOptions } from '@repo/util/logger';
 
-const app = new Elysia()
+export const app = new Elysia()
   .use(elysiaLogger(createLoggerOptions('backend-elysia')))
   .use(
     swagger({
