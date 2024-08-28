@@ -6,6 +6,12 @@ import { mailer } from '@repo/email';
 import { createVerificationCode } from '~/util';
 import { addMinute } from '@formkit/tempo';
 
+/**
+ * Creates a user with the provided information.
+ * 
+ * @param user - The user object containing user details.
+ * @returns A promise that resolves when the user is created successfully.
+ */
 export async function createUser({ password, ...user }: authModels.UserCreate) {
   // Hash password with argon2.
   const hash = await Bun.password.hash(password, hashAlgo);

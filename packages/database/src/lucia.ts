@@ -6,6 +6,9 @@ import { auth as authModels } from './models';
 import { eq, gt } from 'drizzle-orm';
 import { Type } from '@sinclair/typebox';
 
+/**
+ * A lucia auth adapter with a custom Drizzle backend.
+ */
 const AuthAdapter = {
   async deleteExpiredSessions() {
     await client.delete(authSchema.sessions).where(gt(authSchema.sessions.expiresAt, new Date()));
