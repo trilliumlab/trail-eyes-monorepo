@@ -83,6 +83,11 @@ export function RemovePrefix<T extends TObject, TPrefix extends string>(
     });
 }
 
+/**
+ * Converts the values of a literal array into an array of TLiterals.
+ *
+ * @typeParam T - The literal array.
+ */
 type IntoStringLiteralUnion<T> = { [K in keyof T]: T[K] extends string ? TLiteral<T[K]> : never };
 
 /**

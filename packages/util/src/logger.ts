@@ -1,6 +1,11 @@
 import { publicEnv } from './public-env';
 import type { LoggerOptions } from 'pino';
 
+/**
+ * Creates pino logger options.
+ * @param name - The name of the logger.
+ * @returns The logger options.
+ */
 export function createLoggerOptions(name: string) {
   return {
     name,
