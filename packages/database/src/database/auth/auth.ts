@@ -5,6 +5,7 @@ import { auth as authSchema } from '~/schema';
 import { mailer } from '@repo/email';
 import { createVerificationCode } from '~/util';
 import { addMinute } from '@formkit/tempo';
+import { and, eq, gt } from 'drizzle-orm';
 
 /**
  * Creates a user with the provided information.
@@ -44,4 +45,37 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
     firstName: user.firstName,
     lastName: user.lastName,
   });
+}
+
+/**
+ * Refreshes the verification code for a user.
+ *
+ * @param userId - The ID of the user.
+ * @param force - Optional. If set to true, forces the generation of a new verification code even if a valid one already exists.
+ * @returns A Promise that resolves when the verification code is refreshed.
+ */
+export async function refreshVerificationCode(userId: string, force = false) {
+  const validCodes = await client.query.emailVerificationCodes.findMany({
+    where: and(
+      eq(authSchema.emailVerificationCodes.userId, userId),
+      gt(authSchema.emailVerificationCodes.expiresAt, new Date()),
+    ),
+    orderBy: (codes, { desc }) => [desc(codes.expiresAt)],
+  });
+
+  // Get the codes that are eligible to be force-refreshed.
+  const refreshableCodes = validCodes.filter((code) => code.expiresAt < new Date());
+  // TODO implement
+
+  if (validCodes.length === 0 || force) {
+    const verificationCode = createVerificationCode();
+    await client
+      .update(authSchema.emailVerificationCodes)
+      .set({
+        code: verificationCode,
+        expiresAt: addMinute(new Date(), verificationCodeExpirationMinutes),
+      })
+      .where(eq(authSchema.emailVerificationCodes.userId, userId));
+    return verificationCode;
+  }
 }
