@@ -38,9 +38,9 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
   };
 }
 
-export const styles = new Elysia({ prefix: 'styles' })
+export const styles = new Elysia({ prefix: '/styles' })
   .get(
-    'light.json',
+    '/light.json',
     ({ query: { key, mobile } }) => {
       return createTheme(key, 'light', mobile);
     },
@@ -49,7 +49,7 @@ export const styles = new Elysia({ prefix: 'styles' })
     },
   )
   .get(
-    'dark.json',
+    '/dark.json',
     ({ query: { key, mobile } }) => {
       return createTheme(key, 'dark', mobile);
     },
