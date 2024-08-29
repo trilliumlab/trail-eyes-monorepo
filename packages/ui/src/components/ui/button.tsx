@@ -43,7 +43,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const [isAnimating, setIsAnimating] = React.useState(false);
     const [isPressed, setIsPressed] = React.useState(false);
-    const timerRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
+    const timerRef = React.useRef<NodeJS.Timer | undefined>(undefined);
 
     // On press, set animation to true for duration of animation
     // Store the press state to not duplicate animations during a press if multiple events fired.
