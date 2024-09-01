@@ -1,14 +1,14 @@
 import { randomInt, randomBytes } from 'node:crypto';
-import { verificationCodeLength } from '~/consts';
+import { otpCodeLength } from '~/consts';
 
 /**
  * Generates a 6 digit verification code.
- * 
+ *
  * @returns The generated verification code as a string.
  */
-export function createVerificationCode() {
-  return randomInt(10 ** verificationCodeLength).toLocaleString('en-US', {
-    minimumIntegerDigits: verificationCodeLength,
+export function createOtpCode() {
+  return randomInt(10 ** otpCodeLength).toLocaleString('en-US', {
+    minimumIntegerDigits: otpCodeLength,
     useGrouping: false,
   });
 }

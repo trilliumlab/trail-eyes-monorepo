@@ -10,6 +10,8 @@ export const emailMfaCodes = pgTable('email_mfa_codes', {
     .references(() => users.id)
     .notNull(),
   code: varchar('code', { length: 6 }).notNull(),
+  attempts: integer('attempts').default(0).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  allowRefreshAt: timestamp('allow_refresh_at', { withTimezone: true }).notNull(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
 });

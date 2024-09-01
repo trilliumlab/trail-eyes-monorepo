@@ -4,12 +4,11 @@ export const hashAlgo = {
   timeCost: 2,
 } as const;
 
-export const verificationCodeLength = 6;
+export const otpCodeLength = 6;
 
-export const verificationRequestTimeoutSeconds = 90;
-export const verificationCodeExpirationMinutes = 60;
-export const verificationCodeRenewMinutes = 55;
+export const verificationTimeoutSeconds = 1.5 * 60;
+export const verificationExpirationMinutes = 60;
+export const verificationRefreshMinutes = 55;
 
-export const maxVerificationCodeAttempts = 5;
-
-export const verificationTimeoutSeconds = 2.5 * 60;
+export const maxOtpAttempts = 5;
+export const otpTimeoutSeconds = 2.5 * 60;
