@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "invite_data" timestamp with time zone;

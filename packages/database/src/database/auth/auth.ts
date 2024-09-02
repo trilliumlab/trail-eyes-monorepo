@@ -11,6 +11,9 @@ import { mailer } from '@repo/email';
 import { createOtpCode } from '~/util';
 import { addMinute, addSecond } from '@formkit/tempo';
 import { and, eq, gt } from 'drizzle-orm';
+// import type { PostgresError } from 'postgres';
+import { RegistrationEmailConflictError } from '~/errors/auth';
+import postgres from 'postgres';
 
 /**
  * Creates a user with the provided information.
@@ -23,20 +26,30 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
   const hash = await Bun.password.hash(password, hashAlgo);
 
   // Put insertion into transaction to make sure a user doesn't get created without a password.
-  await client.transaction(async (txn) => {
-    const [dbUser] = await txn.insert(authSchema.users).values(user).returning();
-    if (!dbUser) {
-      txn.rollback();
-    } else {
-      // If succesful user creation, set password
-      await txn.insert(authSchema.passwords).values({
-        userId: dbUser.id,
-        hash,
-      });
-      // Create and send verification email
-      createOrRefreshVerification(dbUser, { db: txn });
+  try {
+    await client.transaction(async (txn) => {
+      const [dbUser] = await txn.insert(authSchema.users).values(user).returning();
+      if (!dbUser) {
+        txn.rollback();
+      } else {
+        // If succesful user creation, set password
+        await txn.insert(authSchema.passwords).values({
+          userId: dbUser.id,
+          hash,
+        });
+        // Create and send verification email
+        createOrRefreshVerification(dbUser, { db: txn });
+      }
+    });
+  } catch (e) {
+    if (e instanceof postgres.PostgresError) {
+      // Unique constraint violation
+      if (e.code === '23505') {
+        throw RegistrationEmailConflictError;
+      }
     }
-  });
+    throw e;
+  }
 }
 
 /**

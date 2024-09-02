@@ -9,7 +9,8 @@
     "./private-env": "./src/private-env.ts",
     "./public-env": "./src/public-env.ts",
     "./logger": "./src/logger.ts",
-    "./regex": "./src/regex.ts"
+    "./regex": "./src/regex.ts",
+    "./errors": "./src/errors.ts"
   },
   "dependencies": {
     "@sinclair/typebox": "^0.33.7",
