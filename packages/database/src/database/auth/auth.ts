@@ -21,7 +21,6 @@ import { and, eq, gt } from 'drizzle-orm';
 export async function createUser({ password, ...user }: authModels.UserCreate) {
   // Hash password with argon2.
   const hash = await Bun.password.hash(password, hashAlgo);
-  const verificationCode = createOtpCode();
 
   // Put insertion into transaction to make sure a user doesn't get created without a password.
   await client.transaction(async (txn) => {
@@ -43,9 +42,11 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
 /**
  * Creates or refreshes the verification code for a user.
  *
- * @param user - The ID of the user.
- * @param forceRefresh - Optional. If set to true, forces the generation of a new verification code even if a valid one already exists.
- * @returns A Promise that resolves when the verification code is refreshed.
+ * @param user - The user object.
+ * @param options - Options for the verification code.
+ * @param options.forceRefresh - Whether to force refresh the verification code (sends a new verification code if allowed). Otherwise, will only send a new code if previous codes are almost expired.
+ * @param options.sendEmail - Whether to send an email with the verification code.
+ * @param options.db - The database client to use (useful for transactions).
  */
 export async function createOrRefreshVerification(
   user: Pick<authModels.UserSelect, 'id' | 'email' | 'firstName' | 'lastName'>,
