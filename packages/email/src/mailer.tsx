@@ -5,7 +5,7 @@ import VerifyEmail, { type VerifyEmailProps } from '~/emails/verify-email';
 
 /**
  * Sends an invitation email to the specified recipient.
- * 
+ *
  * @param props.firstName - The first name of the user being invited.
  * @param props.lastName - The last name of the user being invited.
  * @param props.inviteRole - The role for which the user is being invited.
@@ -41,7 +41,7 @@ export async function sendVerification(to: string, props: VerifyEmailProps) {
 
 /**
  * Sends an OTP (One-Time Password) email to the specified recipient.
- * 
+ *
  * @param to - The email address of the recipient.
  * @param props.code - The verification code.
  * @param props.firstName - The first name of the recipient.

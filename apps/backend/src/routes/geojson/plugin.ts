@@ -38,7 +38,6 @@ const routesJsonMemo = memoize(
 
 export const geojson = new Elysia({ prefix: '/geojson' })
   .get('/routes.json', async () => await routesJsonMemo())
-  .get('/start-markers', () => {
+  .get('/start-markers.json', () => {
     return startMarkers;
-  })
-  .get('/test', () => 'Test');
+  });

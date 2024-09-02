@@ -7,6 +7,7 @@ export interface VerifyEmailProps {
   code: string;
   firstName: string;
   lastName: string;
+  expirationString: string;
 }
 
 /**
@@ -21,6 +22,7 @@ export default function VerifyEmail({
   code = '123456',
   firstName = 'Jane',
   lastName = 'Doe',
+  expirationString = '1 hour',
 }: VerifyEmailProps) {
   const previewText = `Your TrailEyes verification code is ${code}`;
 
@@ -32,7 +34,7 @@ export default function VerifyEmail({
         </CardHeader>
         <CardContent>
           <Text className="text-black text-sm leading-6">
-            Enter it in your open browser window. This code will expire in 15 minutes.
+            Enter it in your open browser window. This code will expire in {expirationString}.
           </Text>
           <VerificationCode>{code}</VerificationCode>
         </CardContent>

@@ -37,7 +37,7 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
           hash,
         });
         // Create and send verification email
-        createOrRefreshVerification(dbUser, { db: txn });
+        await createOrRefreshVerification(dbUser, { db: txn });
       }
     });
   } catch (e) {
@@ -103,6 +103,7 @@ export async function createOrRefreshVerification(
         code: verificationCode,
         firstName: user.firstName,
         lastName: user.lastName,
+        expirationString: `${verificationExpirationMinutes / 60} hour${verificationExpirationMinutes === 60 ? '' : 's'}`,
       });
     }
 

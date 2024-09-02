@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Sends a react-email to the specified recipient.
- * 
+ *
  * @param email - The react-email component to send.
  * @param to - The email address of the recipient.
  * @param subject - The subject of the email.

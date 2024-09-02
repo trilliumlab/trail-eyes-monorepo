@@ -7,6 +7,7 @@ export interface OtpEmailProps {
   code: string;
   firstName: string;
   lastName: string;
+  expirationString: string;
 }
 
 const resetUrl = 'reset';
@@ -23,6 +24,7 @@ export default function OtpEmail({
   code = '123456',
   firstName = 'Jane',
   lastName = 'Doe',
+  expirationString = '15 minutes',
 }: OtpEmailProps) {
   const previewText = `Your TrailEyes verification code is ${code}`;
 
@@ -34,7 +36,7 @@ export default function OtpEmail({
         </CardHeader>
         <CardContent>
           <Text className="text-black text-sm leading-6">
-            Enter it in your open browser window. This code will expire in 15 minutes.
+            Enter it in your open browser window. This code will expire in {expirationString}.
           </Text>
           <VerificationCode>{code}</VerificationCode>
         </CardContent>
