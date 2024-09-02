@@ -1,11 +1,17 @@
-import { Elysia, t } from 'elysia';
-import { models, db } from '@repo/database';
+import { Elysia, error, StatusMap, t } from 'elysia';
+import { models, db, errors } from '@repo/database';
 
 export const auth = new Elysia({ prefix: '/auth' }).post(
   '/register',
-  async ({ body, error }) => {
-    // db.auth.createUser(body);
-    return error(500, 'Not implemented');
+  async ({ body }) => {
+    try {
+      await db.auth.createUser(body);
+    } catch (e) {
+      if (e instanceof errors.auth.RegistrationConflictError) {
+        return error(StatusMap.Conflict, e);
+      }
+      throw e;
+    }
   },
   {
     // Make sure to only allow the fields we want a user to be able to control.

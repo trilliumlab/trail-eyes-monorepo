@@ -24,8 +24,7 @@
     "import-meta-resolve": "^4.1.0",
     "drizzle-postgis": "^1.1.1",
     "lucia": "^3.2.0",
-    "@formkit/tempo": "^0.1.2",
-    "elysia": "1.1.6"
+    "@formkit/tempo": "^0.1.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

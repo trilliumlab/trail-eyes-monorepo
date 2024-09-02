@@ -1,8 +1,12 @@
-import { StatusMap } from 'elysia';
-import type { TEError } from '@repo/util/errors';
+class BaseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
 
-export const RegistrationEmailConflictError = {
-  code: 'EMAIL_CONFLICT',
-  status: StatusMap.Conflict,
-  message: 'Email already registered.',
-} as const satisfies TEError;
+export class RegistrationConflictError extends BaseError {
+  constructor() {
+    super('Email already registered.');
+  }
+}

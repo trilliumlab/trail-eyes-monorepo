@@ -11,9 +11,8 @@ import { mailer } from '@repo/email';
 import { createOtpCode } from '~/util';
 import { addMinute, addSecond } from '@formkit/tempo';
 import { and, eq, gt } from 'drizzle-orm';
-// import type { PostgresError } from 'postgres';
-import { RegistrationEmailConflictError } from '~/errors/auth';
 import postgres from 'postgres';
+import { RegistrationConflictError } from '~/errors/auth';
 
 /**
  * Creates a user with the provided information.
@@ -45,7 +44,7 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
     if (e instanceof postgres.PostgresError) {
       // Unique constraint violation
       if (e.code === '23505') {
-        throw RegistrationEmailConflictError;
+        throw new RegistrationConflictError();
       }
     }
     throw e;
