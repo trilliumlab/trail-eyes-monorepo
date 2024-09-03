@@ -2,18 +2,20 @@
 
 import { Button } from '@repo/ui/button';
 import { Input } from '@repo/ui/input';
+import { LoaderCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl } from '@repo/ui/form';
-
 import { z } from 'zod';
+import { api } from '~/api';
 import {
   passwordLowercaseRegex,
   passwordNumericRegex,
   passwordSpecialRegex,
   passwordUppercaseRegex,
 } from '@repo/util/regex';
-import { api } from '~/api';
 
 const RegisterSchema = z.object({
   firstName: z.string().min(1, { message: 'Required' }),
@@ -29,6 +31,9 @@ const RegisterSchema = z.object({
 });
 
 export function RegisterForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -41,8 +46,15 @@ export function RegisterForm() {
 
   // This is only called on validated values.
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
-    form.setError('email', { message: 'Oopsies' });
-    form.setFocus('email');
+    setIsSubmitting(true);
+    const res = await api.auth.register.post(values);
+    if (res.error) {
+      setIsSubmitting(false);
+      form.setError('email', { message: res.error.value.message });
+      form.setFocus('email');
+    } else {
+      router.push('/verify-email');
+    }
   }
 
   return (
@@ -107,7 +119,8 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button disabled={isSubmitting} type="submit" className="w-full">
+          {isSubmitting && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
           Create an account
         </Button>
       </form>
