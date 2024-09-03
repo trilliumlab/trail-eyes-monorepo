@@ -9,8 +9,6 @@
     "jsx": "preserve",
     "types": ["bun-types"],
     "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "composite": true,
-    "incremental": true
+    "skipLibCheck": true
   }
 }

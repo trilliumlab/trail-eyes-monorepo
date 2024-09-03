@@ -5,7 +5,6 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "incremental": false,
     "isolatedModules": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
@@ -17,6 +16,19 @@
     "strict": true,
     "target": "ES2022",
     "allowJs": false,
-    "jsx": "preserve"
-  }
+    "jsx": "preserve",
+    "composite": true,
+    "incremental": true
+  },
+  "references": [
+    { "path": "../../apps/auth" },
+    { "path": "../../apps/backend" },
+    { "path": "../../apps/panel" },
+    { "path": "../../apps/scripts" },
+    { "path": "../../packages/backend-api" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/email" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/util" }
+  ]
 }

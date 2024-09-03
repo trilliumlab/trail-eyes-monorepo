@@ -13,6 +13,7 @@ import {
   passwordSpecialRegex,
   passwordUppercaseRegex,
 } from '@repo/util/regex';
+import { api } from '~/api';
 
 const RegisterSchema = z.object({
   firstName: z.string().min(1, { message: 'Required' }),
@@ -39,7 +40,9 @@ export function RegisterForm() {
   });
 
   // This is only called on validated values.
-  function onSubmit(values: z.infer<typeof RegisterSchema>) {
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+    const sprites = await api.sprites['dark.json'].get();
+    console.log('got em', sprites);
     form.setError('email', { message: 'Oopsies' });
     form.setFocus('email');
   }

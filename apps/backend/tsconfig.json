@@ -8,6 +8,5 @@
       "~repo/*": ["../../*"],
       "~data/*": ["../../data/*"]
     }
-  },
-  "references": [{ "path": "../../packages/database" }, { "path": "../../packages/util" }]
+  }
 }

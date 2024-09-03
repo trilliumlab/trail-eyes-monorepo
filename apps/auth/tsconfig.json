@@ -13,6 +13,5 @@
     }
   },
   "include": ["next-env.d.ts", "next.config.mjs", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "references": [{ "path": "../../packages/database" }]
+  "exclude": ["node_modules"]
 }
