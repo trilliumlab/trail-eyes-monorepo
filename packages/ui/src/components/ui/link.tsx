@@ -11,7 +11,7 @@ export function Link(
     <NextLink
       {...props}
       className={cn(
-        'rounded-sm hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-offset-background focus-visible:ring-offset-1 focus-visible:ring-2 focus-visible:ring-ring underline',
+        'transition-colors rounded-sm hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-offset-background focus-visible:ring-offset-1 focus-visible:ring-2 focus-visible:ring-ring underline',
         props.className,
       )}
     />

@@ -14,7 +14,7 @@ export type UserSelect = typeof UserSelectSchema.static;
 export const UserCreateSchema = Type.Composite([
   UserInsertSchema,
   Type.Object({
-    password: Type.RegExp(strongPasswordRegex),
+    password: Type.String({ pattern: strongPasswordRegex.source }),
   }),
 ]);
 export type UserCreate = typeof UserCreateSchema.static;
