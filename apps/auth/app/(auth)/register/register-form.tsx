@@ -30,10 +30,18 @@ const RegisterSchema = z.object({
 export function RegisterForm() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
   });
 
+  // This is only called on validated values.
   function onSubmit(values: z.infer<typeof RegisterSchema>) {
-    console.log(values);
+    form.setError('email', { message: 'Oopsies' });
+    form.setFocus('email');
   }
 
   return (
