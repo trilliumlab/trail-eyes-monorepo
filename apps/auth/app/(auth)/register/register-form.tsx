@@ -41,8 +41,6 @@ export function RegisterForm() {
 
   // This is only called on validated values.
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
-    const sprites = await api.sprites['dark.json'].get();
-    console.log('got em', sprites);
     form.setError('email', { message: 'Oopsies' });
     form.setFocus('email');
   }

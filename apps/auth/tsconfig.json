@@ -13,5 +13,15 @@
     }
   },
   "include": ["next-env.d.ts", "next.config.mjs", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [
+    { "path": "../../apps/backend" },
+    { "path": "../../apps/panel" },
+    { "path": "../../apps/scripts" },
+    { "path": "../../packages/backend-api" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/email" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/util" }
+  ]
 }

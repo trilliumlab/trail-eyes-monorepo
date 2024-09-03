@@ -8,5 +8,15 @@
       "~repo/*": ["../../*"],
       "~data/*": ["../../data/*"]
     }
-  }
+  },
+  "references": [
+    { "path": "../../apps/auth" },
+    { "path": "../../apps/backend" },
+    { "path": "../../apps/panel" },
+    { "path": "../../apps/scripts" },
+    { "path": "../../packages/backend-api" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/util" }
+  ]
 }
