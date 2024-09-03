@@ -3,7 +3,7 @@ import { memoize } from '@repo/util';
 import Elysia from 'elysia';
 import type { Feature, FeatureCollection } from 'geojson';
 
-import startMarkers from '~data/routes/start-markers.json';
+import startMarkers from '../../../../../data/routes/start-markers.json';
 
 const routesJsonMemo = memoize(
   async () => {

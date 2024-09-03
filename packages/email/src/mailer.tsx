@@ -1,7 +1,7 @@
-import { sendEmail } from '~/email-client';
-import InviteEmail, { type InviteEmailProps } from '~/emails/invite';
-import OtpEmail, { type OtpEmailProps } from '~/emails/otp-email';
-import VerifyEmail, { type VerifyEmailProps } from '~/emails/verify-email';
+import { sendEmail } from './email-client';
+import InviteEmail, { type InviteEmailProps } from './emails/invite';
+import OtpEmail, { type OtpEmailProps } from './emails/otp-email';
+import VerifyEmail, { type VerifyEmailProps } from './emails/verify-email';
 
 /**
  * Sends an invitation email to the specified recipient.

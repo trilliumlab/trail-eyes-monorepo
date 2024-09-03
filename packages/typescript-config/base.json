@@ -2,33 +2,23 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
+    "composite": false,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "inlineSources": false,
     "isolatedModules": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "NodeNext",
-    "moduleDetection": "force",
-    "moduleResolution": "NodeNext",
-    "noUncheckedIndexedAccess": true,
-    "resolveJsonModule": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2022",
-    "allowJs": false,
-    "jsx": "preserve",
-    "composite": true,
-    "incremental": true
+    "strictNullChecks": true
   },
-  "references": [
-    { "path": "../../apps/auth" },
-    { "path": "../../apps/backend" },
-    { "path": "../../apps/panel" },
-    { "path": "../../apps/scripts" },
-    { "path": "../../packages/backend-api" },
-    { "path": "../../packages/database" },
-    { "path": "../../packages/email" },
-    { "path": "../../packages/ui" },
-    { "path": "../../packages/util" }
-  ]
+  "exclude": ["node_modules"]
 }

@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { privateEnv } from '@repo/util/private-env';
-import * as schema from '~/schema';
+import * as schema from './schema';
 
 export const client = drizzle(
   postgres({

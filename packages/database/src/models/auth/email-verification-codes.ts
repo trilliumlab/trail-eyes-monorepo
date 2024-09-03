@@ -1,5 +1,5 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { auth } from '~/schema';
+import { auth } from '../../schema';
 
 export const EmailVerificationCodesInsertSchema = createInsertSchema(auth.emailVerificationCodes);
 export const EmailVerificationCodesSelectSchema = createSelectSchema(auth.emailVerificationCodes);

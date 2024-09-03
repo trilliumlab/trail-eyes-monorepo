@@ -3,16 +3,16 @@ import {
   verificationExpirationMinutes,
   verificationRefreshMinutes,
   verificationTimeoutSeconds,
-} from '~/consts';
-import { client } from '~/db-client';
-import type { auth as authModels } from '~/models';
-import { auth as authSchema } from '~/schema';
+} from '../../consts';
+import { client } from '../../db-client';
+import type { auth as authModels } from '../../models';
+import { auth as authSchema } from '../../schema';
 import { mailer } from '@repo/email';
-import { createOtpCode } from '~/util';
+import { createOtpCode } from '../../util';
 import { addMinute, addSecond } from '@formkit/tempo';
 import { and, eq, gt } from 'drizzle-orm';
 import postgres from 'postgres';
-import { RegistrationConflictError } from '~/errors/auth';
+import { RegistrationConflictError } from '../../errors/auth';
 
 /**
  * Creates a user with the provided information.

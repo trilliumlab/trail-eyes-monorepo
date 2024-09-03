@@ -3,8 +3,8 @@ import { Button } from '@repo/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/table';
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
-import { NavBar } from '~/_components/nav/nav-bar';
-import { TrailEyesMap } from '~/_components/trail-eyes-map';
+import { NavBar } from '../_components/nav/nav-bar';
+import { TrailEyesMap } from '../_components/trail-eyes-map';
 import { Link } from '@repo/ui/link';
 
 export default function Dashboard() {

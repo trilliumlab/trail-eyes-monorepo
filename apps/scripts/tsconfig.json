@@ -1,22 +1,4 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@repo/typescript-config/bun.json",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["./src/*"],
-      "~repo/*": ["../../*"],
-      "~data/*": ["../../data/*"]
-    }
-  },
-  "references": [
-    { "path": "../../apps/auth" },
-    { "path": "../../apps/backend" },
-    { "path": "../../apps/panel" },
-    { "path": "../../packages/backend-api" },
-    { "path": "../../packages/database" },
-    { "path": "../../packages/email" },
-    { "path": "../../packages/ui" },
-    { "path": "../../packages/util" }
-  ]
+  "extends": "@repo/typescript-config/bun.json"
 }

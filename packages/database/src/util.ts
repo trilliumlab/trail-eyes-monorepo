@@ -1,5 +1,5 @@
 import { randomInt, randomBytes } from 'node:crypto';
-import { otpCodeLength } from '~/consts';
+import { otpCodeLength } from './consts';
 
 /**
  * Generates a 6 digit verification code.

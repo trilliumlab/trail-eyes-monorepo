@@ -1,6 +1,6 @@
-import { StringEnum } from '@repo/util';
-import { auth } from '~/schema';
-import type { PgEnumToObject } from '~/utils';
+import { TEType } from '@repo/util';
+import { auth } from '../../schema';
+import type { PgEnumToObject } from '../../utils';
 
 export const roleEnumValues = {
   developer: { rank: 0, name: 'Developer' },
@@ -21,5 +21,5 @@ export function hasRole(userRole: RoleEnum, requiredRole: RoleEnum) {
   return roleEnumValues[userRole].rank <= roleEnumValues[requiredRole].rank;
 }
 
-export const RoleEnumSchema = StringEnum(auth.roleEnum.enumValues);
+export const RoleEnumSchema = TEType.StringEnum(auth.roleEnum.enumValues);
 export type RoleEnum = typeof RoleEnumSchema.static;

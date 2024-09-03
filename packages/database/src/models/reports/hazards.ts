@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { reports } from '~/schema';
+import { reports } from '../../schema';
 
 const hazardsRefine = {
   geometry: Type.Object({

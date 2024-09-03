@@ -1,10 +1,4 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@repo/typescript-config/bun.json",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@repo/util/*": ["./src/*"]
-    }
-  }
+  "extends": "@repo/typescript-config/bun.json"
 }

@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { auth } from '~/schema';
+import { auth } from '../../schema';
 
 const invitesRefine = {
   email: Type.String({ format: 'email' }),

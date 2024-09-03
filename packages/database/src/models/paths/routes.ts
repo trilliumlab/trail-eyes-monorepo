@@ -1,6 +1,6 @@
 import { Type } from '@sinclair/typebox';
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { paths } from '~/schema';
+import { paths } from '../../schema';
 
 const routesRefine = {
   geometry: Type.Object({

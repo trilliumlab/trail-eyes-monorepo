@@ -17,7 +17,7 @@ import {
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
-import { getLogger } from '~/logger';
+import { getLogger } from '../logger';
 
 export function TrailEyesMap() {
   const { resolvedTheme } = useTheme();

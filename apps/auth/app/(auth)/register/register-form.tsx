@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl } from '@repo/ui/form';
 import { z } from 'zod';
-import { api } from '~/api';
+import { api } from '../../api';
 import {
   passwordLowercaseRegex,
   passwordNumericRegex,

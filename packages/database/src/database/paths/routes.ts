@@ -1,10 +1,10 @@
-import { client } from '~/db-client';
-import type * as models from '~/models';
-import * as schema from '~/schema';
+import { client } from '../../db-client';
+import type * as models from '../../models';
+import * as schema from '../../schema';
 
 /**
  * Adds a route to the database.
- * 
+ *
  * @param route - The route to be added.
  * @returns A promise that resolves when the route is successfully added.
  */
@@ -14,7 +14,7 @@ export async function addRoute(route: models.paths.RouteInsert) {
 
 /**
  * Retrieves all routes from the database.
- * 
+ *
  * @returns A promise that resolves to an array of routes.
  */
 export async function getAllRoutes() {

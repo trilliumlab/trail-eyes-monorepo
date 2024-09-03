@@ -2,8 +2,8 @@ import { publicEnv } from '@repo/util/public-env';
 import { Elysia, t } from 'elysia';
 import normalizeUrl from 'normalize-url';
 
-import dark from '~data/styles/dark.json';
-import light from '~data/styles/light.json';
+import dark from '../../../../../data/styles/dark.json';
+import light from '../../../../../data/styles/light.json';
 
 const querySchema = t.Object({
   key: t.String(),

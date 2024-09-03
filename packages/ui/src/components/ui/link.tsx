@@ -1,5 +1,5 @@
 import NextLink, { type LinkProps } from 'next/link';
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@ui/lib/utils';
 
 export function Link(
   props: Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LinkProps> &
