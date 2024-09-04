@@ -4,7 +4,7 @@ import { Button } from '@repo/ui/button';
 import { Input } from '@repo/ui/input';
 import { LoaderCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl } from '@repo/ui/form';
@@ -47,15 +47,30 @@ export function RegisterForm() {
   // This is only called on validated values.
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setIsSubmitting(true);
+
     const res = await api.auth.register.post(values);
     if (res.error) {
       setIsSubmitting(false);
       form.setError('email', { message: res.error.value.message });
       form.setFocus('email');
     } else {
+      // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
       router.push('/verify-email');
     }
   }
+
+  // Reset submission state when tab is foregrounded.
+  useEffect(() => {
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        setIsSubmitting(false);
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
 
   return (
     <Form {...form}>
