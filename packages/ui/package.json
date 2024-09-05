@@ -5,9 +5,9 @@
   "exports": {
     "./tailwind.config": "./tailwind.config.ts",
     "./globals.css": "./src/globals.css",
-    "./*": ["./src/components/ui/*.tsx", "./src/components/ui/*.ts"],
     "./lib/*": "./src/lib/*.ts",
-    "./code": "./src/code.tsx"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./*": ["./src/components/ui/*.tsx", "./src/components/ui/*.ts"]
   },
   "scripts": {
     "generate:component": "turbo gen react-component"
@@ -20,8 +20,10 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "input-otp": "^1.2.4",
     "lucide-react": "^0.427.0",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-f994737d14-20240522",

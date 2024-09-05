@@ -10,6 +10,29 @@ const config = {
   ],
   prefix: '',
   theme: {
+    fontFamily: {
+      sans: [
+        'var(--font-geist-sans)',
+        'ui-sans-serif',
+        'system-ui',
+        'sans-serif',
+        'Apple Color Emoji',
+        'Segoe UI Emoji',
+        'Segoe UI Symbol',
+        'Noto Color Emoji',
+      ],
+      mono: [
+        'var(--font-geist-mono)',
+        'ui-monospace',
+        'SFMono-Regular',
+        'Menlo',
+        'Monaco',
+        'Consolas',
+        'Liberation Mono',
+        'Courier New',
+        'monospace',
+      ],
+    },
     container: {
       center: true,
       padding: '2rem',
@@ -67,11 +90,16 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'spin-slow': 'spin 1.5s linear infinite;',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
+        'spin-slow': 'spin 2s linear infinite;',
       },
     },
   },
