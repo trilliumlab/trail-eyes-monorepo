@@ -171,7 +171,7 @@ export function TrailEyesMap() {
             if (document.fullscreenElement) {
               document.exitFullscreen();
             } else {
-              containerRef.current?.requestFullscreen();
+              containerRef.current?.requestFullscreen?.();
             }
           }}
         />
@@ -197,14 +197,16 @@ function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void })
 
   return (
     <div className="absolute right-0 m-2 grid">
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={onFullscreenToggle}
-        className="border-border-map bg-card mb-2"
-      >
-        {isFullscreen ? <Shrink className="h-4 w-4" /> : <Expand className="h-4 w-4" />}
-      </Button>
+      {document.fullscreenEnabled && (
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onFullscreenToggle}
+          className="border-border-map bg-card mb-2"
+        >
+          {isFullscreen ? <Shrink className="h-4 w-4" /> : <Expand className="h-4 w-4" />}
+        </Button>
+      )}
 
       <Button
         variant="outline"
