@@ -1,11 +1,11 @@
 'use client';
 
-import { Link, linkStyle } from '@repo/ui/link';
+import { linkStyle } from '@repo/ui/link';
 import { useEffect, useState } from 'react';
 import { cn } from '@repo/ui/lib/utils';
 
 export function ResendCountdown({ className }: { className?: string }) {
-  const initialSeconds = 9;
+  const initialSeconds = 90;
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isElapsed, setIsElapsed] = useState(false);
 
