@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
 import { NavBar } from '../_components/nav/nav-bar';
 import { TrailEyesMap } from '../_components/trail-eyes-map';
-import { Link } from '@repo/ui/link';
+import Link from 'next/link';
 
 export default function Dashboard() {
   return (

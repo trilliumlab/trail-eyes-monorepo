@@ -43,6 +43,7 @@ const config = {
     extend: {
       colors: {
         border: 'hsl(var(--border))',
+        'border-map': 'hsl(var(--border-map))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',

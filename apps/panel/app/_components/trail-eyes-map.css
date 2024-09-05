@@ -3,7 +3,7 @@
   color: hsl(var(--card-foreground)) !important;
   border: 1px !important;
   border-style: solid !important;
-  border-color: hsl(var(--border)) !important;
+  border-color: hsl(var(--border-map)) !important;
 }
 
 .maplibregl-ctrl-attrib a {

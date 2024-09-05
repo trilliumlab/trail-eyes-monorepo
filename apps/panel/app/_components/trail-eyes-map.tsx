@@ -2,15 +2,18 @@
 
 import { publicEnv } from '@repo/util/public-env';
 import { useTheme } from 'next-themes';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   type CircleLayer,
+  GeolocateControl,
   Layer,
   type LineLayer,
   Map as MapComponent,
   type MapRef,
+  NavigationControl,
   Source,
   type SymbolLayer,
+  useMap,
 } from 'react-map-gl/maplibre';
 
 // maplibre stylesheet
@@ -18,6 +21,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
 import { getLogger } from '../logger';
+import { Button } from '@repo/ui/button';
+import { Expand, Fullscreen, Minus, Plus, Shrink } from 'lucide-react';
+import { Separator } from '@repo/ui/separator';
 
 export function TrailEyesMap() {
   const { resolvedTheme } = useTheme();
@@ -104,11 +110,12 @@ export function TrailEyesMap() {
   };
 
   const mapRef = useRef<MapRef | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [activeRoute, setActiveRoute] = useState<number>();
 
   return (
-    <div className="h-full w-full select-none">
+    <div ref={containerRef} className="h-full w-full select-none relative">
       <MapComponent
         ref={mapRef}
         initialViewState={{
@@ -159,7 +166,67 @@ export function TrailEyesMap() {
         >
           <Layer {...startMarkers} />
         </Source>
+        <MapControls
+          onFullscreenToggle={() => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              containerRef.current?.requestFullscreen();
+            }
+          }}
+        />
       </MapComponent>
+    </div>
+  );
+}
+
+function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void }) {
+  const { current: map } = useMap();
+
+  // Listen to changes to fullscreen state to update button icon
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  return (
+    <div className="absolute right-0 m-2 grid">
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={onFullscreenToggle}
+        className="border-border-map bg-card mb-2"
+      >
+        {isFullscreen ? <Shrink className="h-4 w-4" /> : <Expand className="h-4 w-4" />}
+      </Button>
+
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => map?.zoomIn()}
+        className="border-border-map bg-card rounded-b-none border-b-0 z-10"
+      >
+        <Plus className="h-4 w-4" />
+      </Button>
+      <Separator className="bg-border-map z-10" />
+      {/* Prevent button scale from revealing map behind it */}
+      <div className="relative mx-0 w-full z-0">
+        <div className="absolute right-0 left-0 h-[5px] -top-[3px] mx-[1px] bg-accent" />
+      </div>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => map?.zoomOut()}
+        className="border-border-map bg-card rounded-t-none border-t-0 z-10"
+      >
+        <Minus className="h-4 w-4" />
+      </Button>
     </div>
   );
 }
