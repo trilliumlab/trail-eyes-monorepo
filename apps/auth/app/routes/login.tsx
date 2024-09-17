@@ -1,11 +1,16 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@repo/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
 import { Input } from '@repo/ui/input';
 import { Label } from '@repo/ui/label';
 import { Separator } from '@repo/ui/separator';
-import { Link } from '@repo/ui/link';
+import { Link } from '@tanstack/react-router';
 
-export default function LoginForm() {
+export const Route = createFileRoute('/login')({
+  component: Login,
+});
+
+function Login() {
   return (
     <div className="absolute inset-0 grid place-items-center p-4">
       <Card className="mx-auto max-w-sm">
@@ -32,7 +37,7 @@ export default function LoginForm() {
                 <Link
                   // biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs
                   tabIndex={4}
-                  href="/reset-password"
+                  to="/reset-password"
                   className="ml-auto inline-block text-sm"
                 >
                   Forgot your password?
@@ -50,7 +55,7 @@ export default function LoginForm() {
           <div className="mt-4 text-center text-sm">
             Don't have an account?{' '}
             {/* biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs */}
-            <Link tabIndex={5} href="/register">
+            <Link tabIndex={5} to="/register">
               Sign up
             </Link>
           </div>

@@ -1,8 +1,13 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
-import { VerifyEmailForm } from './verify-email-form';
-import { ResendCountdown } from './resend-countdown';
+import { VerifyEmailForm } from '~/components/register/verify-email-form';
+import { ResendCountdown } from '~/components/resend-countdown';
 
-export default function VerifyEmailPage() {
+export const Route = createFileRoute('/verify-email')({
+  component: VerifyEmail,
+});
+
+export default function VerifyEmail() {
   const email = 'example@example.com';
   return (
     <div className="absolute inset-0 grid place-items-center p-4">

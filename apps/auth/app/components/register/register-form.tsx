@@ -5,17 +5,17 @@ import { Input } from '@repo/ui/input';
 import { LoaderCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl } from '@repo/ui/form';
 import { z } from 'zod';
-import { api } from '../../api';
+import { backend } from '~/backend';
 import {
   passwordLowercaseRegex,
   passwordNumericRegex,
   passwordSpecialRegex,
   passwordUppercaseRegex,
 } from '@repo/util/regex';
+import { useRouter } from '@tanstack/react-router';
 
 const RegisterSchema = z.object({
   firstName: z.string().min(1, { message: 'Required' }),
@@ -48,14 +48,14 @@ export function RegisterForm() {
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setIsSubmitting(true);
 
-    const res = await api.auth.register.post(values);
+    const res = await backend.auth.register.post(values);
     if (res.error) {
       setIsSubmitting(false);
       form.setError('email', { message: res.error.value.message });
       form.setFocus('email');
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
-      router.push('/verify-email');
+      router.navigate({ to: '/' });
     }
   }
 

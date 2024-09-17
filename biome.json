@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.2.2/schema.json",
   "files": {
-    "ignore": ["node_modules/**/*", ".next", "drizzle/**/*"]
+    "ignore": ["node_modules/**/*", ".next", "drizzle/**/*", "*.gen.ts"]
   },
   "organizeImports": {
     "enabled": true
@@ -21,7 +21,11 @@
     "rules": {
       "recommended": true,
       "style": {
-        "noUnusedTemplateLiteral": "warn"
+        "noUnusedTemplateLiteral": "warn",
+        "noNonNullAssertion": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
       }
     }
   },

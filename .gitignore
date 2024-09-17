@@ -19,6 +19,10 @@ node_modules
 # Testing
 coverage
 
+# Vinxi
+.vinxi
+.output
+
 # Turbo
 .turbo
 

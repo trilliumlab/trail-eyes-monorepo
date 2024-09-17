@@ -5,8 +5,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "inputs": ["$TURBO_DEFAULT$", ".env", "./*.ts"],
+      "outputs": [".next/**", "!.next/cache/**", ".output/**", ".vinxi/**"]
     },
     "dev": {
       "cache": false,
