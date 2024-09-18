@@ -1,7 +1,7 @@
 'use client';
 
 import { publicEnv } from '@repo/env';
-import { useTheme } from '~/components/theme-provider';
+import { useTheme } from '@repo/ui/components/theme';
 import { useEffect, useRef, useState } from 'react';
 import {
   type CircleLayer,
@@ -18,9 +18,9 @@ import {
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
-import { Button } from '@repo/ui/button';
+import { Button } from '@repo/ui/components/button';
 import { Expand, Minus, Plus, Shrink } from 'lucide-react';
-import { Separator } from '@repo/ui/separator';
+import { Separator } from '@repo/ui/components/separator';
 
 export function TrailEyesMap() {
   const { resolvedTheme } = useTheme();

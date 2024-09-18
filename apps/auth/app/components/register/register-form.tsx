@@ -1,12 +1,19 @@
 'use client';
 
-import { Button } from '@repo/ui/button';
-import { Input } from '@repo/ui/input';
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
 import { LoaderCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormField, FormItem, FormLabel, FormMessage, FormControl } from '@repo/ui/form';
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormControl,
+} from '@repo/ui/components/form';
 import { z } from 'zod';
 import { backend } from '~/backend';
 import {

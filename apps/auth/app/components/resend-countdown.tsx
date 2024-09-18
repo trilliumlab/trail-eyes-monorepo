@@ -1,6 +1,6 @@
 'use client';
 
-import { linkStyle } from '@repo/ui/link';
+import { linkStyle } from '@repo/ui/components/link';
 import { useEffect, useState } from 'react';
 import { cn } from '@repo/ui/lib/utils';
 

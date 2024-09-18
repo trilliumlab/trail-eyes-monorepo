@@ -4,7 +4,7 @@ import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
 // @ts-expect-error
 import styles from '@repo/ui/globals.css?url';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@repo/ui/components/theme';
 import { publicEnv } from '@repo/env';
 
 export const Route = createRootRoute({

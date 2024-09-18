@@ -1,8 +1,21 @@
-import { Badge } from '@repo/ui/badge';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
 import { Link } from '@tanstack/react-router';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@repo/ui/components/table';
 import { createFileRoute } from '@tanstack/react-router';
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
 import { NavBar } from '~/components/nav/nav-bar';

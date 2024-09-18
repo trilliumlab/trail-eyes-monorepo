@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@repo/ui/button';
+import { Button } from '@repo/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +13,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@repo/ui/dropdown-menu';
+} from '@repo/ui/components/dropdown-menu';
 import { CircleUser } from 'lucide-react';
-import { useTheme } from '~/components/theme-provider';
+import { useTheme } from '@repo/ui/components/theme';
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();

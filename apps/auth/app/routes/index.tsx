@@ -1,8 +1,7 @@
 import * as fs from 'node:fs';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import { Button } from '@repo/ui/button';
-// import { Button } from '@repo/ui/button';
+import { Button } from '@repo/ui/components/button';
 
 const filePath = 'count.txt';
 

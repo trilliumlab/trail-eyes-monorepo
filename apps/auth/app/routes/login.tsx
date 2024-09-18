@@ -1,9 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button } from '@repo/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
-import { Input } from '@repo/ui/input';
-import { Label } from '@repo/ui/label';
-import { Separator } from '@repo/ui/separator';
+import { Button } from '@repo/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
+import { Separator } from '@repo/ui/components/separator';
 import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/login')({

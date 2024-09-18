@@ -1,5 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
 import { VerifyEmailForm } from '~/components/register/verify-email-form';
 import { ResendCountdown } from '~/components/resend-countdown';
 

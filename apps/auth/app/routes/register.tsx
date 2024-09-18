@@ -1,5 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
-import { Separator } from '@repo/ui/separator';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
+import { Separator } from '@repo/ui/components/separator';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { RegisterForm } from '~/components/register/register-form';
 
