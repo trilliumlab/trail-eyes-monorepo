@@ -1,7 +1,7 @@
 'use client';
 
 import { publicEnv } from '@repo/env';
-import { useTheme } from 'next-themes';
+import { useTheme } from '~/components/theme-provider';
 import { useEffect, useRef, useState } from 'react';
 import {
   type CircleLayer,
