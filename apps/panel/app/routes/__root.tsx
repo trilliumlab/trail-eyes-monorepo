@@ -4,7 +4,6 @@ import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
 // @ts-expect-error
 import styles from '@repo/ui/globals.css?url';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { ThemeProvider } from 'next-themes';
 import { publicEnv } from '@repo/env';
 
