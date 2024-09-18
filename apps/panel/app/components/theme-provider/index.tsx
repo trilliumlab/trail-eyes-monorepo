@@ -139,11 +139,15 @@ const Theme = ({
     [theme],
   );
 
+  const [_, startTransition] = React.useTransition();
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const handleMediaQuery = React.useCallback(
     (e: MediaQueryListEvent | MediaQueryList) => {
       const resolved = getSystemTheme(e);
-      setResolvedTheme(resolved);
+      startTransition(() => {
+        setResolvedTheme(resolved);
+      });
 
       if (theme === 'system' && enableSystem && !forcedTheme) {
         applyTheme('system');
@@ -213,7 +217,6 @@ const Theme = ({
           nonce,
         }}
       />
-
       {children}
     </ThemeContext.Provider>
   );
@@ -249,6 +252,7 @@ const ThemeScript = React.memo(
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Needed to inject script before hydration
         dangerouslySetInnerHTML={{ __html: `(${script.toString()})(${scriptArgs})` }}
       />
+      // <></>
     );
   },
 );
