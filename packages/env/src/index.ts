@@ -43,7 +43,10 @@ export const PrivateEnvSchema = z.object({
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_PORT: z.coerce.number(),
-  DB_SSL: z.coerce.boolean(),
+  DB_SSL: z.preprocess(
+    (value) => z.enum(['true', 'false']).default('false').parse(value) === 'true',
+    z.boolean(),
+  ),
   // packages/email
   SMTP_HOST: z.string(),
   SMTP_PORT: z.coerce.number(),

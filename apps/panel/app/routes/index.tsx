@@ -67,7 +67,7 @@ function Dashboard() {
                 <CardDescription>Rapid response route status</CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="#">
+                <Link to="." hash="#">
                   View All
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
