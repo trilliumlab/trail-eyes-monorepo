@@ -6,6 +6,7 @@ import * as React from 'react';
 import styles from '@repo/ui/globals.css?url';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { ThemeProvider } from 'next-themes';
+import { publicEnv } from '@repo/env';
 
 export const Route = createRootRoute({
   meta: () => [
@@ -26,6 +27,16 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: React.PropsWithChildren) {
+  const TanStackRouterDevtools =
+    publicEnv().mode === 'production'
+      ? () => null // Render nothing in production
+      : React.lazy(() =>
+          // Lazy load in development
+          import('@tanstack/router-devtools').then((res) => ({
+            default: res.TanStackRouterDevtools,
+          })),
+        );
+
   return (
     <Html lang="en" suppressHydrationWarning>
       <Head>
@@ -33,15 +44,13 @@ function RootDocument({ children }: React.PropsWithChildren) {
       </Head>
       <Body>
         <React.Suspense>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
         </React.Suspense>
-        <TanStackRouterDevtools />
+        <React.Suspense>
+          <TanStackRouterDevtools />
+        </React.Suspense>
         <ScrollRestoration />
         <Scripts />
       </Body>

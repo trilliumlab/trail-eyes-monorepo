@@ -26,6 +26,7 @@ function makeTypedEnvironment<T>(schema: (v: unknown) => T) {
 }
 
 export const PublicEnvSchema = z.object({
+  MODE: z.enum(['development', 'production']).optional(),
   VITE_APP_NAME: z.string(),
   VITE_BACKEND_URL: z.string().url(),
   VITE_PANEL_URL: z.string().url(),
