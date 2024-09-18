@@ -1,4 +1,4 @@
-import { publicEnv } from '@repo/util/public-env';
+import { publicEnv } from '@repo/env';
 import { Elysia, t } from 'elysia';
 import normalizeUrl from 'normalize-url';
 
@@ -18,11 +18,11 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
     sprite: [
       {
         id: 'default',
-        url: normalizeUrl(`${publicEnv.BACKEND_URL}/sprites/${theme}`),
+        url: normalizeUrl(`${publicEnv().backendUrl}/sprites/${theme}`),
       },
       {
         id: 'sdf',
-        url: normalizeUrl(`${publicEnv.BACKEND_URL}/sprites/sdf`),
+        url: normalizeUrl(`${publicEnv().backendUrl}/sprites/sdf`),
       },
     ],
     sources: {

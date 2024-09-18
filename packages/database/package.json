@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@repo/util": "workspace:*",
+    "@repo/env": "workspace:*",
     "@repo/email": "workspace:*",
     "@sinclair/typebox": "^0.33.7",
     "postgres": "^3.4.4",

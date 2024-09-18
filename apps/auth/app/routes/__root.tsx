@@ -37,7 +37,6 @@ function RootDocument({ children }: React.PropsWithChildren) {
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
           >
             {children}
           </ThemeProvider>

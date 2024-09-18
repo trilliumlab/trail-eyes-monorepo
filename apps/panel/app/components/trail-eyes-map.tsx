@@ -1,28 +1,25 @@
 'use client';
 
-import { publicEnv } from '@repo/util/public-env';
+import { publicEnv } from '@repo/env';
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 import {
   type CircleLayer,
-  GeolocateControl,
   Layer,
   type LineLayer,
   Map as MapComponent,
   type MapRef,
-  NavigationControl,
   Source,
   type SymbolLayer,
   useMap,
-} from 'react-map-gl/maplibre';
+} from 'react-map-gl/dist/es5/exports-maplibre';
 
 // maplibre stylesheet
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
-import { getLogger } from '../logger';
 import { Button } from '@repo/ui/button';
-import { Expand, Fullscreen, Minus, Plus, Shrink } from 'lucide-react';
+import { Expand, Minus, Plus, Shrink } from 'lucide-react';
 import { Separator } from '@repo/ui/separator';
 
 export function TrailEyesMap() {
@@ -125,12 +122,11 @@ export function TrailEyesMap() {
         }}
         mapStyle={
           resolvedTheme === 'dark' || resolvedTheme === 'light'
-            ? `${publicEnv.BACKEND_URL}/styles/${resolvedTheme}.json?key=${publicEnv.PROTO_API_KEY}`
+            ? `${publicEnv().backendUrl}/styles/${resolvedTheme}.json?key=${publicEnv().protoApiKey}`
             : undefined
         }
         interactiveLayerIds={['routes-hit']}
         onMouseMove={(event) => {
-          getLogger().warn('This is warning');
           const map = mapRef.current;
           if (event.features && event.features.length > 0) {
             const id = event.features[0]?.id as number | undefined;
@@ -151,7 +147,7 @@ export function TrailEyesMap() {
           }
         }}
       >
-        <Source id="routes" type="geojson" data={`${publicEnv.BACKEND_URL}/geojson/routes.json`}>
+        <Source id="routes" type="geojson" data={`${publicEnv().backendUrl}/geojson/routes.json`}>
           <Layer {...routesLayer} />
           <Layer {...arrowLayer} />
           <Layer {...hoverRoutesOutlineLayer} />
@@ -162,7 +158,7 @@ export function TrailEyesMap() {
         <Source
           id="start-markers"
           type="geojson"
-          data={`${publicEnv.BACKEND_URL}/geojson/start-markers.json`}
+          data={`${publicEnv().backendUrl}/geojson/start-markers.json`}
         >
           <Layer {...startMarkers} />
         </Source>

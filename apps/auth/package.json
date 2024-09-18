@@ -2,9 +2,9 @@
   "name": "@repo/auth",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev --port 3005",
+    "dev": "vinxi dev --port 3000",
     "build": "vinxi build",
-    "start": "vinxi start --port 3005"
+    "start": "vinxi start --port 3000"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",

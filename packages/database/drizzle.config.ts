@@ -1,9 +1,9 @@
 import { defineConfig } from 'drizzle-kit';
-import { privateEnv } from '@repo/util/private-env';
+import { privateEnv } from '@repo/env';
 import { createHash } from 'node:crypto';
 
 // Create a unique hash for the connection to store db migrations
-const connection = `${privateEnv.DB_USER}@${privateEnv.DB_HOST}:${privateEnv.DB_PORT}/${privateEnv.DB_NAME}`;
+const connection = `${privateEnv().dbUser}@${privateEnv().dbHost}:${privateEnv().dbPort}/${privateEnv().dbName}`;
 const hash = createHash('md5').update(connection).digest('hex').slice(0, 16);
 
 export default defineConfig({
@@ -11,12 +11,12 @@ export default defineConfig({
   schema: ['./src/schema/**/*.schema.ts', './src/schema/**/schema.ts'],
   out: `./drizzle/${hash}`,
   dbCredentials: {
-    host: privateEnv.DB_HOST,
-    port: privateEnv.DB_PORT,
-    user: privateEnv.DB_USER,
-    password: privateEnv.DB_PASSWORD,
-    database: privateEnv.DB_NAME,
-    ssl: privateEnv.DB_SSL,
+    host: privateEnv().dbHost,
+    port: privateEnv().dbPort,
+    user: privateEnv().dbUser,
+    password: privateEnv().dbPassword,
+    database: privateEnv().dbName,
+    ssl: privateEnv().dbSsl,
   },
   extensionsFilters: ['postgis'],
 });

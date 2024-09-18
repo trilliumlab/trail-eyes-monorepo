@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/util": "workspace:*",
+    "@repo/env": "workspace:*",
     "@repo/database": "workspace:*",
     "elysia": "1.1.6",
     "@elysiajs/cors": "^1.1.0",

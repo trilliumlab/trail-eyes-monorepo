@@ -1,5 +1,5 @@
 import { Kind, type TLiteral, type StaticDecode, type TSchema } from '@sinclair/typebox';
-import { TransformDecodeCheckError, Value, ValueErrorType } from '@sinclair/typebox/value';
+import { Value } from '@sinclair/typebox/value';
 
 /**
  * Parses a value from a Typebox schema.
@@ -38,55 +38,4 @@ function getErrorTypeString(schema: TSchema): string {
 
   // Default to printing type
   return `of type '${type ?? kind}'`;
-}
-
-/**
- * Parses env variables from a Typebox schema and provides helpful error messages for missing variables.
- *
- * @param schema The Typebox schema of the env variables to parse.
- * @param envPath The path to the .env file the variables are loaded from. Used to generate more detailed errors.
- * @param additionalVars Additional variables to be parsed.
- * @returns The validated env variables.
- */
-export function parseEnv<T extends TSchema, R = StaticDecode<T>>(
-  schema: T,
-  envPath?: string,
-  additionalVars?: Record<string, unknown>,
-): R {
-  try {
-    return parse(schema, { ...process.env, ...additionalVars }); // run decode transforms (optional)
-  } catch (e) {
-    if (e instanceof TransformDecodeCheckError) {
-      const varName = e.error.path.substring(1);
-      const varValue = e.error.value;
-      const varType = getErrorTypeString(e.error.schema);
-
-      if (e.error.type === ValueErrorType.ObjectRequiredProperty || !varValue) {
-        // Missing property error
-        let message = `Missing required ENV variable '${varName}' '${varType}'.`;
-        if (envPath) {
-          message += `\n'${varName}' should be set in '${envPath}'.`;
-          message += `\nSee '${envPath}.example' for example usage.`;
-        }
-        throw {
-          name: 'MissingEnvVar',
-          message,
-        };
-      }
-      if (e.error.message.toLowerCase().startsWith('expected')) {
-        let message = `Expected ENV variable '${varName}' to be ${varType}: value '${varValue}' cannot be coerced to type.`;
-        if (envPath) {
-          message += `\nSee '${envPath}.example' for example usage.`;
-        }
-        throw {
-          name: 'InvalidEnvVar',
-          message,
-        };
-      }
-      console.error('Unknown TransformDecodeCheckError.');
-    } else {
-      console.error('Unknown parsing error.');
-    }
-    throw e;
-  }
 }

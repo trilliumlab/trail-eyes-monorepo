@@ -1,6 +1,6 @@
 import { api } from '../../index.test';
 import { describe, expect, it } from 'bun:test';
-import { publicEnv } from '@repo/util/public-env';
+import { publicEnv } from '@repo/env';
 
 const styles = ['light.json', 'dark.json'] as const;
 
@@ -9,7 +9,7 @@ describe('/styles', () => {
     for (const mobile of [true, false]) {
       it(`/${style}?mobile=${mobile} is a valid style`, async () => {
         const res = await api.styles[style].get({
-          query: { key: publicEnv.PROTO_API_KEY, mobile },
+          query: { key: publicEnv().protoApiKey, mobile },
         });
         expect(res.status).toBe(200);
         expect(res.data).toBeDefined();

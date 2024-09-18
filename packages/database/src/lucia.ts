@@ -1,4 +1,4 @@
-import { publicEnv } from '@repo/util/public-env';
+import { publicEnv } from '@repo/env';
 import { type Adapter, Lucia } from 'lucia';
 import { client } from './db-client';
 import { auth as authSchema } from './schema';
@@ -61,9 +61,9 @@ export const lucia = new Lucia(AuthAdapter, {
   sessionCookie: {
     attributes: {
       secure:
-        publicEnv.BACKEND_URL.startsWith('https://') &&
-        publicEnv.AUTH_URL.startsWith('https://') &&
-        publicEnv.PANEL_URL.startsWith('https://'),
+        publicEnv().backendUrl.startsWith('https://') &&
+        publicEnv().authUrl.startsWith('https://') &&
+        publicEnv().panelUrl.startsWith('https://'),
     },
   },
   getUserAttributes: (attributes) => attributes,
