@@ -1,7 +1,7 @@
 import { Badge } from '@repo/ui/badge';
 import { Button } from '@repo/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/card';
-import { Link } from '@repo/ui/link';
+import { Link } from '@tanstack/react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/table';
 import { createFileRoute } from '@tanstack/react-router';
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
