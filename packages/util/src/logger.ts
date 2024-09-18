@@ -1,4 +1,4 @@
-import { publicEnv } from './public-env';
+import { publicEnv } from '@repo/env';
 import type { LoggerOptions } from 'pino';
 
 /**
@@ -9,9 +9,9 @@ import type { LoggerOptions } from 'pino';
 export function createLoggerOptions(name: string) {
   return {
     name,
-    level: publicEnv.LOG_LEVEL,
+    level: publicEnv().logLevel,
     transport:
-      typeof window === 'undefined' && publicEnv.LOG_FORMAT === 'pretty'
+      typeof window === 'undefined' && publicEnv().logFormat === 'pretty'
         ? {
             target: 'pino-pretty',
             options: {

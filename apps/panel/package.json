@@ -18,7 +18,9 @@
     "vinxi": "^0.4.3",
     "next-themes": "^0.3.0",
     "@elysiajs/eden": "^1.1.2",
-    "lucide-react": "^0.441.0"
+    "lucide-react": "^0.441.0",
+    "react-map-gl": "^7.1.7",
+    "maplibre-gl": "^4.7.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
