@@ -1,18 +1,30 @@
-import { cors } from '@elysiajs/cors';
-import { Elysia } from 'elysia';
 import { routes } from './routes/plugin';
 import { logger } from './logger';
-import { logger as elysiaLogger } from '@bogeychan/elysia-logger';
-import { createLoggerOptions } from '@repo/util/logger';
-import { openapi } from './middleware/openapi';
+import { logger as honoLogger } from 'hono-pino';
+import { cors } from 'hono/cors';
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { apiReference } from '@scalar/hono-api-reference';
 
-export const app = new Elysia()
-  .use(elysiaLogger(createLoggerOptions('backend-elysia')))
-  .use(openapi())
+export const app = new OpenAPIHono()
+  .doc31('/openapi.json', {
+    openapi: '3.1.0',
+    info: {
+      version: '1.0.0',
+      title: 'My API',
+    },
+  })
+  .get('/docs', apiReference({ spec: { url: '/openapi.json' }, theme: 'kepler' }))
+  .use(
+    honoLogger({
+      pino: logger,
+    }),
+  )
   .use(cors())
-  .use(routes)
-  .listen(8000);
+  .route('', routes);
 
-export type App = typeof app;
+export type AppType = typeof app;
 
-logger.info(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+export default {
+  port: 8000,
+  fetch: app.fetch,
+};

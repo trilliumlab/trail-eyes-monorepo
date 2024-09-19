@@ -1,14 +1,14 @@
-import { Type } from '@sinclair/typebox';
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { reports } from '../../schema';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { reports } from '~/schema';
+import { z } from 'zod';
 
 const hazardsRefine = {
-  geometry: Type.Object({
-    coordinates: Type.Tuple([Type.Number(), Type.Number(), Type.Number()]),
-    type: Type.Literal('Point'),
+  geometry: z.object({
+    coordinates: z.tuple([z.number(), z.number(), z.number()]),
+    type: z.literal('Point'),
   }),
 };
 export const HazardInsertSchema = createInsertSchema(reports.hazards, hazardsRefine);
 export const HazardSelectSchema = createSelectSchema(reports.hazards, hazardsRefine);
-export type HazardInsert = typeof HazardInsertSchema.static;
-export type HazardSelect = typeof HazardSelectSchema.static;
+export type HazardInsert = z.infer<typeof HazardInsertSchema>;
+export type HazardSelect = z.infer<typeof HazardSelectSchema>;

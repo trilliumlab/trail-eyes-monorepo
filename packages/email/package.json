@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@repo/util": "workspace:*",
-    "@sinclair/typebox": "^0.33.7",
     "@react-email/components": "^0.0.23",
     "react-email": "^3.0.1",
     "nodemailer": "^6.9.14"

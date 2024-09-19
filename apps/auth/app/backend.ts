@@ -1,4 +1,5 @@
-import { treaty } from '@elysiajs/eden';
-import type { Api } from '@repo/backend-api';
+import { hc } from 'hono/client';
+import type { AppType } from '@repo/backend';
+import { publicEnv } from '@repo/env';
 
-export const backend = treaty<Api>('http://localhost:8000');
+export const backend = hc<AppType>(publicEnv().backendUrl);

@@ -1,6 +1,5 @@
-import { TEType } from '@repo/util';
-import { auth } from '../../schema';
-import type { PgEnumToObject } from '../../utils';
+import type { auth } from '~/schema';
+import type { PgEnumToObject } from '~/utils';
 
 export const roleEnumValues = {
   developer: { rank: 0, name: 'Developer' },
@@ -17,9 +16,9 @@ export const roleEnumValues = {
  * @param requiredRole The required role.
  * @returns True if `userRole` has greater or equal privelege to `requiredRole`, otherwise false.
  */
-export function hasRole(userRole: RoleEnum, requiredRole: RoleEnum) {
+export function hasRole(
+  userRole: keyof typeof roleEnumValues,
+  requiredRole: keyof typeof roleEnumValues,
+) {
   return roleEnumValues[userRole].rank <= roleEnumValues[requiredRole].rank;
 }
-
-export const RoleEnumSchema = TEType.StringEnum(auth.roleEnum.enumValues);
-export type RoleEnum = typeof RoleEnumSchema.static;

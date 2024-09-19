@@ -23,6 +23,7 @@ import {
   passwordUppercaseRegex,
 } from '@repo/util/regex';
 import { useRouter } from '@tanstack/react-router';
+import type { InferResponseType } from 'hono';
 
 const RegisterSchema = z.object({
   firstName: z.string().min(1, { message: 'Required' }),
@@ -55,11 +56,15 @@ export function RegisterForm() {
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setIsSubmitting(true);
 
-    const res = await backend.auth.register.post(values);
-    if (res.error) {
+    const res = await backend.auth.register.$post({ json: values });
+    if (res.status !== 200) {
       setIsSubmitting(false);
-      form.setError('email', { message: res.error.value.message });
-      form.setFocus('email');
+      // TODO fix login error handling
+      if (res.status === 409) {
+        const error: InferResponseType<typeof backend.auth.register.$post, 409> = res.json();
+        form.setError('email', { message: error.value.message });
+        form.setFocus('email');
+      }
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
       router.navigate({ to: '/' });

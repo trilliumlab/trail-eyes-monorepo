@@ -4,7 +4,7 @@ import { client } from './db-client';
 import { auth as authSchema } from './schema';
 import { auth as authModels } from './models';
 import { eq, gt } from 'drizzle-orm';
-import { Type } from '@sinclair/typebox';
+import type { z } from 'zod';
 
 /**
  * A lucia auth adapter with a custom Drizzle backend.
@@ -69,11 +69,11 @@ export const lucia = new Lucia(AuthAdapter, {
   getUserAttributes: (attributes) => attributes,
 });
 
-const DatabaseUserAttributesSchema = Type.Omit(authModels.UserSelectSchema, ['id']);
+const DatabaseUserAttributesSchema = authModels.UserSelectSchema.omit({ id: true });
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: typeof DatabaseUserAttributesSchema.static;
+    DatabaseUserAttributes: z.infer<typeof DatabaseUserAttributesSchema>;
   }
 }

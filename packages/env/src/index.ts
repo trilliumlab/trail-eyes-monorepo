@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { tez } from '@repo/zod-utils';
 import type { CamelKeys, ReplaceKeys } from 'string-ts';
 import { camelKeys, replaceKeys } from 'string-ts';
 
@@ -43,10 +44,7 @@ export const PrivateEnvSchema = z.object({
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_PORT: z.coerce.number(),
-  DB_SSL: z.preprocess(
-    (value) => z.enum(['true', 'false']).default('false').parse(value) === 'true',
-    z.boolean(),
-  ),
+  DB_SSL: tez.coerce.boolean(),
   // packages/email
   SMTP_HOST: z.string(),
   SMTP_PORT: z.coerce.number(),

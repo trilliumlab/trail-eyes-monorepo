@@ -1,5 +1,5 @@
 {
-  "name": "scripts",
+  "name": "@repo/scripts",
   "version": "1.0.0",
   "scripts": {
     "build-sprites": "bun run src/build-sprites.ts",

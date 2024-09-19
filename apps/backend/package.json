@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "@repo/backend",
   "version": "1.0.0",
   "main": "./src/index.ts",
   "module": "src/index.ts",
@@ -12,20 +12,20 @@
     "@repo/util": "workspace:*",
     "@repo/env": "workspace:*",
     "@repo/database": "workspace:*",
-    "elysia": "1.1.6",
-    "@elysiajs/cors": "^1.1.0",
-    "@elysiajs/swagger": "^1.1.1",
-    "@sinclair/typebox": "^0.33.7",
+    "@repo/zod-utils": "workspace:*",
+    "zod": "^3.23.8",
+    "hono": "^4.6.2",
+    "hono-pino": "^0.1.0",
+    "@hono/zod-openapi": "^0.16.0",
+    "@scalar/hono-api-reference": "^0.5.146",
     "@paralleldrive/cuid2": "^2.2.2",
     "normalize-url": "^8.0.1",
-    "@bogeychan/elysia-logger": "^0.1.2",
     "pino": "^9.3.2",
     "pino-pretty": "^11.2.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/geojson": "^7946.0.14",
-    "@elysiajs/eden": "^1.1.2",
     "@types/bun": "latest"
   }
 }

@@ -1,7 +1,12 @@
-import { Type } from '@sinclair/typebox';
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { auth } from '../../schema';
-import { strongPasswordRegex } from '@repo/util/regex';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { auth } from '~/schema';
+import {
+  passwordLowercaseRegex,
+  passwordNumericRegex,
+  passwordSpecialRegex,
+  passwordUppercaseRegex,
+} from '@repo/util/regex';
+import { z } from 'zod';
 
 /**
  * Capitalizes the first letter of a string (respecting utf16 characters).
@@ -19,25 +24,28 @@ function capitalizeFirstLetter(str: string) {
 }
 
 const usersRefine = {
-  email: Type.Transform(Type.String({ format: 'email' }))
-    .Decode((value) => value.toLowerCase())
-    .Encode((value) => value.toLowerCase()),
-  firstName: Type.Transform(Type.String({ minLength: 1 }))
-    .Decode((value) => capitalizeFirstLetter(value.trim()))
-    .Encode((value) => capitalizeFirstLetter(value.trim())),
-  lastName: Type.Transform(Type.String({ minLength: 1 }))
-    .Decode((value) => capitalizeFirstLetter(value.trim()))
-    .Encode((value) => capitalizeFirstLetter(value.trim())),
+  email: z.string().min(1, 'Required').email('Invalid email').toLowerCase(),
+  firstName: z
+    .string()
+    .min(1, 'Required')
+    .transform((value) => capitalizeFirstLetter(value.trim())),
+  lastName: z
+    .string()
+    .min(1, 'Required')
+    .transform((value) => capitalizeFirstLetter(value.trim())),
 };
 export const UserInsertSchema = createInsertSchema(auth.users, usersRefine);
 export const UserSelectSchema = createSelectSchema(auth.users, usersRefine);
-export type UserInsert = typeof UserInsertSchema.static;
-export type UserSelect = typeof UserSelectSchema.static;
+export type UserInsert = z.infer<typeof UserInsertSchema>;
+export type UserSelect = z.infer<typeof UserSelectSchema>;
 
-export const UserCreateSchema = Type.Composite([
-  UserInsertSchema,
-  Type.Object({
-    password: Type.String({ pattern: strongPasswordRegex.source }),
-  }),
-]);
-export type UserCreate = typeof UserCreateSchema.static;
+export const UserCreateSchema = UserInsertSchema.extend({
+  password: z
+    .string()
+    .min(8, { message: 'Password must have at least 8 characters' })
+    .regex(passwordLowercaseRegex, { message: 'Password must include a lowercase character' })
+    .regex(passwordUppercaseRegex, { message: 'Password must include an uppercase character' })
+    .regex(passwordNumericRegex, { message: 'Password must include a number' })
+    .regex(passwordSpecialRegex, { message: 'Password must include a special character' }),
+});
+export type UserCreate = z.infer<typeof UserCreateSchema>;

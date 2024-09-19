@@ -1,11 +1,11 @@
-import { Type } from '@sinclair/typebox';
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { auth } from '../../schema';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { auth } from '~/schema';
+import { z } from 'zod';
 
 const invitesRefine = {
-  email: Type.String({ format: 'email' }),
+  email: z.string().email(),
 };
 export const InviteInsertSchema = createInsertSchema(auth.invites, invitesRefine);
 export const InviteSelectSchema = createSelectSchema(auth.invites, invitesRefine);
-export type InviteInsert = typeof InviteInsertSchema.static;
-export type InviteSelect = typeof InviteSelectSchema.static;
+export type InviteInsert = z.infer<typeof InviteInsertSchema>;
+export type InviteSelect = z.infer<typeof InviteSelectSchema>;

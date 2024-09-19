@@ -1,7 +1,8 @@
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { auth } from '../../schema';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { auth } from '~/schema';
+import type { z } from 'zod';
 
 export const LoginTokenInsertSchema = createInsertSchema(auth.loginTokens);
 export const LoginTokenSelectSchema = createSelectSchema(auth.loginTokens);
-export type LoginTokenInsert = typeof LoginTokenInsertSchema.static;
-export type LoginTokenSelect = typeof LoginTokenSelectSchema.static;
+export type LoginTokenInsert = z.infer<typeof LoginTokenInsertSchema>;
+export type LoginTokenSelect = z.infer<typeof LoginTokenSelectSchema>;
