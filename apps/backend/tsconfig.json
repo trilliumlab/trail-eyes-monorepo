@@ -7,5 +7,11 @@
       "~/*": ["./src/*"],
       "~data/*": ["../../data/*"]
     }
-  }
+  },
+  "references": [
+    { "path": "../../packages/util" },
+    { "path": "../../packages/env" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/zod-utils" }
+  ]
 }

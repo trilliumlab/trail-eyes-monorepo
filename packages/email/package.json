@@ -10,7 +10,7 @@
     "dev": "email dev -p 4000 -d src/emails"
   },
   "dependencies": {
-    "@repo/util": "workspace:*",
+    "@repo/env": "workspace:*",
     "@react-email/components": "^0.0.23",
     "react-email": "^3.0.1",
     "nodemailer": "^6.9.14"

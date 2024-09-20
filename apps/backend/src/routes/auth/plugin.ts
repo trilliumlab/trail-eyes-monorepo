@@ -97,6 +97,5 @@ export const auth = new OpenAPIHono()
     //   return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 401);
     // }
     // db.auth.updateSession({});
-    db.auth.createUser({});
     return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 200);
   });
