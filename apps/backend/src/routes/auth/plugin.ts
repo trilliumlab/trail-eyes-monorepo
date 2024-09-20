@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { models, db, errors } from '@repo/database';
+import { lucia } from '@repo/database/auth';
 
 export const registerRoute = createRoute({
   method: 'post',
@@ -50,10 +51,7 @@ export const loginRoute = createRoute({
     body: {
       content: {
         'application/json': {
-          schema: models.auth.UserCreateSchema.pick({
-            email: true,
-            password: true,
-          }),
+          schema: models.auth.UserCredentialsSchema,
         },
       },
     },
@@ -65,6 +63,11 @@ export const loginRoute = createRoute({
           schema: LoginResponseSchema,
         },
       },
+      headers: z.object({
+        'set-cookie': z.string().openapi({
+          example: 'auth_session=abc123; Path=/; HttpOnly; SameSite=Strict; Secure',
+        }),
+      }),
       description: 'User logged in successfully',
     },
     401: {
@@ -92,10 +95,30 @@ export const auth = new OpenAPIHono()
   })
   .openapi(loginRoute, async (ctx) => {
     const body = ctx.req.valid('json');
-    // const user = await db.auth.createUser({}) getUserByEmail(body.email);
-    // if (!user) {
-    //   return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 401);
-    // }
-    // db.auth.updateSession({});
-    return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 200);
+
+    try {
+      const user = await db.auth.verifyUser(body);
+      // If it doesn't throw then the user is verified, need to create a session
+      // TODO: set confirmed to false if the user has 2fa enabled
+      const session = await lucia.createSession(user.id, { confirmed: true });
+      const sessionCookie = await lucia.createSessionCookie(session.id);
+      return ctx.json(
+        {
+          requiresSecondFactor: false,
+          enabledSecondFactors: [],
+        },
+        200,
+        {
+          'set-cookie': sessionCookie.serialize(),
+        },
+      );
+    } catch (e) {
+      if (
+        e instanceof errors.auth.InvalidCredentialsError ||
+        e instanceof errors.auth.UserNotFoundError
+      ) {
+        return ctx.json(e, 401);
+      }
+      return ctx.text('Internal server error', 500);
+    }
   });

@@ -12,7 +12,11 @@ import { createOtpCode } from '../../util';
 import { addMinute, addSecond } from '@formkit/tempo';
 import { and, eq, gt } from 'drizzle-orm';
 import postgres from 'postgres';
-import { RegistrationConflictError } from '../../errors/auth';
+import {
+  InvalidCredentialsError,
+  RegistrationConflictError,
+  UserNotFoundError,
+} from '../../errors/auth';
 
 /**
  * Creates a user with the provided information.
@@ -49,6 +53,40 @@ export async function createUser({ password, ...user }: authModels.UserCreate) {
     }
     throw e;
   }
+}
+
+/**
+ * Verifies a user's credentials.
+ *
+ * @param user - The user object containing email and password.
+ * @returns A promise that resolves when the user is verified.
+ * @throws {UserNotFoundError} If the user is not found.
+ * @throws {InvalidCredentialsError} If the credentials are invalid.
+ */
+export async function verifyUser(user: authModels.UserCredentials) {
+  const dbUser = await client.query.users.findFirst({
+    where: eq(authSchema.users.email, user.email),
+  });
+  if (!dbUser) {
+    throw new UserNotFoundError();
+  }
+
+  const password = await client.query.passwords.findFirst({
+    where: eq(authSchema.passwords.userId, dbUser.id),
+    columns: {
+      hash: true,
+    },
+  });
+  if (!password) {
+    throw new UserNotFoundError();
+  }
+
+  const verified = await Bun.password.verify(password.hash, user.password);
+  if (!verified) {
+    throw new InvalidCredentialsError();
+  }
+
+  return dbUser;
 }
 
 /**

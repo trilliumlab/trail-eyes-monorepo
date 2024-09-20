@@ -10,3 +10,15 @@ export class RegistrationConflictError extends BaseError {
     super('Email already registered.');
   }
 }
+
+export class UserNotFoundError extends BaseError {
+  constructor() {
+    super('User not found.');
+  }
+}
+
+export class InvalidCredentialsError extends BaseError {
+  constructor() {
+    super('Invalid credentials.');
+  }
+}

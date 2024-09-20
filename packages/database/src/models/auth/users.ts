@@ -49,3 +49,9 @@ export const UserCreateSchema = UserInsertSchema.extend({
     .regex(passwordSpecialRegex, { message: 'Password must include a special character' }),
 });
 export type UserCreate = z.infer<typeof UserCreateSchema>;
+
+export const UserCredentialsSchema = UserCreateSchema.pick({
+  email: true,
+  password: true,
+});
+export type UserCredentials = z.infer<typeof UserCredentialsSchema>;
