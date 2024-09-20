@@ -1,7 +1,9 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { privateEnv } from '@repo/env';
-import * as schema from './schema';
+import * as auth from './schema/auth';
+import * as paths from './schema/paths';
+import * as reports from './schema/reports';
 
 export const client = drizzle(
   postgres({
@@ -14,9 +16,9 @@ export const client = drizzle(
   }),
   {
     schema: {
-      ...schema.auth,
-      ...schema.paths,
-      ...schema.reports,
+      ...auth,
+      ...paths,
+      ...reports,
     },
   },
 );

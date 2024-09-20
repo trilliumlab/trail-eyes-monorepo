@@ -1,7 +1,17 @@
-import { integer, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { pgEnum } from 'drizzle-orm/pg-core';
+import { integer, serial, text, timestamp, uuid, pgTable } from 'drizzle-orm/pg-core';
 import { point } from 'drizzle-postgis/models';
-import { categoryEnum } from './category.schema';
-import { statusEnum } from './status.schema';
+
+export const categoryEnum = pgEnum('category', [
+  'other',
+  'fallenTree',
+  'drainage',
+  'erosion',
+  'structureFailure',
+  'damagedSign',
+  'seasonal',
+]);
+export const statusEnum = pgEnum('status', ['open', 'confirmed', 'inProgress', 'closed']);
 
 export function commonReportsColumns() {
   return {
@@ -20,3 +30,13 @@ export function commonReportsColumns() {
     geometry: point('geometry', { is3D: true, srid: 4326 }).notNull(),
   };
 }
+
+export const hazards = pgTable('hazards', {
+  ...commonReportsColumns(),
+  description: text('description').notNull(),
+  locationDescription: text('location_description'),
+});
+
+export const reports = pgTable('reports', {
+  ...commonReportsColumns(),
+});

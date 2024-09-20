@@ -1,33 +1,33 @@
 import { publicEnv } from '@repo/env';
-import { type Adapter, DatabaseSession, Lucia } from 'lucia';
+import { type Adapter, Lucia } from 'lucia';
 import { client } from './db-client';
-import { auth as authSchema } from './schema';
-import { auth as authModels } from './models';
 import { eq, gt } from 'drizzle-orm';
 import type { z } from 'zod';
+import { sessions, users } from './schema/auth';
+import { SessionSelectSchema, UserSelectSchema } from './models/auth';
 
 /**
  * A lucia auth adapter with a custom Drizzle backend.
  */
 const AuthAdapter = {
   async deleteExpiredSessions() {
-    await client.delete(authSchema.sessions).where(gt(authSchema.sessions.expiresAt, new Date()));
+    await client.delete(sessions).where(gt(sessions.expiresAt, new Date()));
   },
   async deleteSession(sessionId) {
-    await client.delete(authSchema.sessions).where(eq(authSchema.sessions.id, sessionId));
+    await client.delete(sessions).where(eq(sessions.id, sessionId));
   },
   async deleteUserSessions(userId) {
-    await client.delete(authSchema.sessions).where(eq(authSchema.sessions.userId, userId));
+    await client.delete(sessions).where(eq(sessions.userId, userId));
   },
   async getSessionAndUser(sessionId) {
     const session = await client.query.sessions.findFirst({
-      where: eq(authSchema.sessions.id, sessionId),
+      where: eq(sessions.id, sessionId),
     });
     if (!session) {
       return [null, null];
     }
     const user = await client.query.users.findFirst({
-      where: eq(authSchema.users.id, session.userId),
+      where: eq(users.id, session.userId),
     });
     if (!user) {
       return [null, null];
@@ -42,18 +42,15 @@ const AuthAdapter = {
   },
   async getUserSessions(userId) {
     const userSessions = await client.query.sessions.findMany({
-      where: eq(authSchema.sessions.userId, userId),
+      where: eq(sessions.userId, userId),
     });
     return userSessions.map((s) => ({ ...s, attributes: s }));
   },
   async setSession(session) {
-    await client.insert(authSchema.sessions).values(session);
+    await client.insert(sessions).values(session);
   },
   async updateSessionExpiration(sessionId, expiresAt) {
-    await client
-      .update(authSchema.sessions)
-      .set({ expiresAt })
-      .where(eq(authSchema.sessions.id, sessionId));
+    await client.update(sessions).set({ expiresAt }).where(eq(sessions.id, sessionId));
   },
 } satisfies Adapter;
 
@@ -69,8 +66,8 @@ export const lucia = new Lucia(AuthAdapter, {
   getUserAttributes: (attributes) => attributes,
 });
 
-const DatabaseUserAttributesSchema = authModels.UserSelectSchema.omit({ id: true });
-const DatabaseSessionAttributesSchema = authModels.SessionSelectSchema.omit({
+const DatabaseUserAttributesSchema = UserSelectSchema.omit({ id: true });
+const DatabaseSessionAttributesSchema = SessionSelectSchema.omit({
   id: true,
   userId: true,
   expiresAt: true,

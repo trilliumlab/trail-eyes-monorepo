@@ -1,7 +1,8 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { paths } from '~/schema';
+import { routes } from '~/schema/paths';
 import { z } from 'zod';
 
+// Routes
 const routesRefine = {
   // TODO: Add geometry type
   geometry: z.object({
@@ -9,7 +10,7 @@ const routesRefine = {
     type: z.literal('LineString'),
   }),
 };
-export const RouteInsertSchema = createInsertSchema(paths.routes, routesRefine);
-export const RouteSelectSchema = createSelectSchema(paths.routes, routesRefine);
+export const RouteInsertSchema = createInsertSchema(routes, routesRefine);
+export const RouteSelectSchema = createSelectSchema(routes, routesRefine);
 export type RouteInsert = z.infer<typeof RouteInsertSchema>;
 export type RouteSelect = z.infer<typeof RouteSelectSchema>;
