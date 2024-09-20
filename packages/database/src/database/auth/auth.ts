@@ -81,7 +81,7 @@ export async function verifyUser(user: authModels.UserCredentials) {
     throw new UserNotFoundError();
   }
 
-  const verified = await Bun.password.verify(password.hash, user.password);
+  const verified = await Bun.password.verify(user.password, password.hash);
   if (!verified) {
     throw new InvalidCredentialsError();
   }

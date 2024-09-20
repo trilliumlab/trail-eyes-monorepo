@@ -119,6 +119,7 @@ export const auth = new OpenAPIHono()
       ) {
         return ctx.json(e, 401);
       }
+      console.error(e);
       return ctx.text('Internal server error', 500);
     }
   });
