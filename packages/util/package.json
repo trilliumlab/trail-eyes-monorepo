@@ -10,7 +10,6 @@
     "./regex": "./src/regex.ts"
   },
   "dependencies": {
-    "@sinclair/typebox": "^0.33.7",
     "@repo/env": "workspace:*",
     "dotenv": "^16.4.5"
   },

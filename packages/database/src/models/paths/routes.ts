@@ -1,14 +1,15 @@
-import { Type } from '@sinclair/typebox';
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
-import { paths } from '../../schema';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { paths } from '~/schema';
+import { z } from 'zod';
 
 const routesRefine = {
-  geometry: Type.Object({
-    coordinates: Type.Array(Type.Tuple([Type.Number(), Type.Number(), Type.Number()])),
-    type: Type.Literal('LineString'),
+  // TODO: Add geometry type
+  geometry: z.object({
+    coordinates: z.array(z.tuple([z.number(), z.number(), z.number()])),
+    type: z.literal('LineString'),
   }),
 };
 export const RouteInsertSchema = createInsertSchema(paths.routes, routesRefine);
 export const RouteSelectSchema = createSelectSchema(paths.routes, routesRefine);
-export type RouteInsert = typeof RouteInsertSchema.static;
-export type RouteSelect = typeof RouteSelectSchema.static;
+export type RouteInsert = z.infer<typeof RouteInsertSchema>;
+export type RouteSelect = z.infer<typeof RouteSelectSchema>;

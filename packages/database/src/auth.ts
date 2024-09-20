@@ -1,10 +1,10 @@
 import { publicEnv } from '@repo/env';
-import { type Adapter, Lucia } from 'lucia';
+import { type Adapter, DatabaseSession, Lucia } from 'lucia';
 import { client } from './db-client';
 import { auth as authSchema } from './schema';
 import { auth as authModels } from './models';
 import { eq, gt } from 'drizzle-orm';
-import { Type } from '@sinclair/typebox';
+import type { z } from 'zod';
 
 /**
  * A lucia auth adapter with a custom Drizzle backend.
@@ -26,17 +26,17 @@ const AuthAdapter = {
     if (!session) {
       return [null, null];
     }
-    const users = await client.query.users.findFirst({
+    const user = await client.query.users.findFirst({
       where: eq(authSchema.users.id, session.userId),
     });
-    if (!users) {
+    if (!user) {
       return [null, null];
     }
     return [
-      { ...session, attributes: {} } ?? null,
+      { ...session, attributes: session } ?? null,
       {
-        id: session.userId,
-        attributes: users,
+        id: user.id,
+        attributes: user,
       } ?? null,
     ];
   },
@@ -44,7 +44,7 @@ const AuthAdapter = {
     const userSessions = await client.query.sessions.findMany({
       where: eq(authSchema.sessions.userId, userId),
     });
-    return userSessions.map((s) => ({ ...s, attributes: {} }));
+    return userSessions.map((s) => ({ ...s, attributes: s }));
   },
   async setSession(session) {
     await client.insert(authSchema.sessions).values(session);
@@ -69,11 +69,18 @@ export const lucia = new Lucia(AuthAdapter, {
   getUserAttributes: (attributes) => attributes,
 });
 
-const DatabaseUserAttributesSchema = Type.Omit(authModels.UserSelectSchema, ['id']);
+const DatabaseUserAttributesSchema = authModels.UserSelectSchema.omit({ id: true });
+const DatabaseSessionAttributesSchema = authModels.SessionSelectSchema.omit({
+  id: true,
+  userId: true,
+  expiresAt: true,
+  createdAt: true,
+});
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: typeof DatabaseUserAttributesSchema.static;
+    DatabaseUserAttributes: z.infer<typeof DatabaseUserAttributesSchema>;
+    DatabaseSessionAttributes: z.infer<typeof DatabaseSessionAttributesSchema>;
   }
 }

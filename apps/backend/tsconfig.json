@@ -1,4 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "@repo/typescript-config/bun.json"
+  "extends": "@repo/typescript-config/bun.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "~data/*": ["../../data/*"]
+    }
+  },
+  "references": [
+    { "path": "../../packages/util" },
+    { "path": "../../packages/env" },
+    { "path": "../../packages/database" },
+    { "path": "../../packages/zod-utils" }
+  ]
 }

@@ -6,5 +6,10 @@
     "paths": {
       "~/*": ["app/*"]
     }
-  }
+  },
+  "references": [
+    { "path": "../../apps/backend" },
+    { "path": "../../packages/env" },
+    { "path": "../../packages/ui" }
+  ]
 }

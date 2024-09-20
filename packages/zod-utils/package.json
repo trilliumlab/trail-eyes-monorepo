@@ -1,12 +1,11 @@
 {
-  "name": "@repo/env",
+  "name": "@repo/zod-utils",
   "type": "module",
   "module": "src/index.ts",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@repo/zod-utils": "workspace:*",
     "zod": "^3.23.8",
     "string-ts": "^2.2.0"
   },

@@ -1,13 +1,15 @@
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { publicEnv } from '@repo/env';
+import { tez } from '@repo/zod-utils';
 import { Elysia, t } from 'elysia';
 import normalizeUrl from 'normalize-url';
 
-import dark from '../../../../../data/styles/dark.json';
-import light from '../../../../../data/styles/light.json';
+import dark from '~data/styles/dark.json';
+import light from '~data/styles/light.json';
 
-const querySchema = t.Object({
-  key: t.String(),
-  mobile: t.BooleanString({ default: false }),
+const QuerySchema = z.object({
+  key: z.string(),
+  mobile: tez.coerce.boolean().default(false),
 });
 
 function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = false) {
@@ -38,22 +40,44 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
   };
 }
 
-export const styles = new Elysia({ prefix: '/styles' })
-  .get(
-    '/light.json',
-    ({ query: { key, mobile } }) => {
-      return createTheme(key, 'light', mobile);
+export const lightRoute = createRoute({
+  method: 'get',
+  path: '/light.json',
+  summary: 'Get light style',
+  description: 'Get light style',
+  tags: ['styles'],
+  request: {
+    query: QuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'Light style',
     },
-    {
-      query: querySchema,
+  },
+});
+
+export const darkRoute = createRoute({
+  method: 'get',
+  path: '/dark.json',
+  summary: 'Get dark style',
+  description: 'Get dark style',
+  tags: ['styles'],
+  request: {
+    query: QuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'Dark style',
     },
-  )
-  .get(
-    '/dark.json',
-    ({ query: { key, mobile } }) => {
-      return createTheme(key, 'dark', mobile);
-    },
-    {
-      query: querySchema,
-    },
-  );
+  },
+});
+
+export const styles = new OpenAPIHono()
+  .openapi(lightRoute, async (ctx) => {
+    const { key, mobile } = ctx.req.valid('query');
+    return ctx.json(createTheme(key, 'light', mobile));
+  })
+  .openapi(darkRoute, async (ctx) => {
+    const { key, mobile } = ctx.req.valid('query');
+    return ctx.json(createTheme(key, 'dark', mobile));
+  });

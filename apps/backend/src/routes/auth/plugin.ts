@@ -1,22 +1,101 @@
-import { Elysia, error, StatusMap, t } from 'elysia';
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { models, db, errors } from '@repo/database';
 
-export const auth = new Elysia({ prefix: '/auth' }).post(
-  '/register',
-  async ({ body }) => {
+export const registerRoute = createRoute({
+  method: 'post',
+  path: '/register',
+  summary: 'Register a new user',
+  description: 'Register a new user',
+  tags: ['auth'],
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: models.auth.UserCreateSchema.pick({
+            email: true,
+            password: true,
+            firstName: true,
+            lastName: true,
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'User created successfully',
+    },
+    409: {
+      // TODO: Use a specific error type here.
+      description: 'User already exists',
+    },
+    500: {
+      description: 'Internal server error',
+    },
+  },
+});
+
+export const LoginResponseSchema = z.object({
+  requiresSecondFactor: z.boolean(),
+  enabledSecondFactors: z.array(z.string()),
+});
+
+export const loginRoute = createRoute({
+  method: 'post',
+  path: '/login',
+  summary: 'Login a user',
+  description: 'Login a user',
+  tags: ['auth'],
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: models.auth.UserCreateSchema.pick({
+            email: true,
+            password: true,
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: LoginResponseSchema,
+        },
+      },
+      description: 'User logged in successfully',
+    },
+    401: {
+      description: 'Unauthorized',
+    },
+    500: {
+      description: 'Internal server error',
+    },
+  },
+});
+
+export const auth = new OpenAPIHono()
+  .openapi(registerRoute, async (ctx) => {
+    const body = ctx.req.valid('json');
     try {
       await db.auth.createUser(body);
     } catch (e) {
       if (e instanceof errors.auth.RegistrationConflictError) {
-        return error(StatusMap.Conflict, e);
+        return ctx.json(e, 409);
       }
-      throw e;
+      // TODO: Use a specific json error type here.
+      return ctx.text('Internal server error', 500);
     }
-  },
-  {
-    // Make sure to only allow the fields we want a user to be able to control.
-    // If fields like verified or role were included, they could be set by a malicious user.
-    // Elysia/Typebox will remove all fields not on a schema.
-    body: t.Pick(models.auth.UserCreateSchema, ['email', 'password', 'firstName', 'lastName']),
-  },
-);
+    return ctx.newResponse(null, 200);
+  })
+  .openapi(loginRoute, async (ctx) => {
+    const body = ctx.req.valid('json');
+    // const user = await db.auth.createUser({}) getUserByEmail(body.email);
+    // if (!user) {
+    //   return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 401);
+    // }
+    // db.auth.updateSession({});
+    return ctx.json({ requiresSecondFactor: false, enabledSecondFactors: [] }, 200);
+  });

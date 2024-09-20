@@ -1,6 +1,5 @@
-import { TEType } from '@repo/util';
-import { reports } from '../../schema';
-import type { PgEnumToObject } from '../../utils';
+import type { reports } from '~/schema';
+import type { PgEnumToObject } from '~/utils';
 
 export const categoryEnumValues = {
   other: 'Other',
@@ -11,5 +10,3 @@ export const categoryEnumValues = {
   damagedSign: 'Missing/vandalized/badly damaged sign(s)',
   seasonal: 'Seasonal maintenance needed',
 } as const satisfies PgEnumToObject<typeof reports.categoryEnum>;
-
-export const CategoryEnumSchema = TEType.StringEnum(reports.categoryEnum.enumValues);
