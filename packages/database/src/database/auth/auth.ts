@@ -110,3 +110,16 @@ export async function createOrRefreshVerification(
     return verificationCode;
   }
 }
+
+/**
+ * Updates a session in the database.
+ *
+ * @param session - The session object to update.
+ */
+export async function updateSession(session: Partial<authModels.SessionInsert> & { id: string }) {
+  const { id, ...update } = session;
+  await client
+    .update(authSchema.sessions)
+    .set(update)
+    .where(eq(authSchema.sessions.id, session.id));
+}

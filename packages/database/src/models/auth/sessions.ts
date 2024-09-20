@@ -1,5 +1,5 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { auth } from '~/schema';
+import { auth } from '../../schema';
 import type { z } from 'zod';
 
 export const SessionInsertSchema = createInsertSchema(auth.sessions);

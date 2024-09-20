@@ -1,14 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Bun",
-  "extends": "./base.json",
-  "compilerOptions": {
-    "plugins": [{ "name": "next" }],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "preserve",
-    "types": ["bun-types"],
-    "resolveJsonModule": true,
-    "skipLibCheck": true
-  }
+  "extends": "./base.json"
 }
