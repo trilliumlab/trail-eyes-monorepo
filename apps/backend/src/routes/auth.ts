@@ -16,11 +16,26 @@ export const authRouter = s.router(contract.auth, {
       await db.createUser(body);
     } catch (e) {
       if (e instanceof RegistrationConflictError) {
-        return { status: 409 };
+        return {
+          status: 409,
+          body: {
+            statusCode: 409,
+            message: 'Email already in use',
+            error: 'Conflict',
+            code: 'REGISTRATION_CONFLICT',
+          },
+        };
       }
-      // TODO: Use a specific json error type here.
-      // return ctx.text('Internal server error', 500);
-      return { status: 500, body: 'Internal server error' };
+      console.error(e);
+      return {
+        status: 500,
+        body: {
+          statusCode: 500,
+          message: String(e),
+          error: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      };
     }
     return { status: 200 };
   },
@@ -45,7 +60,15 @@ export const authRouter = s.router(contract.auth, {
         return { status: 401 };
       }
       console.error(e);
-      return { status: 500, body: 'Internal server error' };
+      return {
+        status: 500,
+        body: {
+          statusCode: 500,
+          message: String(e),
+          error: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      };
     }
   },
 });

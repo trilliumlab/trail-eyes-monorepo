@@ -56,13 +56,13 @@ export function RegisterForm() {
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setIsSubmitting(true);
 
-    const res = await backend.auth.register.$post({ json: values });
+    const res = await backend.auth.register.mutation({ body: values });
+
     if (res.status !== 200) {
       setIsSubmitting(false);
       // TODO fix login error handling
       if (res.status === 409) {
-        const error: InferResponseType<typeof backend.auth.register.$post, 409> = res.json();
-        form.setError('email', { message: error.value.message });
+        form.setError('email', { message: res.body.message });
         form.setFocus('email');
       }
     } else {

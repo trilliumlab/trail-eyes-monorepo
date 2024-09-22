@@ -23,7 +23,12 @@ export const authContract = c.router(
       }),
       responses: {
         200: c.noBody(),
-        409: z.undefined(),
+        409: z.object({
+          statusCode: z.literal(409),
+          message: z.string(),
+          error: z.literal('Conflict'),
+          code: z.literal('REGISTRATION_CONFLICT'),
+        }),
       },
     },
     login: {
