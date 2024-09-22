@@ -34,7 +34,11 @@ export const authContract = c.router(
       body: UserCredentialsSchema,
       responses: {
         200: LoginResponseSchema,
-        401: z.undefined(),
+        401: ErrorResponseBaseSchema.extend({
+          statusCode: z.literal(401),
+          error: z.literal('Unauthorized'),
+          code: z.literal('UNAUTHORIZED'),
+        }),
       },
     },
   },

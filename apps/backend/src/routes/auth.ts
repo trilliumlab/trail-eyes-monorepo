@@ -57,7 +57,15 @@ export const authRouter = s.router(contract.auth, {
       };
     } catch (e) {
       if (e instanceof InvalidCredentialsError || e instanceof UserNotFoundError) {
-        return { status: 401 };
+        return {
+          status: 401,
+          body: {
+            statusCode: 401,
+            error: 'Unauthorized',
+            code: 'UNAUTHORIZED',
+            message: 'Invalid credentials',
+          },
+        };
       }
       console.error(e);
       return {

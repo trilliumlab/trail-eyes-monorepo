@@ -6,7 +6,11 @@ import { geojsonRouter } from './routes/geojson';
 import { spritesRouter } from './routes/sprites';
 import { stylesRouter } from './routes/styles';
 import { generateOpenApi } from '@ts-rest/open-api';
-import ScalarApiReference from '@scalar/fastify-api-reference';
+import apiReference from '@scalar/fastify-api-reference';
+import { fastifyCookie } from '@fastify/cookie';
+import { csrfPlugin } from './plugins/csrf';
+import { authPlugin } from './plugins/auth';
+import { publicEnv } from '@repo/env';
 
 const s = initServer();
 const router = s.router(contract, {
@@ -17,8 +21,17 @@ const router = s.router(contract, {
 });
 
 const app = fastify();
+
+// Register middleware
+app.register(fastifyCookie);
+app.register(csrfPlugin, {
+  allowedOrigins: [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl],
+});
+app.register(authPlugin);
+
 // Register ts-rest routes
 s.registerRouter(contract, router, app);
+
 // OpenAPI schema
 app.get('/openapi.json', async (req, reply) => {
   return reply.send(
@@ -30,7 +43,7 @@ app.get('/openapi.json', async (req, reply) => {
     }),
   );
 });
-app.register(ScalarApiReference, {
+app.register(apiReference, {
   routePrefix: '/docs',
   configuration: {
     spec: {

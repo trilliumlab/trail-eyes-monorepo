@@ -25,7 +25,7 @@ export const spritesContract = c.router(
       }),
       summary: 'Get a sprite',
       responses: {
-        200: z.instanceof(File),
+        200: z.instanceof(Blob),
       },
     },
   },
