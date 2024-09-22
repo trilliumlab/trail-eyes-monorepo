@@ -1,11 +1,6 @@
-import { tez } from '@repo/zod-utils';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-
-const QuerySchema = z.object({
-  key: z.string(),
-  mobile: tez.coerce.boolean().default(false),
-});
+import { StylesQuerySchema } from '~/models/styles';
 
 const c = initContract();
 
@@ -15,18 +10,18 @@ export const stylesContract = c.router(
       method: 'GET',
       path: '/light.json',
       summary: 'Get light style',
-      query: QuerySchema,
+      query: StylesQuerySchema,
       responses: {
-        200: z.any(),
+        200: z.record(z.any()),
       },
     },
     getDarkStyle: {
       method: 'GET',
       path: '/dark.json',
       summary: 'Get dark style',
-      query: QuerySchema,
+      query: StylesQuerySchema,
       responses: {
-        200: z.any(),
+        200: z.record(z.any()),
       },
     },
   },

@@ -1,11 +1,8 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import { UserCreateSchema, UserCredentialsSchema } from '@repo/database/models/auth';
-
-export const LoginResponseSchema = z.object({
-  requiresSecondFactor: z.boolean(),
-  enabledSecondFactors: z.array(z.string()),
-});
+import { LoginResponseSchema } from '~/models/auth';
+import { ErrorResponseBaseSchema } from '~/models/base';
 
 const c = initContract();
 
@@ -23,9 +20,8 @@ export const authContract = c.router(
       }),
       responses: {
         200: c.noBody(),
-        409: z.object({
+        409: ErrorResponseBaseSchema.extend({
           statusCode: z.literal(409),
-          message: z.string(),
           error: z.literal('Conflict'),
           code: z.literal('REGISTRATION_CONFLICT'),
         }),

@@ -1,16 +1,10 @@
-import { initContract } from '@ts-rest/core';
-import { authContract } from './auth';
-import { geojsonContract } from './geojson';
-import { spritesContract } from './sprites';
-import { stylesContract } from './styles';
 import { z } from 'zod';
-
-export const ErrorResponseBaseSchema = z.object({
-  statusCode: z.number(),
-  message: z.string(),
-  error: z.string(),
-  code: z.string().optional(),
-});
+import { initContract } from '@ts-rest/core';
+import { authContract } from './contracts/auth';
+import { geojsonContract } from './contracts/geojson';
+import { spritesContract } from './contracts/sprites';
+import { stylesContract } from './contracts/styles';
+import { ErrorResponseBaseSchema } from './models/base';
 
 const c = initContract();
 
@@ -26,10 +20,6 @@ export const contract = c.router(
       500: ErrorResponseBaseSchema.extend({
         statusCode: z.literal(500),
         error: z.literal('Internal Server Error'),
-      }),
-      404: ErrorResponseBaseSchema.extend({
-        statusCode: z.literal(404),
-        error: z.literal('Not Found'),
       }),
     },
   },
