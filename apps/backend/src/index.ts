@@ -11,6 +11,9 @@ import { fastifyCookie } from '@fastify/cookie';
 import { csrfPlugin } from './plugins/csrf';
 import { authPlugin } from './plugins/auth';
 import { publicEnv } from '@repo/env';
+import { fastifyCors } from '@fastify/cors';
+
+const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
 
 const s = initServer();
 const router = s.router(contract, {
@@ -24,9 +27,8 @@ const app = fastify();
 
 // Register middleware
 app.register(fastifyCookie);
-app.register(csrfPlugin, {
-  allowedOrigins: [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl],
-});
+app.register(fastifyCors, { origin: allowedOrigins });
+app.register(csrfPlugin, { allowedOrigins });
 app.register(authPlugin);
 
 // Register ts-rest routes
@@ -53,4 +55,4 @@ app.register(apiReference, {
   },
 });
 
-await app.listen({ port: 8000 });
+await app.listen({ port: 8000, host: '0.0.0.0' });

@@ -2,7 +2,7 @@
   "name": "@repo/auth",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev --port 3000",
+    "dev": "vinxi dev --port 3000 --host",
     "build": "vinxi build",
     "start": "vinxi start --port 3000"
   },
