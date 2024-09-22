@@ -1,0 +1,22 @@
+{
+  "name": "@repo/contract",
+  "type": "module",
+  "module": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@repo/database": "workspace:*",
+    "@repo/zod-utils": "workspace:*",
+    "zod": "^3.23.8",
+    "@ts-rest/core": "^3.51.0",
+    "@anatine/zod-openapi": "^2.2.6"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

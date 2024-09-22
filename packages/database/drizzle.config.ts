@@ -8,7 +8,7 @@ const hash = createHash('md5').update(connection).digest('hex').slice(0, 16);
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: ['./src/schema/**/*.schema.ts', './src/schema/**/schema.ts'],
+  schema: ['./src/schema/**/*.ts'],
   out: `./drizzle/${hash}`,
   dbCredentials: {
     host: privateEnv().dbHost,

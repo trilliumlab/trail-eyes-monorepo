@@ -29,6 +29,13 @@
       "when": 1725311268447,
       "tag": "0003_acoustic_gwen_stacy",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1727023656925,
+      "tag": "0004_faithful_makkari",
+      "breakpoints": true
     }
   ]
 }

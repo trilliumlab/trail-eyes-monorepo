@@ -1,30 +1,58 @@
-import { routes } from './routes/plugin';
-import { logger } from './logger';
-import { logger as honoLogger } from 'hono-pino';
-import { cors } from 'hono/cors';
-import { OpenAPIHono } from '@hono/zod-openapi';
-import { apiReference } from '@scalar/hono-api-reference';
+import { contract } from '@repo/contract';
+import { initServer } from '@ts-rest/fastify';
+import { fastify } from 'fastify';
+import { authRouter } from './routes/auth';
+import { geojsonRouter } from './routes/geojson';
+import { spritesRouter } from './routes/sprites';
+import { stylesRouter } from './routes/styles';
+import { generateOpenApi } from '@ts-rest/open-api';
+import apiReference from '@scalar/fastify-api-reference';
+import { fastifyCookie } from '@fastify/cookie';
+import { csrfPlugin } from './plugins/csrf';
+import { authPlugin } from './plugins/auth';
+import { publicEnv } from '@repo/env';
+import { fastifyCors } from '@fastify/cors';
 
-export const app = new OpenAPIHono()
-  .doc31('/openapi.json', {
-    openapi: '3.1.0',
-    info: {
-      version: '1.0.0',
-      title: 'My API',
-    },
-  })
-  .get('/docs', apiReference({ spec: { url: '/openapi.json' }, theme: 'kepler' }))
-  .use(
-    honoLogger({
-      pino: logger,
+const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
+
+const s = initServer();
+const router = s.router(contract, {
+  auth: authRouter,
+  geojson: geojsonRouter,
+  sprites: spritesRouter,
+  styles: stylesRouter,
+});
+
+const app = fastify();
+
+// Register middleware
+app.register(fastifyCookie);
+app.register(fastifyCors, { origin: allowedOrigins });
+app.register(csrfPlugin, { allowedOrigins });
+app.register(authPlugin);
+
+// Register ts-rest routes
+s.registerRouter(contract, router, app);
+
+// OpenAPI schema
+app.get('/openapi.json', async (req, reply) => {
+  return reply.send(
+    generateOpenApi(contract, {
+      info: {
+        title: 'TrailEyes API',
+        version: '1.0.0',
+      },
     }),
-  )
-  .use(cors())
-  .route('', routes);
+  );
+});
+app.register(apiReference, {
+  routePrefix: '/docs',
+  configuration: {
+    spec: {
+      url: '/openapi.json',
+    },
+    theme: 'kepler',
+  },
+});
 
-export type AppType = typeof app;
-
-export default {
-  port: 8000,
-  fetch: app.fetch,
-};
+await app.listen({ port: 8000, host: '0.0.0.0' });

@@ -8,8 +8,8 @@
     }
   },
   "references": [
-    { "path": "../../apps/backend" },
     { "path": "../../packages/env" },
-    { "path": "../../packages/ui" }
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/contract" }
   ]
 }
