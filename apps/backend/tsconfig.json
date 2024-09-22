@@ -12,6 +12,7 @@
     { "path": "../../packages/util" },
     { "path": "../../packages/env" },
     { "path": "../../packages/database" },
-    { "path": "../../packages/zod-utils" }
+    { "path": "../../packages/zod-utils" },
+    { "path": "../../packages/contract" }
   ]
 }

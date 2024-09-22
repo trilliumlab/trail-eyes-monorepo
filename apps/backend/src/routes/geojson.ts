@@ -1,13 +1,14 @@
-import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
+import { contract } from '@repo/contract';
 import { db } from '@repo/database';
 import { memoize } from '@repo/util';
+import { initServer } from '@ts-rest/fastify';
 import type { Feature, FeatureCollection } from 'geojson';
 
 import startMarkers from '~data/routes/start-markers.json';
 
 const routesJsonMemo = memoize(
   async () => {
-    const routes = await db.paths.getAllRoutes();
+    const routes = await db.getAllRoutes();
     const features = routes.map(
       (route) =>
         ({
@@ -36,32 +37,12 @@ const routesJsonMemo = memoize(
   },
 );
 
-export const routesRoute = createRoute({
-  method: 'get',
-  path: '/routes.json',
-  summary: 'Get all routes as GeoJSON',
-  description: 'Get all routes as GeoJSON',
-  tags: ['geojson'],
-  responses: {
-    200: {
-      description: 'All routes as GeoJSON',
-    },
+const s = initServer();
+export const geojsonRouter = s.router(contract.geojson, {
+  getRoutes: async () => {
+    return { status: 200, body: await routesJsonMemo() };
+  },
+  getStartMarkers: async () => {
+    return { status: 200, body: startMarkers };
   },
 });
-
-export const startMarkersRoute = createRoute({
-  method: 'get',
-  path: '/start-markers.json',
-  summary: 'Get start markers as GeoJSON',
-  description: 'Get start markers as GeoJSON',
-  tags: ['geojson'],
-  responses: {
-    200: {
-      description: 'Start markers as GeoJSON',
-    },
-  },
-});
-
-export const geojson = new OpenAPIHono()
-  .openapi(routesRoute, async (ctx) => ctx.json(await routesJsonMemo()))
-  .openapi(startMarkersRoute, async (ctx) => ctx.json(startMarkers));

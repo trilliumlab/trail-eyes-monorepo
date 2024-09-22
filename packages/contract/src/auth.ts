@@ -1,35 +1,46 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { UserCreateSchema } from '@repo/database/models/auth';
+import { UserCreateSchema, UserCredentialsSchema } from '@repo/database/models/auth';
+
+export const LoginResponseSchema = z.object({
+  requiresSecondFactor: z.boolean(),
+  enabledSecondFactors: z.array(z.string()),
+});
 
 const c = initContract();
 
-export const authContract = c.router({
-  register: {
-    method: 'POST',
-    path: '/register',
-    body: UserCreateSchema.pick({
-      email: true,
-      password: true,
-      firstName: true,
-      lastName: true,
-    }),
-    responses: {
-      200: z.undefined(),
+export const authContract = c.router(
+  {
+    register: {
+      method: 'POST',
+      path: '/register',
+      summary: 'Register a new user',
+      body: UserCreateSchema.pick({
+        email: true,
+        password: true,
+        firstName: true,
+        lastName: true,
+      }),
+      responses: {
+        200: c.noBody(),
+        409: z.undefined(),
+      },
+    },
+    login: {
+      method: 'POST',
+      path: '/login',
+      summary: 'Login a user',
+      body: UserCredentialsSchema,
+      responses: {
+        200: LoginResponseSchema,
+        401: z.undefined(),
+      },
     },
   },
-  login: {
-    method: 'POST',
-    path: '/login',
-    body: z.object({
-      email: z.string(),
-      password: z.string(),
-    }),
-    responses: {
-      200: z.undefined(),
-    },
+  {
+    pathPrefix: '/auth',
   },
-});
+);
 
 // export const registerRoute = createRoute({
 //   method: 'post',
@@ -55,13 +66,7 @@ export const authContract = c.router({
 //     200: {
 //       description: 'User created successfully',
 //     },
-//     409: {
-//       // TODO: Use a specific error type here.
-//       description: 'User already exists',
-//     },
-//     500: {
-//       description: 'Internal server error',
-//     },
+
 //   },
 // });
 

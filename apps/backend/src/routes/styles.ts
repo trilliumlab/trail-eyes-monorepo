@@ -1,16 +1,10 @@
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { contract } from '@repo/contract';
 import { publicEnv } from '@repo/env';
-import { tez } from '@repo/zod-utils';
-import { Elysia, t } from 'elysia';
+import { initServer } from '@ts-rest/fastify';
 import normalizeUrl from 'normalize-url';
 
 import dark from '~data/styles/dark.json';
 import light from '~data/styles/light.json';
-
-const QuerySchema = z.object({
-  key: z.string(),
-  mobile: tez.coerce.boolean().default(false),
-});
 
 function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = false) {
   const base = theme === 'light' ? light : dark;
@@ -40,44 +34,13 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
   };
 }
 
-export const lightRoute = createRoute({
-  method: 'get',
-  path: '/light.json',
-  summary: 'Get light style',
-  description: 'Get light style',
-  tags: ['styles'],
-  request: {
-    query: QuerySchema,
+const s = initServer();
+
+export const stylesRouter = s.router(contract.styles, {
+  getLightStyle: async ({ query: { key, mobile } }) => {
+    return { status: 200, body: createTheme(key, 'light', mobile) };
   },
-  responses: {
-    200: {
-      description: 'Light style',
-    },
+  getDarkStyle: async ({ query: { key, mobile } }) => {
+    return { status: 200, body: createTheme(key, 'dark', mobile) };
   },
 });
-
-export const darkRoute = createRoute({
-  method: 'get',
-  path: '/dark.json',
-  summary: 'Get dark style',
-  description: 'Get dark style',
-  tags: ['styles'],
-  request: {
-    query: QuerySchema,
-  },
-  responses: {
-    200: {
-      description: 'Dark style',
-    },
-  },
-});
-
-export const styles = new OpenAPIHono()
-  .openapi(lightRoute, async (ctx) => {
-    const { key, mobile } = ctx.req.valid('query');
-    return ctx.json(createTheme(key, 'light', mobile));
-  })
-  .openapi(darkRoute, async (ctx) => {
-    const { key, mobile } = ctx.req.valid('query');
-    return ctx.json(createTheme(key, 'dark', mobile));
-  });
