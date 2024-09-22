@@ -6,6 +6,7 @@ import * as React from 'react';
 import styles from '@repo/ui/globals.css?url';
 import { ThemeProvider } from '@repo/ui/components/theme';
 import { publicEnv } from '@repo/env';
+import NotFound from '~/components/not-found';
 
 export const Route = createRootRoute({
   meta: () => [
@@ -15,6 +16,7 @@ export const Route = createRootRoute({
   ],
   links: () => [{ rel: 'stylesheet', href: styles }],
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
 
 function RootComponent() {
