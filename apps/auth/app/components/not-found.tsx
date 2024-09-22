@@ -1,8 +1,8 @@
 import { Button } from '@repo/ui/components/button';
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import { FileQuestion } from 'lucide-react';
 
-export default function NotFound() {
+export default function NotFound({ homepage }: { homepage: LinkOptions['to'] }) {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
       <div className="container px-4 md:px-6 py-8 flex flex-col items-center space-y-4 text-center">
@@ -19,7 +19,7 @@ export default function NotFound() {
           navigating back to the homepage.
         </p>
         <Button asChild className="mt-4">
-          <Link to="/">Return to Homepage</Link>
+          <Link to={homepage}>Return to Homepage</Link>
         </Button>
       </div>
     </main>

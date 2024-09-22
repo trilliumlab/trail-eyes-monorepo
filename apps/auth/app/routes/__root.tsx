@@ -7,6 +7,7 @@ import styles from '@repo/ui/globals.css?url';
 import { ThemeProvider } from '@repo/ui/components/theme';
 import { publicEnv } from '@repo/env';
 import NotFound from '~/components/not-found';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const Route = createRootRoute({
   meta: () => [
@@ -16,7 +17,7 @@ export const Route = createRootRoute({
   ],
   links: () => [{ rel: 'stylesheet', href: styles }],
   component: RootComponent,
-  notFoundComponent: NotFound,
+  notFoundComponent: () => <NotFound homepage="/register" />,
 });
 
 function RootComponent() {
@@ -27,16 +28,25 @@ function RootComponent() {
   );
 }
 
+const queryClient = new QueryClient();
+
 function RootDocument({ children }: React.PropsWithChildren) {
   const TanStackRouterDevtools =
     publicEnv().mode === 'production'
       ? () => null // Render nothing in production
-      : React.lazy(() =>
+      : React.lazy(async () => {
           // Lazy load in development
-          import('@tanstack/router-devtools').then((res) => ({
-            default: res.TanStackRouterDevtools,
-          })),
-        );
+          const { TanStackRouterDevtools } = await import('@tanstack/router-devtools');
+          return { default: TanStackRouterDevtools };
+        });
+  const ReactQueryDevtools =
+    publicEnv().mode === 'production'
+      ? () => null // Render nothing in production
+      : React.lazy(async () => {
+          // Lazy load in development
+          const { ReactQueryDevtools } = await import('@tanstack/react-query-devtools');
+          return { default: ReactQueryDevtools };
+        });
 
   return (
     <Html lang="en" suppressHydrationWarning>
@@ -44,14 +54,15 @@ function RootDocument({ children }: React.PropsWithChildren) {
         <Meta />
       </Head>
       <Body>
-        <React.Suspense>
+        <QueryClientProvider client={queryClient}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
-        </React.Suspense>
-        <React.Suspense>
-          <TanStackRouterDevtools />
-        </React.Suspense>
+          <React.Suspense>
+            <ReactQueryDevtools />
+            <TanStackRouterDevtools />
+          </React.Suspense>
+        </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
       </Body>
