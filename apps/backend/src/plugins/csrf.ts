@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { fastifyPlugin } from 'fastify-plugin';
 import { verifyRequestOrigin } from 'lucia';
 
@@ -7,29 +7,32 @@ type Options = {
   allowedOrigins?: string[];
 };
 
-// const plugin = ;
-
 export const csrfPlugin = fastifyPlugin(
   async (app: FastifyInstance, { enabled = true, allowedOrigins = [] }: Options) => {
     if (!enabled) {
       return;
     }
 
-    app.addHook('preHandler', (req, res, done) => {
+    app.addHook('preHandler', (req, reply, done) => {
       if (req.method === 'GET') {
         return done();
       }
 
       const originHeader = req.headers.origin ?? null;
-      // NOTE: You may need to use `X-Forwarded-Host` instead
       const hostHeader = req.headers.host ?? null;
       if (
-        !originHeader ||
-        !hostHeader ||
+        originHeader &&
+        hostHeader &&
         !verifyRequestOrigin(originHeader, [hostHeader, ...allowedOrigins])
       ) {
         console.error('Invalid origin', { originHeader, hostHeader });
-        return res.status(403);
+        reply.status(403);
+        reply.send({
+          statusCode: 403,
+          message: 'Invalid origin',
+          error: 'Forbidden',
+          code: 'FORBIDDEN',
+        });
       }
       done();
     });

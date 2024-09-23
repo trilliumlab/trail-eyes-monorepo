@@ -3,7 +3,6 @@
   "display": "Tanstack Start",
   "extends": "./base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "ES2022"
+    "jsx": "react-jsx"
   }
 }

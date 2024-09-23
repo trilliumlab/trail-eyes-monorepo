@@ -14,36 +14,17 @@ import {
   FormMessage,
   FormControl,
 } from '@repo/ui/components/form';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { backend } from '~/backend';
-import {
-  passwordLowercaseRegex,
-  passwordNumericRegex,
-  passwordSpecialRegex,
-  passwordUppercaseRegex,
-} from '@repo/util/regex';
 import { useRouter } from '@tanstack/react-router';
-import type { InferResponseType } from 'hono';
+import { RegisterBodySchema } from '@repo/contract/models/auth';
 
-const RegisterSchema = z.object({
-  firstName: z.string().min(1, { message: 'Required' }),
-  lastName: z.string().min(1, { message: 'Required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z
-    .string()
-    .min(8, { message: 'Password must have at least 8 characters' })
-    .regex(passwordLowercaseRegex, { message: 'Password must include a lowercase character' })
-    .regex(passwordUppercaseRegex, { message: 'Password must include an uppercase character' })
-    .regex(passwordNumericRegex, { message: 'Password must include a number' })
-    .regex(passwordSpecialRegex, { message: 'Password must include a special character' }),
-});
-
-export function RegisterForm() {
+export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<z.infer<typeof RegisterBodySchema>>({
+    resolver: zodResolver(RegisterBodySchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -53,7 +34,7 @@ export function RegisterForm() {
   });
 
   // This is only called on validated values.
-  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+  async function onSubmit(values: z.infer<typeof RegisterBodySchema>) {
     setIsSubmitting(true);
 
     const res = await backend.auth.register.mutation({ body: values });
@@ -67,7 +48,8 @@ export function RegisterForm() {
       }
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
-      router.navigate({ to: '/' });
+      console.log('redirecting to', redirectUrl);
+      router.history.push(redirectUrl);
     }
   }
 

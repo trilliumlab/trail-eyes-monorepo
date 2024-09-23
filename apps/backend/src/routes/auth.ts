@@ -11,9 +11,16 @@ import { initServer } from '@ts-rest/fastify';
 const s = initServer();
 
 export const authRouter = s.router(contract.auth, {
-  register: async ({ body }) => {
+  register: async ({ body, reply }) => {
     try {
-      await db.createUser(body);
+      console.log('registering user', body);
+      const user = await db.createUser(body);
+      console.log('user created', user);
+
+      // Once user is created, create a session
+      const session = await lucia.createSession(user.id, { confirmed: true });
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      reply.header('set-cookie', sessionCookie.serialize());
     } catch (e) {
       if (e instanceof RegistrationConflictError) {
         return {

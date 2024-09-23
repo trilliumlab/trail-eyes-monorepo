@@ -1,7 +1,7 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { UserCreateSchema, UserCredentialsSchema } from '@repo/database/models/auth';
-import { LoginResponseSchema } from '~/models/auth';
+import { UserCredentialsSchema } from '@repo/database/models/auth';
+import { LoginResponseSchema, RegisterBodySchema } from '~/models/auth';
 import { ErrorResponseBaseSchema } from '~/models/base';
 
 const c = initContract();
@@ -12,12 +12,7 @@ export const authContract = c.router(
       method: 'POST',
       path: '/register',
       summary: 'Register a new user',
-      body: UserCreateSchema.pick({
-        email: true,
-        password: true,
-        firstName: true,
-        lastName: true,
-      }),
+      body: RegisterBodySchema,
       responses: {
         200: c.noBody(),
         409: ErrorResponseBaseSchema.extend({

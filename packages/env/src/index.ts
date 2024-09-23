@@ -72,7 +72,7 @@ const publicTypedEnv = makeTypedEnvironment(PublicEnvSchema.parse);
  * console.log(publicEnv().backendUrl); // Logs the value of VITE_BACKEND_URL
  */
 export function publicEnv() {
-  return publicTypedEnv(import.meta?.env ?? process.env);
+  return publicTypedEnv((import.meta && import.meta.env) ?? process.env);
 }
 
 const privateTypedEnv = makeTypedEnvironment(PrivateEnvSchema.parse);
@@ -92,5 +92,5 @@ const privateTypedEnv = makeTypedEnvironment(PrivateEnvSchema.parse);
  * console.log(privateEnv().smtpHost); // Logs the value of SMTP_HOST
  */
 export function privateEnv() {
-  return privateTypedEnv(import.meta?.env ?? process.env);
+  return privateTypedEnv((import.meta && import.meta.env) ?? process.env);
 }

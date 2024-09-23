@@ -30,19 +30,19 @@ export async function createUser({ password, ...user }: UserCreate) {
 
   // Put insertion into transaction to make sure a user doesn't get created without a password.
   try {
-    await client.transaction(async (txn) => {
+    return await client.transaction(async (txn) => {
       const [dbUser] = await txn.insert(users).values(user).returning();
       if (!dbUser) {
-        txn.rollback();
-      } else {
-        // If succesful user creation, set password
-        await txn.insert(passwords).values({
-          userId: dbUser.id,
-          hash,
-        });
-        // Create and send verification email
-        await createOrRefreshVerification(dbUser, { db: txn });
+        throw txn.rollback();
       }
+      // If succesful user creation, set password
+      await txn.insert(passwords).values({
+        userId: dbUser.id,
+        hash,
+      });
+      // Create and send verification email
+      await createOrRefreshVerification(dbUser, { db: txn });
+      return dbUser;
     });
   } catch (e) {
     if (e instanceof postgres.PostgresError) {
