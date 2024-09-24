@@ -2,9 +2,16 @@ import { QueryClient, QueryClientProvider, dehydrate, hydrate } from '@tanstack/
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { tsr } from '~/tsr';
 import { routeTree } from './routeTree.gen';
-
+import { posthog } from 'posthog-js/dist/module.full';
 import { PostHogProvider } from 'posthog-js/react';
 import { publicEnv } from '@repo/env';
+import type { PostHog } from 'posthog-js';
+
+posthog.init(publicEnv().posthogKey, {
+  api_host: publicEnv().posthogHost,
+  person_profiles: 'identified_only',
+  persistence: 'cookie',
+});
 
 export function createRouter() {
   const queryClient = new QueryClient();
@@ -32,16 +39,7 @@ export function createRouter() {
       return (
         <QueryClientProvider client={queryClient}>
           <tsr.ReactQueryProvider>
-            <PostHogProvider
-              apiKey={publicEnv().posthogKey}
-              options={{
-                api_host: publicEnv().posthogHost,
-                person_profiles: 'identified_only',
-                enable_recording_console_log: true,
-              }}
-            >
-              {children}
-            </PostHogProvider>
+            <PostHogProvider client={posthog as unknown as PostHog}>{children}</PostHogProvider>
           </tsr.ReactQueryProvider>
         </QueryClientProvider>
       );
