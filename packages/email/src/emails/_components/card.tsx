@@ -1,6 +1,5 @@
 import { Body, Container, Heading, Hr, Section, Text } from '@react-email/components';
 
-
 /**
  * Renders a card component with a background color, border, and rounded corners.
  *

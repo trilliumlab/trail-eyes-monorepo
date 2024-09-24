@@ -1,8 +1,8 @@
 'use client';
 
 import { linkStyle } from '@repo/ui/components/link';
-import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@repo/ui/lib/utils';
+import { useEffect, useMemo, useState } from 'react';
 
 export function ResendCountdown({
   className,

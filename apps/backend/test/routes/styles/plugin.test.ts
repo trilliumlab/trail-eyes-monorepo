@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'bun:test';
 import { publicEnv } from '@repo/env';
-import { app } from '~/index';
-import { testClient } from 'hono/testing';
 import { tez } from '@repo/zod-utils';
+import { testClient } from 'hono/testing';
+import { app } from '~/index';
 
 const styles = ['light.json', 'dark.json'] as const;
 

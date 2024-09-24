@@ -1,3 +1,7 @@
+import { addMinute, addSecond } from '@formkit/tempo';
+import { mailer } from '@repo/email';
+import { and, eq, gt } from 'drizzle-orm';
+import postgres from 'postgres';
 import {
   hashAlgo,
   verificationExpirationMinutes,
@@ -5,11 +9,6 @@ import {
   verificationTimeoutSeconds,
 } from '~/consts';
 import { client } from '~/db-client';
-import { mailer } from '@repo/email';
-import { createOtpCode } from '~/utils';
-import { addMinute, addSecond } from '@formkit/tempo';
-import { and, eq, gt } from 'drizzle-orm';
-import postgres from 'postgres';
 import {
   InvalidCredentialsError,
   RegistrationConflictError,
@@ -17,6 +16,7 @@ import {
 } from '~/errors/auth';
 import type { SessionInsert, UserCreate, UserCredentials, UserSelect } from '~/models/auth';
 import { emailVerificationCodes, passwords, sessions, users } from '~/schema/auth';
+import { createOtpCode } from '~/utils';
 
 /**
  * Creates a user with the provided information.

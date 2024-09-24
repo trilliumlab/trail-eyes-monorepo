@@ -1,16 +1,15 @@
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
-import type { PgEnumToObject } from '~/utils';
+import { capitalizeFirstLetter } from '@repo/util';
 import {
   passwordLowercaseRegex,
   passwordNumericRegex,
   passwordSpecialRegex,
   passwordUppercaseRegex,
 } from '@repo/util/regex';
-import { capitalizeFirstLetter } from '@repo/util';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 import {
-  emailMfaCodes,
   emailMfa,
+  emailMfaCodes,
   emailVerificationCodes,
   invites,
   loginTokens,
@@ -20,6 +19,7 @@ import {
   totpMfa,
   users,
 } from '~/schema/auth';
+import type { PgEnumToObject } from '~/utils';
 
 // Role enum
 export const roleEnumValues = {

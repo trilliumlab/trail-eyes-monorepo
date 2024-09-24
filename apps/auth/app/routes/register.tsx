@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { Separator } from '@repo/ui/components/separator';
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router';
 import { z } from 'zod';
 import { RegisterForm } from '~/components/register/register-form';
 import { RedirectSearchSchema } from '~/models/redirect';

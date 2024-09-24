@@ -1,6 +1,6 @@
+import { lucia } from '@repo/database/auth';
 import { fastifyPlugin } from 'fastify-plugin';
 import type { Session, User } from 'lucia';
-import { lucia } from '@repo/database/auth';
 
 export const authPlugin = fastifyPlugin(
   async (app) => {

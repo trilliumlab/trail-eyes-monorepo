@@ -1,17 +1,17 @@
+import { fastifyCookie } from '@fastify/cookie';
+import { fastifyCors } from '@fastify/cors';
 import { contract } from '@repo/contract';
+import { publicEnv } from '@repo/env';
+import apiReference from '@scalar/fastify-api-reference';
 import { initServer } from '@ts-rest/fastify';
+import { generateOpenApi } from '@ts-rest/open-api';
 import { fastify } from 'fastify';
+import { authPlugin } from './plugins/auth';
+import { csrfPlugin } from './plugins/csrf';
 import { authRouter } from './routes/auth';
 import { geojsonRouter } from './routes/geojson';
 import { spritesRouter } from './routes/sprites';
 import { stylesRouter } from './routes/styles';
-import { generateOpenApi } from '@ts-rest/open-api';
-import apiReference from '@scalar/fastify-api-reference';
-import { fastifyCookie } from '@fastify/cookie';
-import { csrfPlugin } from './plugins/csrf';
-import { authPlugin } from './plugins/auth';
-import { publicEnv } from '@repo/env';
-import { fastifyCors } from '@fastify/cors';
 
 const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
 

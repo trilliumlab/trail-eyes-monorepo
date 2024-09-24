@@ -1,7 +1,7 @@
+import { QueryClient, QueryClientProvider, dehydrate, hydrate } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
-import { routeTree } from './routeTree.gen';
-import { dehydrate, hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { tsr } from '~/tsr';
+import { routeTree } from './routeTree.gen';
 
 export function createRouter() {
   const queryClient = new QueryClient();

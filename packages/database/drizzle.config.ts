@@ -1,6 +1,6 @@
-import { defineConfig } from 'drizzle-kit';
-import { privateEnv } from '@repo/env';
 import { createHash } from 'node:crypto';
+import { privateEnv } from '@repo/env';
+import { defineConfig } from 'drizzle-kit';
 
 // Create a unique hash for the connection to store db migrations
 const connection = `${privateEnv().dbUser}@${privateEnv().dbHost}:${privateEnv().dbPort}/${privateEnv().dbName}`;

@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import type { contract } from '@repo/contract';
 import {
   Card,
   CardContent,
@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
+import { createFileRoute, redirect } from '@tanstack/react-router';
+import type { ErrorResponse } from '@ts-rest/react-query/v5';
 import { VerifyEmailForm } from '~/components/register/verify-email-form';
 import { ResendCountdown } from '~/components/resend-countdown';
 import { RedirectSearchSchema } from '~/models/redirect';
 import { tsr } from '~/tsr';
-import type { ErrorResponse } from '@ts-rest/react-query/v5';
-import type { contract } from '@repo/contract';
 import { externalRedirect } from '~/util/external-redirect';
 // import { getEvent, sendRedirect } from 'vinxi/http';
 

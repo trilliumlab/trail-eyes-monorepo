@@ -1,8 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@repo/ui/components/form';
 import {
   InputOTP,
@@ -11,6 +9,8 @@ import {
   InputOTPSlot,
 } from '@repo/ui/components/input-otp';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const OtpSchema = z.object({
   pin: z.string().min(6, {

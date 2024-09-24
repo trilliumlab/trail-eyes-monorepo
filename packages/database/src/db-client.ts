@@ -1,6 +1,6 @@
+import { privateEnv } from '@repo/env';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { privateEnv } from '@repo/env';
 import * as auth from './schema/auth';
 import * as paths from './schema/paths';
 import * as reports from './schema/reports';

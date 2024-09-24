@@ -1,4 +1,3 @@
-import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@repo/ui/components/button';
 import {
   Card,
@@ -10,6 +9,7 @@ import {
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { Separator } from '@repo/ui/components/separator';
+import { createFileRoute } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
 import { RedirectSearchSchema } from '~/models/redirect';
 

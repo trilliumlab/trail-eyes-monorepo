@@ -1,10 +1,10 @@
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
+import { Link } from '@repo/ui/components/link';
 import { Sheet, SheetContent, SheetTrigger } from '@repo/ui/components/sheet';
+import type { LinkComponent } from '@tanstack/react-router';
 import { Menu, Package2, Search } from 'lucide-react';
 import { UserMenu } from './user-menu';
-import { Link } from '@repo/ui/components/link';
-import type { LinkComponent } from '@tanstack/react-router';
 
 const NavLink: LinkComponent<'a'> = ({ className, ...props }) => {
   return (

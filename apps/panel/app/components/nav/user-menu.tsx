@@ -14,8 +14,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
-import { CircleUser } from 'lucide-react';
 import { useTheme } from '@repo/ui/components/theme';
+import { CircleUser } from 'lucide-react';
 
 export function UserMenu() {
   const { theme, setTheme } = useTheme();

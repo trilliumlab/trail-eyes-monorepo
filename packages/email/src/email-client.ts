@@ -1,6 +1,6 @@
 import { render } from '@react-email/components';
-import nodemailer from 'nodemailer';
 import { privateEnv } from '@repo/env';
+import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   port: privateEnv().smtpPort,

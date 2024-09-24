@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Link } from '@tanstack/react-router';
 import {
   Table,
   TableBody,
@@ -16,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@repo/ui/components/table';
+import { Link } from '@tanstack/react-router';
 import { createFileRoute } from '@tanstack/react-router';
 import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
 import { NavBar } from '~/components/nav/nav-bar';

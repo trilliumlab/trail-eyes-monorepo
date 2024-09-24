@@ -1,5 +1,5 @@
 import { pgEnum } from 'drizzle-orm/pg-core';
-import { integer, serial, text, timestamp, uuid, pgTable } from 'drizzle-orm/pg-core';
+import { integer, pgTable, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { point } from 'drizzle-postgis/models';
 
 export const categoryEnum = pgEnum('category', [

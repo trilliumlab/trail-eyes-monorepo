@@ -2,7 +2,7 @@ import { Heading, Section } from '@react-email/components';
 
 /**
  * Renders a verification code component.
- * 
+ *
  * @param children - The verification code to be displayed.
  * @returns The rendered verification code component.
  */

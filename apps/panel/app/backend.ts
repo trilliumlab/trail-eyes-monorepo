@@ -1,6 +1,6 @@
-import { initQueryClient } from '@ts-rest/react-query';
 import { contract } from '@repo/contract';
 import { publicEnv } from '@repo/env';
+import { initQueryClient } from '@ts-rest/react-query';
 // import { tsRestFetchApi } from '@ts-rest/core';
 // import { isServer } from '@tanstack/react-query';
 

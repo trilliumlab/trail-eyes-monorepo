@@ -1,7 +1,7 @@
-import { z } from 'zod';
 import { tez } from '@repo/zod-utils';
 import type { CamelKeys, ReplaceKeys } from 'string-ts';
 import { camelKeys, replaceKeys } from 'string-ts';
+import { z } from 'zod';
 
 /**
  * Creates a typed environment function.

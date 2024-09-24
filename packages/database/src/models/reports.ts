@@ -1,7 +1,7 @@
-import type { PgEnumToObject } from '~/utils';
-import { z } from 'zod';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { hazards, reports, type statusEnum, type categoryEnum } from '~/schema/reports';
+import { z } from 'zod';
+import { type categoryEnum, hazards, reports, type statusEnum } from '~/schema/reports';
+import type { PgEnumToObject } from '~/utils';
 
 // Category enum
 export const categoryEnumValues = {

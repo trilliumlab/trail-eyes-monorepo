@@ -1,10 +1,10 @@
 import { publicEnv } from '@repo/env';
-import { type Adapter, Lucia } from 'lucia';
-import { client } from './db-client';
 import { eq, gt } from 'drizzle-orm';
+import { type Adapter, Lucia } from 'lucia';
 import type { z } from 'zod';
-import { sessions, users } from './schema/auth';
+import { client } from './db-client';
 import { SessionSelectSchema, UserSelectSchema } from './models/auth';
+import { sessions, users } from './schema/auth';
 
 /**
  * A lucia auth adapter with a custom Drizzle backend.

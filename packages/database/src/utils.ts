@@ -1,5 +1,5 @@
+import { randomBytes, randomInt } from 'node:crypto';
 import type { PgEnum } from 'drizzle-orm/pg-core';
-import { randomInt, randomBytes } from 'node:crypto';
 import { otpCodeLength } from './consts';
 
 /**

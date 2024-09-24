@@ -1,23 +1,23 @@
 'use client';
 
-import { Button } from '@repo/ui/components/button';
-import { Input } from '@repo/ui/components/input';
-import { LoaderCircle } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterBodySchema } from '@repo/contract/models/auth';
+import { Button } from '@repo/ui/components/button';
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormControl,
 } from '@repo/ui/components/form';
+import { Input } from '@repo/ui/components/input';
+import { useNavigate } from '@tanstack/react-router';
+import { LoaderCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { tsr } from '~/tsr';
-import { useNavigate } from '@tanstack/react-router';
-import { RegisterBodySchema } from '@repo/contract/models/auth';
 
 export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -1,13 +1,13 @@
+import { publicEnv } from '@repo/env';
+import { ThemeProvider } from '@repo/ui/components/theme';
+// @ts-expect-error
+import styles from '@repo/ui/globals.css?url';
+import { QueryClient } from '@tanstack/react-query';
 import { createRootRoute, createRootRouteWithContext } from '@tanstack/react-router';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
-// @ts-expect-error
-import styles from '@repo/ui/globals.css?url';
-import { ThemeProvider } from '@repo/ui/components/theme';
-import { publicEnv } from '@repo/env';
 import NotFound from '~/components/not-found';
-import { QueryClient } from '@tanstack/react-query';
 
 export interface RootContext {
   queryClient: QueryClient;

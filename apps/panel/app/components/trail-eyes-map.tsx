@@ -19,8 +19,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
 import { Button } from '@repo/ui/components/button';
-import { Expand, Minus, Plus, Shrink } from 'lucide-react';
 import { Separator } from '@repo/ui/components/separator';
+import { Expand, Minus, Plus, Shrink } from 'lucide-react';
 
 export function TrailEyesMap() {
   const { resolvedTheme } = useTheme();

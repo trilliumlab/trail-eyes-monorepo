@@ -1,6 +1,6 @@
+import { UserCredentialsSchema } from '@repo/database/models/auth';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { UserCredentialsSchema } from '@repo/database/models/auth';
 import {
   GetVerificationMetaResponseSchema,
   LoginResponseSchema,

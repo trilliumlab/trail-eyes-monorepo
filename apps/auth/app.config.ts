@@ -1,7 +1,6 @@
 import { defineConfig } from '@tanstack/start/config';
-import tsConfigPaths from 'vite-tsconfig-paths';
 import { envOnlyMacros } from 'vite-env-only';
-import type { Plugin } from 'vinxi/dist/types/lib/vite-dev';
+import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   deployment: {

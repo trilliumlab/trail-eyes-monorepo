@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { initContract } from '@ts-rest/core';
+import { z } from 'zod';
 import { authContract } from './contracts/auth';
 import { geojsonContract } from './contracts/geojson';
 import { spritesContract } from './contracts/sprites';

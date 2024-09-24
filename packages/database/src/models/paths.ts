@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { routes } from '~/schema/paths';
 import { z } from 'zod';
+import { routes } from '~/schema/paths';
 
 // Routes
 const routesRefine = {
