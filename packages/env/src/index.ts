@@ -33,6 +33,10 @@ export const PublicEnvSchema = z.object({
   VITE_PANEL_URL: z.string().url(),
   VITE_AUTH_URL: z.string().url(),
   VITE_PROTO_API_KEY: z.string(),
+  // Analytics
+  VITE_POSTHOG_HOST: z.string().url(),
+  VITE_POSTHOG_KEY: z.string(),
+  // Optional
   VITE_LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   VITE_LOG_FORMAT: z.enum(['json', 'pretty']).default('json'),
 });

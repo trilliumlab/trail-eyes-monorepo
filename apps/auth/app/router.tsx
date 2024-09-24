@@ -3,6 +3,9 @@ import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { tsr } from '~/tsr';
 import { routeTree } from './routeTree.gen';
 
+import { PostHogProvider } from 'posthog-js/react';
+import { publicEnv } from '@repo/env';
+
 export function createRouter() {
   const queryClient = new QueryClient();
 
@@ -28,7 +31,18 @@ export function createRouter() {
     Wrap: ({ children }) => {
       return (
         <QueryClientProvider client={queryClient}>
-          <tsr.ReactQueryProvider>{children}</tsr.ReactQueryProvider>
+          <tsr.ReactQueryProvider>
+            <PostHogProvider
+              apiKey={publicEnv().posthogKey}
+              options={{
+                api_host: publicEnv().posthogHost,
+                person_profiles: 'identified_only',
+                enable_recording_console_log: true,
+              }}
+            >
+              {children}
+            </PostHogProvider>
+          </tsr.ReactQueryProvider>
         </QueryClientProvider>
       );
     },
