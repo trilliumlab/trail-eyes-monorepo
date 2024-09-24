@@ -3,11 +3,10 @@ import { envOnlyMacros } from 'vite-env-only';
 import tsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  deployment: {
+  server: {
     preset: 'node-server',
   },
   vite: {
-    // biome-ignore lint/suspicious/noExplicitAny: envOnlyMacros is a plugin.
-    plugins: () => [tsConfigPaths(), envOnlyMacros() as any],
+    plugins: () => [tsConfigPaths(), envOnlyMacros()],
   },
 });
