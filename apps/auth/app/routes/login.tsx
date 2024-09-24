@@ -11,8 +11,10 @@ import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { Separator } from '@repo/ui/components/separator';
 import { Link } from '@tanstack/react-router';
+import { RedirectSearchSchema } from '~/models/redirect';
 
 export const Route = createFileRoute('/login')({
+  validateSearch: RedirectSearchSchema,
   component: Login,
 });
 
@@ -61,7 +63,7 @@ function Login() {
           <div className="mt-4 text-center text-sm">
             Don't have an account?{' '}
             {/* biome-ignore lint/a11y/noPositiveTabindex: Forgot password placemenet should not interupt inputs */}
-            <Link tabIndex={5} to="/register">
+            <Link tabIndex={5} to="/register" search={{ redirectUrl: '' }}>
               Sign up
             </Link>
           </div>

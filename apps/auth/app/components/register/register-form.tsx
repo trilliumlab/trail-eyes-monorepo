@@ -15,13 +15,13 @@ import {
   FormControl,
 } from '@repo/ui/components/form';
 import type { z } from 'zod';
-import { backend } from '~/backend';
-import { useRouter } from '@tanstack/react-router';
+import { tsr } from '~/tsr';
+import { useNavigate } from '@tanstack/react-router';
 import { RegisterBodySchema } from '@repo/contract/models/auth';
 
 export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof RegisterBodySchema>>({
     resolver: zodResolver(RegisterBodySchema),
@@ -37,7 +37,7 @@ export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
   async function onSubmit(values: z.infer<typeof RegisterBodySchema>) {
     setIsSubmitting(true);
 
-    const res = await backend.auth.register.mutation({ body: values });
+    const res = await tsr.auth.register.mutate({ body: values });
 
     if (res.status !== 200) {
       setIsSubmitting(false);
@@ -48,8 +48,7 @@ export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
       }
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
-      console.log('redirecting to', redirectUrl);
-      router.history.push(redirectUrl);
+      navigate({ to: '/verify-email', search: { redirectUrl } });
     }
   }
 

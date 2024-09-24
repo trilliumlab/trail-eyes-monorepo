@@ -1,4 +1,4 @@
-import { createRootRoute } from '@tanstack/react-router';
+import { createRootRoute, createRootRouteWithContext } from '@tanstack/react-router';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
@@ -7,9 +7,13 @@ import styles from '@repo/ui/globals.css?url';
 import { ThemeProvider } from '@repo/ui/components/theme';
 import { publicEnv } from '@repo/env';
 import NotFound from '~/components/not-found';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 
-export const Route = createRootRoute({
+export interface RootContext {
+  queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<RootContext>()({
   meta: () => [
     { charSet: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -54,15 +58,13 @@ function RootDocument({ children }: React.PropsWithChildren) {
         <Meta />
       </Head>
       <Body>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-          </ThemeProvider>
-          <React.Suspense>
-            <ReactQueryDevtools />
-            <TanStackRouterDevtools />
-          </React.Suspense>
-        </QueryClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+        <React.Suspense>
+          <ReactQueryDevtools />
+          <TanStackRouterDevtools />
+        </React.Suspense>
         <ScrollRestoration />
         <Scripts />
       </Body>

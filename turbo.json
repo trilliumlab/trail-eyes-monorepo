@@ -39,12 +39,12 @@
       "persistent": true
     },
 
-    "scripts#db:import-routes": {
+    "@repo/scripts#db:import-routes": {
       "cache": false,
       "env": ["CMD_WD"],
       "inputs": ["../../data/routes/**", "src/**"]
     },
-    "scripts#build-sprites": {
+    "@repo/scripts#build-sprites": {
       "inputs": [
         "../../data/sprites/dark",
         "../../data/sprites/light",
@@ -52,6 +52,11 @@
         "src/**"
       ],
       "outputs": ["../../data/sprites/out/**"]
+    },
+    "@repo/scripts#send-test-email": {
+      "cache": false,
+      "env": ["CMD_WD"],
+      "inputs": ["src/**"]
     }
   }
 }

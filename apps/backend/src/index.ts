@@ -27,7 +27,7 @@ const app = fastify();
 
 // Register middleware
 app.register(fastifyCookie);
-app.register(fastifyCors, { origin: allowedOrigins });
+app.register(fastifyCors, { origin: allowedOrigins, credentials: true });
 app.register(csrfPlugin, { allowedOrigins });
 app.register(authPlugin);
 

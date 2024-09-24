@@ -7,6 +7,11 @@ import {
   UserNotFoundError,
 } from '@repo/database/errors/auth';
 import { initServer } from '@ts-rest/fastify';
+import {
+  internalServerErrorResponse,
+  invalidCredentialsResponse,
+  invalidSessionResponse,
+} from '~/responses';
 
 const s = initServer();
 
@@ -64,26 +69,38 @@ export const authRouter = s.router(contract.auth, {
       };
     } catch (e) {
       if (e instanceof InvalidCredentialsError || e instanceof UserNotFoundError) {
-        return {
-          status: 401,
-          body: {
-            statusCode: 401,
-            error: 'Unauthorized',
-            code: 'UNAUTHORIZED',
-            message: 'Invalid credentials',
-          },
-        };
+        return invalidCredentialsResponse();
       }
       console.error(e);
+      return internalServerErrorResponse(e);
+    }
+  },
+  getVerificationMeta: async ({ request }) => {
+    const user = request.user;
+    if (!user) {
+      return invalidSessionResponse();
+    }
+    if (user.verified) {
       return {
-        status: 500,
-        body: {
-          statusCode: 500,
-          message: String(e),
-          error: 'Internal Server Error',
-          code: 'INTERNAL_SERVER_ERROR',
-        },
+        status: 200,
+        body: { isVerified: true },
       };
     }
+    // Send the email verification code
+    const code = await db.createOrRefreshVerification(user);
+    if (!code) {
+      return internalServerErrorResponse('Failed to create verification code');
+    }
+    const secondsUntilCanResend = Math.max(
+      Math.ceil((code.allowRefreshAt.getTime() - Date.now()) / 1000),
+      0,
+    );
+    return {
+      status: 200,
+      body: { isVerified: false, secondsUntilCanResend, email: user.email },
+    };
+  },
+  verifyEmail: async () => {
+    return { status: 200, body: undefined };
   },
 });

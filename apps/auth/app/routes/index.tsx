@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
-  loader: async () => {
+  beforeLoad: async ({ location }) => {
     throw redirect({ to: '/register', search: { redirectUrl: '' } });
   },
 });

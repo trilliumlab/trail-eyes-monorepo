@@ -40,8 +40,6 @@ export async function createUser({ password, ...user }: UserCreate) {
         userId: dbUser.id,
         hash,
       });
-      // Create and send verification email
-      await createOrRefreshVerification(dbUser, { db: txn });
       return dbUser;
     });
   } catch (e) {
@@ -115,38 +113,45 @@ export async function createOrRefreshVerification(
     orderBy: (codes, { desc }) => [desc(codes[refreshTable])],
   });
 
-  // Either no codes, or all codes are passed the refresh time. Should create a new code.
-  if (nonRefreshableCodes.length === 0) {
-    const verificationCode = createOtpCode();
-    const entry = {
-      code: verificationCode,
-      allowRefreshAt: addSecond(new Date(), verificationTimeoutSeconds),
-      autoRefreshAt: addMinute(new Date(), verificationRefreshMinutes),
-      expiresAt: addMinute(new Date(), verificationExpirationMinutes),
-    } as const;
-    await db
-      .insert(emailVerificationCodes)
-      .values({
-        userId: user.id,
-        ...entry,
-      })
-      .onConflictDoUpdate({
-        target: emailVerificationCodes.userId,
-        set: entry,
-      });
+  const mostRecentCode = nonRefreshableCodes[0];
 
-    // Now we've inserted code into db, so if `sendEmail` we should send the verification email
-    if (sendEmail) {
-      await mailer.sendVerification(user.email, {
-        code: verificationCode,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        expirationString: `${verificationExpirationMinutes / 60} hour${verificationExpirationMinutes === 60 ? '' : 's'}`,
-      });
-    }
-
-    return verificationCode;
+  if (mostRecentCode) {
+    return mostRecentCode;
   }
+
+  // Either no codes, or all codes are passed the refresh time. Should create a new code.
+  const verificationCode = createOtpCode();
+  const entry = {
+    code: verificationCode,
+    allowRefreshAt: addSecond(new Date(), verificationTimeoutSeconds),
+    autoRefreshAt: addMinute(new Date(), verificationRefreshMinutes),
+    expiresAt: addMinute(new Date(), verificationExpirationMinutes),
+  } as const;
+  const dbEntry = await db
+    .insert(emailVerificationCodes)
+    .values({
+      userId: user.id,
+      ...entry,
+    })
+    .onConflictDoUpdate({
+      target: emailVerificationCodes.userId,
+      set: entry,
+    })
+    .returning();
+
+  // Now we've inserted code into db, so if `sendEmail` we should send the verification email
+  if (sendEmail) {
+    console.log('sending email');
+    await mailer.sendVerification(user.email, {
+      code: verificationCode,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      expirationString: `${verificationExpirationMinutes / 60} hour${verificationExpirationMinutes === 60 ? '' : 's'}`,
+    });
+    console.log('sent email');
+  }
+
+  return dbEntry[0];
 }
 
 /**

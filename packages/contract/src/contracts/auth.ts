@@ -1,7 +1,11 @@
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import { UserCredentialsSchema } from '@repo/database/models/auth';
-import { LoginResponseSchema, RegisterBodySchema } from '~/models/auth';
+import {
+  GetVerificationMetaResponseSchema,
+  LoginResponseSchema,
+  RegisterBodySchema,
+} from '~/models/auth';
 import { ErrorResponseBaseSchema } from '~/models/base';
 
 const c = initContract();
@@ -32,7 +36,36 @@ export const authContract = c.router(
         401: ErrorResponseBaseSchema.extend({
           statusCode: z.literal(401),
           error: z.literal('Unauthorized'),
-          code: z.literal('UNAUTHORIZED'),
+          code: z.literal('INVALID_CREDENTIALS'),
+        }),
+      },
+    },
+    getVerificationMeta: {
+      method: 'GET',
+      path: '/verification-meta',
+      summary: 'Get verification metadata',
+      responses: {
+        200: GetVerificationMetaResponseSchema,
+        401: ErrorResponseBaseSchema.extend({
+          statusCode: z.literal(401),
+          error: z.literal('Unauthorized'),
+          code: z.literal('INVALID_SESSION'),
+        }),
+      },
+    },
+    verifyEmail: {
+      method: 'POST',
+      path: '/verify-email',
+      summary: 'Verify email',
+      body: z.object({
+        code: z.string(),
+      }),
+      responses: {
+        200: c.noBody(),
+        401: ErrorResponseBaseSchema.extend({
+          statusCode: z.literal(401),
+          error: z.literal('Unauthorized'),
+          code: z.enum(['INVALID_SESSION', 'INVALID_CODE']),
         }),
       },
     },

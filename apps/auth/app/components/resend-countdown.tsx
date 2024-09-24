@@ -1,21 +1,21 @@
 'use client';
 
 import { linkStyle } from '@repo/ui/components/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@repo/ui/lib/utils';
 
-export function ResendCountdown({ className }: { className?: string }) {
-  const initialSeconds = 90;
-  const [seconds, setSeconds] = useState(initialSeconds);
-  const [isElapsed, setIsElapsed] = useState(false);
+export function ResendCountdown({
+  className,
+  secondsUntilCanResend,
+}: { className?: string; secondsUntilCanResend: number }) {
+  const [seconds, setSeconds] = useState(secondsUntilCanResend);
+  const isElapsed = useMemo(() => seconds === 0, [seconds]);
 
   useEffect(() => {
     if (!isElapsed) {
       const interval = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds <= 0) {
-            clearInterval(interval);
-            setIsElapsed(true);
             return 0;
           }
           return prevSeconds - 1;
