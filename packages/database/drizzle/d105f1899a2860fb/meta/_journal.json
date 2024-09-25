@@ -29,6 +29,13 @@
       "when": 1725311284890,
       "tag": "0003_magenta_chronomancer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1727240250564,
+      "tag": "0004_yellow_vampiro",
+      "breakpoints": true
     }
   ]
 }
