@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { VerifyEmailBodySchema } from '@repo/contract/models/auth';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@repo/ui/components/form';
 import {
   InputOTP,
@@ -10,34 +11,44 @@ import {
 } from '@repo/ui/components/input-otp';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import type { z } from 'zod';
+import { tsr } from '~/tsr';
 
-const OtpSchema = z.object({
-  pin: z.string().min(6, {
-    message: 'Please enter your 6-digit code',
-  }),
-});
-
-export function VerifyEmailForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const form = useForm<z.infer<typeof OtpSchema>>({
-    resolver: zodResolver(OtpSchema),
+export function VerifyEmailForm({ redirectUrl }: { redirectUrl: string }) {
+  const [disabled, setDisabled] = useState(false);
+  const form = useForm<z.infer<typeof VerifyEmailBodySchema>>({
+    resolver: zodResolver(VerifyEmailBodySchema),
     defaultValues: {
-      pin: '',
+      code: '',
     },
   });
 
-  function onSubmit({ pin }: z.infer<typeof OtpSchema>) {
-    setIsSubmitting(true);
-    console.log(`calling toast: ${pin}`);
+  const { mutate: verifyEmail, isPending: verifyEmailPending } = tsr.auth.verifyEmail.useMutation({
+    mutationKey: ['verifyEmail'],
+    onSuccess: async () => {
+      setDisabled(true);
+      window.location.href = redirectUrl;
+    },
+    onError: (e) => {
+      if (!(e instanceof Error)) {
+        if (e.status === 401) {
+          if (e.body.code === 'INVALID_CREDENTIALS') {
+            form.setError('code', { message: e.body.message });
+          }
+        }
+      }
+    },
+  });
+
+  function onSubmit(body: z.infer<typeof VerifyEmailBodySchema>) {
+    verifyEmail({ body });
   }
 
   return (
     <Form {...form}>
       <form
         onChange={() => {
-          if (form.getValues().pin.length === 6) {
+          if (form.getValues().code.length === 6) {
             form.handleSubmit(onSubmit)();
           }
         }}
@@ -45,11 +56,11 @@ export function VerifyEmailForm() {
       >
         <FormField
           control={form.control}
-          name="pin"
+          name="code"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <InputOTP disabled={isSubmitting} maxLength={6} {...field}>
+                <InputOTP disabled={disabled || verifyEmailPending} maxLength={6} {...field}>
                   <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />

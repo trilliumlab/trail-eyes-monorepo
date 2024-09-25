@@ -52,6 +52,7 @@ export const Route = createFileRoute('/verify-email')({
 });
 
 export default function VerifyEmail() {
+  const { redirectUrl } = Route.useSearch();
   const navigate = useNavigate();
   const tsrqc = tsr.useQueryClient();
   const {
@@ -69,9 +70,6 @@ export default function VerifyEmail() {
     tsr.auth.sendVerification.useMutation({
       mutationKey: ['sendVerification'],
       onSuccess: (data) => {
-        if (data.status !== 200) {
-          throw data;
-        }
         // Update query data to include new metadata.
         tsrqc.auth.getVerificationMeta.setQueryData(['getVerificationMeta'], data);
       },
@@ -85,7 +83,7 @@ export default function VerifyEmail() {
           <CardDescription>Enter the code sent to {body.email}</CardDescription>
         </CardHeader>
         <CardContent>
-          <VerifyEmailForm />
+          <VerifyEmailForm redirectUrl={redirectUrl} />
           <ResendCountdown
             secondsUntilCanResend={body.secondsUntilCanResend}
             className="mt-6 text-center text-sm"

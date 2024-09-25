@@ -137,7 +137,17 @@ export const authRouter = s.router(contract.auth, {
       },
     };
   },
-  verifyEmail: async ({ body }) => {
-    return { status: 200, body: undefined };
+  verifyEmail: async ({ body: { code }, request }) => {
+    const user = request.user;
+    if (!user) {
+      return invalidSessionResponse();
+    }
+    const lastCode = await db.getValidVerificationCode(user.id);
+    if (lastCode?.code === code) {
+      // Update user's verified status
+      await db.updateUser({ id: user.id, verified: true });
+      return { status: 200, body: undefined };
+    }
+    return invalidCredentialsResponse();
   },
 });

@@ -25,3 +25,9 @@ export const VerificationMetaResponseSchema = z.union([
     isVerified: z.literal(true),
   }),
 ]);
+
+export const VerifyEmailBodySchema = z.object({
+  code: z.string().min(6, {
+    message: 'Please enter your 6-digit code',
+  }),
+});

@@ -13,7 +13,13 @@ import {
   RegistrationConflictError,
   UserNotFoundError,
 } from '~/errors/auth';
-import type { SessionInsert, UserCreate, UserCredentials, UserSelect } from '~/models/auth';
+import type {
+  SessionInsert,
+  UserCreate,
+  UserCredentials,
+  UserInsert,
+  UserSelect,
+} from '~/models/auth';
 import { emailVerificationCodes, passwords, sessions, users } from '~/schema/auth';
 import { createOtpCode } from '~/utils';
 import { hashAlgo } from '~/consts';
@@ -51,6 +57,16 @@ export async function createUser({ password, ...user }: UserCreate) {
     }
     throw e;
   }
+}
+
+/**
+ * Updates a user in the database.
+ *
+ * @param session - The user object to update.
+ */
+export async function updateUser(user: Partial<UserInsert> & { id: string }) {
+  const { id, ...update } = user;
+  await client.update(users).set(update).where(eq(users.id, id));
 }
 
 /**
@@ -168,5 +184,5 @@ export async function createOrRefreshVerificationCode(
  */
 export async function updateSession(session: Partial<SessionInsert> & { id: string }) {
   const { id, ...update } = session;
-  await client.update(sessions).set(update).where(eq(sessions.id, session.id));
+  await client.update(sessions).set(update).where(eq(sessions.id, id));
 }

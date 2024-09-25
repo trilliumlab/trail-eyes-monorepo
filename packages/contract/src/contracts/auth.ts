@@ -5,6 +5,7 @@ import {
   VerificationMetaResponseSchema,
   LoginResponseSchema,
   RegisterBodySchema,
+  VerifyEmailBodySchema,
 } from '~/models/auth';
 import {
   ErrorResponseBaseSchema,
@@ -65,9 +66,7 @@ export const authContract = c.router(
       method: 'POST',
       path: '/verify-email',
       summary: 'Verify email',
-      body: z.object({
-        code: z.string(),
-      }),
+      body: VerifyEmailBodySchema,
       responses: {
         200: c.noBody(),
         401: z.union([InvalidSessionResponseSchema, InvalidCredentialsResponseSchema]),
