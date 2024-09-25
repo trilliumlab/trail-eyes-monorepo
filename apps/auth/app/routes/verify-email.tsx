@@ -6,14 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import type { ErrorResponse } from '@ts-rest/react-query/v5';
 import { VerifyEmailForm } from '~/components/register/verify-email-form';
 import { ResendCountdown } from '~/components/resend-countdown';
 import { RedirectSearchSchema } from '~/models/redirect';
 import { tsr } from '~/tsr';
 import { externalRedirect } from '~/util/external-redirect';
-// import { getEvent, sendRedirect } from 'vinxi/http';
 
 export const Route = createFileRoute('/verify-email')({
   validateSearch: RedirectSearchSchema,
@@ -28,8 +27,18 @@ export const Route = createFileRoute('/verify-email')({
       if (body.isVerified) {
         throw await externalRedirect(redirectUrl);
       }
+      // If the auto refresh time has passed, we should resend the code.
+      if (body.shouldResend) {
+        const newBody = await tsr.auth.sendVerification.mutate();
+        if (newBody.status !== 200) {
+          throw newBody;
+        }
+        // Update query data to include new metadata.
+        tsrqc.auth.getVerificationMeta.setQueryData(['getVerificationMeta'], newBody);
+      }
     } catch (unknownError) {
-      const error = unknownError as ErrorResponse<typeof contract.auth.getVerificationMeta>;
+      const error = unknownError as ErrorResponse<typeof contract.auth.getVerificationMeta> &
+        ErrorResponse<typeof contract.auth.sendVerification>;
       if (!(error instanceof Error)) {
         if (error.status === 401) {
           console.log(`we doing redirect to ${location.href}`);
@@ -43,6 +52,8 @@ export const Route = createFileRoute('/verify-email')({
 });
 
 export default function VerifyEmail() {
+  const navigate = useNavigate();
+  const tsrqc = tsr.useQueryClient();
   const {
     data: { body },
   } = tsr.auth.getVerificationMeta.useSuspenseQuery({
@@ -50,8 +61,21 @@ export default function VerifyEmail() {
   });
 
   if (body.isVerified) {
-    throw new Error('Email already verified');
+    navigate({ to: '/login', search: { redirectUrl: location.href } });
+    return;
   }
+
+  const { mutate: sendVerification, isPending: sendVerificationPending } =
+    tsr.auth.sendVerification.useMutation({
+      mutationKey: ['sendVerification'],
+      onSuccess: (data) => {
+        if (data.status !== 200) {
+          throw data;
+        }
+        // Update query data to include new metadata.
+        tsrqc.auth.getVerificationMeta.setQueryData(['getVerificationMeta'], data);
+      },
+    });
 
   return (
     <div className="absolute inset-0 grid place-items-center p-4">
@@ -65,6 +89,12 @@ export default function VerifyEmail() {
           <ResendCountdown
             secondsUntilCanResend={body.secondsUntilCanResend}
             className="mt-6 text-center text-sm"
+            onResend={() => {
+              // Don't duplicate mutation requests
+              if (!sendVerificationPending) {
+                sendVerification({});
+              }
+            }}
           />
           <p className="mt-2 text-center text-xs text-muted-foreground">
             Didn't receive a code? Check your spam folder.

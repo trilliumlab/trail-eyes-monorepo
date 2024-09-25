@@ -18,9 +18,7 @@ const s = initServer();
 export const authRouter = s.router(contract.auth, {
   register: async ({ body, reply }) => {
     try {
-      console.log('registering user', body);
       const user = await db.createUser(body);
-      console.log('user created', user);
 
       // Once user is created, create a session
       const session = await lucia.createSession(user.id, { confirmed: true });
@@ -39,15 +37,7 @@ export const authRouter = s.router(contract.auth, {
         };
       }
       console.error(e);
-      return {
-        status: 500,
-        body: {
-          statusCode: 500,
-          message: String(e),
-          error: 'Internal Server Error',
-          code: 'INTERNAL_SERVER_ERROR',
-        },
-      };
+      return internalServerErrorResponse(e);
     }
     return { status: 200 };
   },
@@ -86,8 +76,49 @@ export const authRouter = s.router(contract.auth, {
         body: { isVerified: true },
       };
     }
+    const lastCode = await db.getValidVerificationCode(user.id);
+    if (!lastCode) {
+      return {
+        status: 200,
+        body: {
+          isVerified: false,
+          secondsUntilCanResend: 0,
+          email: user.email,
+          hasActiveCode: false,
+          shouldResend: true,
+        },
+      };
+    }
+
+    const secondsUntilCanResend = Math.max(
+      Math.ceil((lastCode.allowRefreshAt.getTime() - Date.now()) / 1000),
+      0,
+    );
+    const shouldResend = lastCode.autoRefreshAt < new Date();
+    return {
+      status: 200,
+      body: {
+        isVerified: false,
+        secondsUntilCanResend,
+        email: user.email,
+        hasActiveCode: true,
+        shouldResend,
+      },
+    };
+  },
+  sendVerification: async ({ request }) => {
+    const user = request.user;
+    if (!user) {
+      return invalidSessionResponse();
+    }
+    if (user.verified) {
+      return {
+        status: 200,
+        body: { isVerified: true },
+      };
+    }
     // Send the email verification code
-    const code = await db.createOrRefreshVerification(user);
+    const code = await db.createOrRefreshVerificationCode(user);
     if (!code) {
       return internalServerErrorResponse('Failed to create verification code');
     }
@@ -97,10 +128,16 @@ export const authRouter = s.router(contract.auth, {
     );
     return {
       status: 200,
-      body: { isVerified: false, secondsUntilCanResend, email: user.email },
+      body: {
+        isVerified: false,
+        secondsUntilCanResend,
+        email: user.email,
+        hasActiveCode: true,
+        shouldResend: false,
+      },
     };
   },
-  verifyEmail: async () => {
+  verifyEmail: async ({ body }) => {
     return { status: 200, body: undefined };
   },
 });

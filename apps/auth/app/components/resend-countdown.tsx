@@ -7,8 +7,13 @@ import { useEffect, useMemo, useState } from 'react';
 export function ResendCountdown({
   className,
   secondsUntilCanResend,
-}: { className?: string; secondsUntilCanResend: number }) {
+  onResend,
+}: { className?: string; secondsUntilCanResend: number; onResend: () => void }) {
   const [seconds, setSeconds] = useState(secondsUntilCanResend);
+  // update timer when secondsUntilCanResend changes
+  useEffect(() => {
+    setSeconds(secondsUntilCanResend);
+  }, [secondsUntilCanResend]);
   const isElapsed = useMemo(() => seconds === 0, [seconds]);
 
   useEffect(() => {
@@ -33,12 +38,12 @@ export function ResendCountdown({
   return (
     <div className={cn(className, 'transition-colors', !isElapsed && 'text-muted-foreground')}>
       {isElapsed ? (
-        <button type="button" onClick={() => console.log('Resend email')} className={linkStyle}>
-          Resend code
+        <button type="button" onClick={onResend} className={linkStyle}>
+          Send another code
         </button>
       ) : (
         <>
-          Resend code in <span className="font-mono tracking-tighter">{remainingMinutes}:</span>
+          Send another in <span className="font-mono tracking-tighter">{remainingMinutes}:</span>
           <span className="font-mono">{remainingSeconds}</span>
         </>
       )}

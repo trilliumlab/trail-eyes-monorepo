@@ -2,11 +2,15 @@ import { UserCredentialsSchema } from '@repo/database/models/auth';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 import {
-  GetVerificationMetaResponseSchema,
+  VerificationMetaResponseSchema,
   LoginResponseSchema,
   RegisterBodySchema,
 } from '~/models/auth';
-import { ErrorResponseBaseSchema } from '~/models/base';
+import {
+  ErrorResponseBaseSchema,
+  InvalidCredentialsResponseSchema,
+  InvalidSessionResponseSchema,
+} from '~/models/base';
 
 const c = initContract();
 
@@ -33,24 +37,28 @@ export const authContract = c.router(
       body: UserCredentialsSchema,
       responses: {
         200: LoginResponseSchema,
-        401: ErrorResponseBaseSchema.extend({
-          statusCode: z.literal(401),
-          error: z.literal('Unauthorized'),
-          code: z.literal('INVALID_CREDENTIALS'),
-        }),
+        401: InvalidCredentialsResponseSchema,
       },
     },
     getVerificationMeta: {
       method: 'GET',
-      path: '/verification-meta',
+      path: '/get-verification-meta',
       summary: 'Get verification metadata',
       responses: {
-        200: GetVerificationMetaResponseSchema,
-        401: ErrorResponseBaseSchema.extend({
-          statusCode: z.literal(401),
-          error: z.literal('Unauthorized'),
-          code: z.literal('INVALID_SESSION'),
-        }),
+        200: VerificationMetaResponseSchema,
+        401: InvalidSessionResponseSchema,
+      },
+    },
+    sendVerification: {
+      method: 'POST',
+      path: '/send-verification',
+      summary: 'Send verification email',
+      description:
+        "Sends a verification email to the user's email address. If a code has been sent in the last 90 seconds, no action is taken.",
+      body: c.noBody(),
+      responses: {
+        200: VerificationMetaResponseSchema,
+        401: InvalidSessionResponseSchema,
       },
     },
     verifyEmail: {
@@ -62,11 +70,7 @@ export const authContract = c.router(
       }),
       responses: {
         200: c.noBody(),
-        401: ErrorResponseBaseSchema.extend({
-          statusCode: z.literal(401),
-          error: z.literal('Unauthorized'),
-          code: z.enum(['INVALID_SESSION', 'INVALID_CODE']),
-        }),
+        401: z.union([InvalidSessionResponseSchema, InvalidCredentialsResponseSchema]),
       },
     },
   },

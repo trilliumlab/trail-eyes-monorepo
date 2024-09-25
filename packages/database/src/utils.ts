@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from 'node:crypto';
 import type { PgEnum } from 'drizzle-orm/pg-core';
-import { otpCodeLength } from './consts';
+import { otpCodeLength } from '@repo/util/consts';
 
 /**
  * Generates a 6 digit verification code.

@@ -3,11 +3,10 @@ import { mailer } from '@repo/email';
 import { and, eq, gt } from 'drizzle-orm';
 import postgres from 'postgres';
 import {
-  hashAlgo,
   verificationExpirationMinutes,
   verificationRefreshMinutes,
   verificationTimeoutSeconds,
-} from '~/consts';
+} from '@repo/util/consts';
 import { client } from '~/db-client';
 import {
   InvalidCredentialsError,
@@ -17,6 +16,7 @@ import {
 import type { SessionInsert, UserCreate, UserCredentials, UserSelect } from '~/models/auth';
 import { emailVerificationCodes, passwords, sessions, users } from '~/schema/auth';
 import { createOtpCode } from '~/utils';
+import { hashAlgo } from '~/consts';
 
 /**
  * Creates a user with the provided information.
@@ -88,6 +88,22 @@ export async function verifyUser(user: UserCredentials) {
 }
 
 /**
+ * Retrieves the most recent valid verification code for a user.
+ *
+ * @param userId - The user ID.
+ * @param db - The database client to use (useful for transactions).
+ * @returns The most recent valid verification code for the user.
+ */
+export async function getValidVerificationCode(userId: string, db = client) {
+  return await db.query.emailVerificationCodes.findFirst({
+    where: and(
+      eq(emailVerificationCodes.userId, userId),
+      gt(emailVerificationCodes.expiresAt, new Date()),
+    ),
+  });
+}
+
+/**
  * Creates or refreshes the verification code for a user.
  *
  * @param user - The user object.
@@ -96,27 +112,20 @@ export async function verifyUser(user: UserCredentials) {
  * @param options.sendEmail - Whether to send an email with the verification code.
  * @param options.db - The database client to use (useful for transactions).
  */
-export async function createOrRefreshVerification(
+export async function createOrRefreshVerificationCode(
   user: Pick<UserSelect, 'id' | 'email' | 'firstName' | 'lastName'>,
   {
-    forceRefresh = false,
     sendEmail = true,
     db = client,
   }: { forceRefresh?: boolean; sendEmail?: boolean; db?: typeof client } = {},
 ) {
-  const refreshTable = forceRefresh ? ('allowRefreshAt' as const) : ('autoRefreshAt' as const);
-  const nonRefreshableCodes = await db.query.emailVerificationCodes.findMany({
-    where: and(
-      eq(emailVerificationCodes.userId, user.id),
-      gt(emailVerificationCodes[refreshTable], new Date()),
-    ),
-    orderBy: (codes, { desc }) => [desc(codes[refreshTable])],
-  });
-
-  const mostRecentCode = nonRefreshableCodes[0];
+  const mostRecentCode = await getValidVerificationCode(user.id, db);
 
   if (mostRecentCode) {
-    return mostRecentCode;
+    // If the refresh time hasn't passed, return the most recent code (don't refresh).
+    if (mostRecentCode.allowRefreshAt > new Date()) {
+      return mostRecentCode;
+    }
   }
 
   // Either no codes, or all codes are passed the refresh time. Should create a new code.
@@ -141,14 +150,12 @@ export async function createOrRefreshVerification(
 
   // Now we've inserted code into db, so if `sendEmail` we should send the verification email
   if (sendEmail) {
-    console.log('sending email');
-    await mailer.sendVerification(user.email, {
+    mailer.sendVerification(user.email, {
       code: verificationCode,
       firstName: user.firstName,
       lastName: user.lastName,
       expirationString: `${verificationExpirationMinutes / 60} hour${verificationExpirationMinutes === 60 ? '' : 's'}`,
     });
-    console.log('sent email');
   }
 
   return dbEntry[0];
