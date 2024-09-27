@@ -24,7 +24,7 @@ export const Route = createFileRoute('/verify-email')({
       const { body } = await tsrqc.auth.getVerificationMeta.ensureQueryData({
         queryKey: ['getVerificationMeta'],
       });
-      if (body.isVerified) {
+      if (body.userVerified) {
         throw await externalRedirect(redirectUrl);
       }
       // If the auto refresh time has passed, we should resend the code.
@@ -61,7 +61,7 @@ export default function VerifyEmail() {
     queryKey: ['getVerificationMeta'],
   });
 
-  if (body.isVerified) {
+  if (body.userVerified) {
     navigate({ to: '/login', search: { redirectUrl: location.href } });
     return;
   }

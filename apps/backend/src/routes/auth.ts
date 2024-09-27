@@ -21,6 +21,7 @@ export const authRouter = s.router(contract.auth, {
       const user = await db.createUser(body);
 
       // Once user is created, create a session
+      // FIXME: Figure out why session confirmation is not persisted
       const session = await lucia.createSession(user.id, { confirmed: true });
       const sessionCookie = lucia.createSessionCookie(session.id);
       reply.header('set-cookie', sessionCookie.serialize());
@@ -65,6 +66,20 @@ export const authRouter = s.router(contract.auth, {
       console.error(e);
       return internalServerErrorResponse(e);
     }
+  },
+  getSessionMeta: async ({ request }) => {
+    const user = request.user;
+    const session = request.session;
+    if (!user || !session) {
+      return invalidSessionResponse();
+    }
+    return {
+      status: 200,
+      body: {
+        userVerified: user.verified,
+        sessionConfirmed: session.confirmed,
+      },
+    };
   },
   getVerificationMeta: async ({ request }) => {
     const user = request.user;

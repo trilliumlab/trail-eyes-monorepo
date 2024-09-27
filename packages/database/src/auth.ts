@@ -1,6 +1,6 @@
 import { publicEnv } from '@repo/env';
 import { eq, gt } from 'drizzle-orm';
-import { type Adapter, Lucia } from 'lucia';
+import { type Adapter, Lucia, Session } from 'lucia';
 import type { z } from 'zod';
 import { client } from './db-client';
 import { SessionSelectSchema, UserSelectSchema } from './models/auth';
@@ -64,6 +64,7 @@ export const lucia = new Lucia(AuthAdapter, {
     },
   },
   getUserAttributes: (attributes) => attributes,
+  getSessionAttributes: (attributes) => attributes,
 });
 
 const DatabaseUserAttributesSchema = UserSelectSchema.omit({ id: true });

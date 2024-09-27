@@ -14,6 +14,11 @@ export const LoginResponseSchema = z.object({
   enabledSecondFactors: z.array(z.string()),
 });
 
+export const SessionMetaResponseSchema = z.object({
+  userVerified: z.boolean(),
+  sessionConfirmed: z.boolean(),
+});
+
 export const VerificationMetaResponseSchema = z.union([
   z.object({
     userVerified: z.literal(false),

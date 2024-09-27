@@ -14,7 +14,6 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as VerifyEmailImport } from './routes/verify-email'
 import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RegisterImport } from './routes/register'
-import { Route as LoginOldImport } from './routes/login-old'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 
@@ -32,11 +31,6 @@ const ResetPasswordRoute = ResetPasswordImport.update({
 
 const RegisterRoute = RegisterImport.update({
   path: '/register',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const LoginOldRoute = LoginOldImport.update({
-  path: '/login-old',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -68,13 +62,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/login-old': {
-      id: '/login-old'
-      path: '/login-old'
-      fullPath: '/login-old'
-      preLoaderRoute: typeof LoginOldImport
-      parentRoute: typeof rootRoute
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -104,7 +91,6 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/login-old': typeof LoginOldRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -113,7 +99,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/login-old': typeof LoginOldRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -123,7 +108,6 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/login-old': typeof LoginOldRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -131,26 +115,13 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/login-old'
-    | '/register'
-    | '/reset-password'
-    | '/verify-email'
+  fullPaths: '/' | '/login' | '/register' | '/reset-password' | '/verify-email'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/login'
-    | '/login-old'
-    | '/register'
-    | '/reset-password'
-    | '/verify-email'
+  to: '/' | '/login' | '/register' | '/reset-password' | '/verify-email'
   id:
     | '__root__'
     | '/'
     | '/login'
-    | '/login-old'
     | '/register'
     | '/reset-password'
     | '/verify-email'
@@ -160,7 +131,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
-  LoginOldRoute: typeof LoginOldRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
@@ -169,7 +139,6 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
-  LoginOldRoute: LoginOldRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VerifyEmailRoute: VerifyEmailRoute,
@@ -189,7 +158,6 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/login-old",
         "/register",
         "/reset-password",
         "/verify-email"
@@ -200,9 +168,6 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/login-old": {
-      "filePath": "login-old.tsx"
     },
     "/register": {
       "filePath": "register.tsx"

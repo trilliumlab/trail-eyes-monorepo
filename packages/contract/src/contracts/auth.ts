@@ -6,6 +6,7 @@ import {
   LoginResponseSchema,
   RegisterBodySchema,
   VerifyEmailBodySchema,
+  SessionMetaResponseSchema,
 } from '~/models/auth';
 import {
   ErrorResponseBaseSchema,
@@ -17,6 +18,15 @@ const c = initContract();
 
 export const authContract = c.router(
   {
+    getSessionMeta: {
+      method: 'GET',
+      path: '/session-meta',
+      summary: 'Get session metadata',
+      responses: {
+        200: SessionMetaResponseSchema,
+        401: InvalidSessionResponseSchema,
+      },
+    },
     register: {
       method: 'POST',
       path: '/register',
