@@ -53,6 +53,7 @@ export const authRouter = s.router(contract.auth, {
       return {
         status: 200,
         body: {
+          userVerified: user.verified,
           requiresSecondFactor: false,
           enabledSecondFactors: [],
         },
@@ -73,7 +74,7 @@ export const authRouter = s.router(contract.auth, {
     if (user.verified) {
       return {
         status: 200,
-        body: { isVerified: true },
+        body: { userVerified: true },
       };
     }
     const lastCode = await db.getValidVerificationCode(user.id);
@@ -81,7 +82,7 @@ export const authRouter = s.router(contract.auth, {
       return {
         status: 200,
         body: {
-          isVerified: false,
+          userVerified: false,
           secondsUntilCanResend: 0,
           email: user.email,
           hasActiveCode: false,
@@ -98,7 +99,7 @@ export const authRouter = s.router(contract.auth, {
     return {
       status: 200,
       body: {
-        isVerified: false,
+        userVerified: false,
         secondsUntilCanResend,
         email: user.email,
         hasActiveCode: true,
@@ -114,7 +115,7 @@ export const authRouter = s.router(contract.auth, {
     if (user.verified) {
       return {
         status: 200,
-        body: { isVerified: true },
+        body: { userVerified: true },
       };
     }
     // Send the email verification code
@@ -129,7 +130,7 @@ export const authRouter = s.router(contract.auth, {
     return {
       status: 200,
       body: {
-        isVerified: false,
+        userVerified: false,
         secondsUntilCanResend,
         email: user.email,
         hasActiveCode: true,

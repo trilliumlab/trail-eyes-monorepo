@@ -1,4 +1,3 @@
-import { publicEnv } from '@repo/env';
 import {
   Card,
   CardContent,
@@ -6,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
+import { Link } from '@repo/ui/components/link';
 import { Separator } from '@repo/ui/components/separator';
-import { Link, createFileRoute, useRouter } from '@tanstack/react-router';
-import { z } from 'zod';
+import { createFileRoute } from '@tanstack/react-router';
 import { RegisterForm } from '~/components/register/register-form';
 import { RedirectSearchSchema } from '~/models/redirect';
 
