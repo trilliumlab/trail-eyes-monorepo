@@ -13,6 +13,7 @@ import {
 } from '@repo/ui/components/form';
 import { Input } from '@repo/ui/components/input';
 import { Link } from '@repo/ui/components/link';
+import { useNavigate } from '@tanstack/react-router';
 import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,6 +21,7 @@ import type { z } from 'zod';
 import { tsr } from '~/tsr';
 
 export function LoginForm({ redirectUrl }: { redirectUrl: string }) {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof UserCredentialsSchema>>({
@@ -45,7 +47,11 @@ export function LoginForm({ redirectUrl }: { redirectUrl: string }) {
       }
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
-      window.location.href = redirectUrl;
+      if (res.body.userVerified) {
+        window.location.href = redirectUrl;
+      } else {
+        navigate({ to: '/verify-email', search: { redirectUrl } });
+      }
     }
   }
 
