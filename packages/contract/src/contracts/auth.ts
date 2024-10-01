@@ -7,6 +7,7 @@ import {
   RegisterBodySchema,
   VerifyEmailBodySchema,
   SessionMetaResponseSchema,
+  EnabledSecondFactorsResponseSchema,
 } from '~/models/auth';
 import {
   ErrorResponseBaseSchema,
@@ -49,6 +50,15 @@ export const authContract = c.router(
       responses: {
         200: LoginResponseSchema,
         401: InvalidCredentialsResponseSchema,
+      },
+    },
+    getEnabledSecondFactors: {
+      method: 'GET',
+      path: '/enabled-second-factors',
+      summary: 'Get enabled second factors',
+      responses: {
+        200: EnabledSecondFactorsResponseSchema,
+        401: InvalidSessionResponseSchema,
       },
     },
     getVerificationMeta: {

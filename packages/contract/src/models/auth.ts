@@ -8,10 +8,12 @@ export const RegisterBodySchema = UserCreateSchema.pick({
   lastName: true,
 });
 
+export const EnabledSecondFactorsResponseSchema = z.array(z.enum(['email', 'totp']));
+
 export const LoginResponseSchema = z.object({
   userVerified: z.boolean(),
   requiresSecondFactor: z.boolean(),
-  enabledSecondFactors: z.array(z.string()),
+  enabledSecondFactors: EnabledSecondFactorsResponseSchema,
 });
 
 export const SessionMetaResponseSchema = z.object({

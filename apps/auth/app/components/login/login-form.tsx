@@ -48,7 +48,11 @@ export function LoginForm({ redirectUrl }: { redirectUrl: string }) {
     } else {
       // Since we're redirecting, keep isSubmitting true to prevent the button enabling during the page transition period.
       if (res.body.userVerified) {
-        window.location.href = redirectUrl;
+        if (res.body.requiresSecondFactor) {
+          navigate({ to: '/choose-otp' });
+        } else {
+          window.location.href = redirectUrl;
+        }
       } else {
         navigate({ to: '/verify-email', search: { redirectUrl } });
       }

@@ -20,7 +20,14 @@ import type {
   UserInsert,
   UserSelect,
 } from '~/models/auth';
-import { emailVerificationCodes, passwords, sessions, users } from '~/schema/auth';
+import {
+  emailMfa,
+  emailVerificationCodes,
+  passwords,
+  sessions,
+  totpMfa,
+  users,
+} from '~/schema/auth';
 import { createOtpCode } from '~/utils';
 import { hashAlgo } from '~/consts';
 
@@ -78,29 +85,61 @@ export async function updateUser(user: Partial<UserInsert> & { id: string }) {
  * @throws {InvalidCredentialsError} If the credentials are invalid.
  */
 export async function verifyUser(user: UserCredentials) {
-  const dbUser = await client.query.users.findFirst({
-    where: eq(users.email, user.email),
-  });
-  if (!dbUser) {
+  const [query] = await client
+    .select()
+    .from(users)
+    .leftJoin(passwords, eq(users.id, passwords.userId))
+    .leftJoin(emailMfa, eq(users.id, emailMfa.userId))
+    .leftJoin(totpMfa, eq(users.id, totpMfa.userId))
+    .where(eq(users.email, user.email));
+
+  if (!query?.passwords) {
     throw new UserNotFoundError();
   }
 
-  const password = await client.query.passwords.findFirst({
-    where: eq(passwords.userId, dbUser.id),
-    columns: {
-      hash: true,
-    },
-  });
-  if (!password) {
-    throw new UserNotFoundError();
-  }
-
-  const verified = await Bun.password.verify(user.password, password.hash);
+  const verified = await Bun.password.verify(user.password, query.passwords.hash);
   if (!verified) {
     throw new InvalidCredentialsError();
   }
 
-  return dbUser;
+  const enabledSecondFactors: ('email' | 'totp')[] = [];
+
+  if (query.email_mfa) {
+    enabledSecondFactors.push('email');
+  }
+  if (query.totp_mfa) {
+    enabledSecondFactors.push('totp');
+  }
+
+  return {
+    user: query.users,
+    enabledSecondFactors,
+  };
+}
+
+/**
+ * Retrieves the enabled second factors for a user.
+ *
+ * @param userId - The user ID.
+ * @returns The enabled second factors for the user.
+ */
+export async function getEnabledSecondFactors(userId: string) {
+  const [query] = await client
+    .select()
+    .from(emailMfa)
+    .fullJoin(totpMfa, eq(emailMfa.userId, totpMfa.userId))
+    .where(eq(emailMfa.userId, userId));
+
+  const enabledSecondFactors: ('email' | 'totp')[] = [];
+
+  if (query?.email_mfa) {
+    enabledSecondFactors.push('email');
+  }
+  if (query?.totp_mfa) {
+    enabledSecondFactors.push('totp');
+  }
+
+  return enabledSecondFactors;
 }
 
 /**

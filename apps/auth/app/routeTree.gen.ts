@@ -12,15 +12,23 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as VerifyEmailImport } from './routes/verify-email'
+import { Route as TotpMfaImport } from './routes/totp-mfa'
 import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as EmailMfaImport } from './routes/email-mfa'
+import { Route as ChooseMfaImport } from './routes/choose-mfa'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
 const VerifyEmailRoute = VerifyEmailImport.update({
   path: '/verify-email',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TotpMfaRoute = TotpMfaImport.update({
+  path: '/totp-mfa',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,6 +47,16 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EmailMfaRoute = EmailMfaImport.update({
+  path: '/email-mfa',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ChooseMfaRoute = ChooseMfaImport.update({
+  path: '/choose-mfa',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -53,6 +71,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/choose-mfa': {
+      id: '/choose-mfa'
+      path: '/choose-mfa'
+      fullPath: '/choose-mfa'
+      preLoaderRoute: typeof ChooseMfaImport
+      parentRoute: typeof rootRoute
+    }
+    '/email-mfa': {
+      id: '/email-mfa'
+      path: '/email-mfa'
+      fullPath: '/email-mfa'
+      preLoaderRoute: typeof EmailMfaImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -76,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordImport
       parentRoute: typeof rootRoute
     }
+    '/totp-mfa': {
+      id: '/totp-mfa'
+      path: '/totp-mfa'
+      fullPath: '/totp-mfa'
+      preLoaderRoute: typeof TotpMfaImport
+      parentRoute: typeof rootRoute
+    }
     '/verify-email': {
       id: '/verify-email'
       path: '/verify-email'
@@ -90,57 +129,91 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/choose-mfa': typeof ChooseMfaRoute
+  '/email-mfa': typeof EmailMfaRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/totp-mfa': typeof TotpMfaRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/choose-mfa': typeof ChooseMfaRoute
+  '/email-mfa': typeof EmailMfaRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/totp-mfa': typeof TotpMfaRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/choose-mfa': typeof ChooseMfaRoute
+  '/email-mfa': typeof EmailMfaRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/totp-mfa': typeof TotpMfaRoute
   '/verify-email': typeof VerifyEmailRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/reset-password' | '/verify-email'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/reset-password' | '/verify-email'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/choose-mfa'
+    | '/email-mfa'
     | '/login'
     | '/register'
     | '/reset-password'
+    | '/totp-mfa'
+    | '/verify-email'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/choose-mfa'
+    | '/email-mfa'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/totp-mfa'
+    | '/verify-email'
+  id:
+    | '__root__'
+    | '/'
+    | '/choose-mfa'
+    | '/email-mfa'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/totp-mfa'
     | '/verify-email'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChooseMfaRoute: typeof ChooseMfaRoute
+  EmailMfaRoute: typeof EmailMfaRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TotpMfaRoute: typeof TotpMfaRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChooseMfaRoute: ChooseMfaRoute,
+  EmailMfaRoute: EmailMfaRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TotpMfaRoute: TotpMfaRoute,
   VerifyEmailRoute: VerifyEmailRoute,
 }
 
@@ -157,14 +230,23 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/choose-mfa",
+        "/email-mfa",
         "/login",
         "/register",
         "/reset-password",
+        "/totp-mfa",
         "/verify-email"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/choose-mfa": {
+      "filePath": "choose-mfa.tsx"
+    },
+    "/email-mfa": {
+      "filePath": "email-mfa.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -174,6 +256,9 @@ export const routeTree = rootRoute
     },
     "/reset-password": {
       "filePath": "reset-password.tsx"
+    },
+    "/totp-mfa": {
+      "filePath": "totp-mfa.tsx"
     },
     "/verify-email": {
       "filePath": "verify-email.tsx"

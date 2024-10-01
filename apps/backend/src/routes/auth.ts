@@ -44,7 +44,7 @@ export const authRouter = s.router(contract.auth, {
   },
   login: async ({ body, reply }) => {
     try {
-      const user = await db.verifyUser(body);
+      const { user, enabledSecondFactors } = await db.verifyUser(body);
       // If it doesn't throw then the user is verified, need to create a session
       // TODO: set confirmed to false if the user has 2fa enabled
       const session = await lucia.createSession(user.id, { confirmed: true });
@@ -55,8 +55,8 @@ export const authRouter = s.router(contract.auth, {
         status: 200,
         body: {
           userVerified: user.verified,
-          requiresSecondFactor: false,
-          enabledSecondFactors: [],
+          requiresSecondFactor: enabledSecondFactors.length > 0,
+          enabledSecondFactors,
         },
       };
     } catch (e) {
@@ -66,6 +66,17 @@ export const authRouter = s.router(contract.auth, {
       console.error(e);
       return internalServerErrorResponse(e);
     }
+  },
+  getEnabledSecondFactors: async ({ request }) => {
+    const user = request.user;
+    if (!user) {
+      return invalidSessionResponse();
+    }
+    const enabledSecondFactors = await db.getEnabledSecondFactors(user.id);
+    return {
+      status: 200,
+      body: enabledSecondFactors,
+    };
   },
   getSessionMeta: async ({ request }) => {
     const user = request.user;

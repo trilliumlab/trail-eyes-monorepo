@@ -26,7 +26,6 @@ export const Route = createFileRoute('/login')({
         queryKey: ['getSessionMeta'],
       });
 
-      console.log(body);
       if (body.userVerified && body.sessionConfirmed) {
         throw await externalRedirect(redirectUrl);
       }
@@ -42,7 +41,7 @@ export const Route = createFileRoute('/login')({
       if (!(error instanceof Error)) {
         if (error.status === 401) {
           // User needs to log in
-          return;
+          throw redirect({ to: '/login', search: { redirectUrl } });
         }
       }
       throw error;
