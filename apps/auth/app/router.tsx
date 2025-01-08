@@ -1,5 +1,6 @@
-import { QueryClient, QueryClientProvider, dehydrate, hydrate } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
+import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 import { tsr } from '~/tsr';
 import { routeTree } from './route-tree.gen';
 import { posthog } from 'posthog-js';
@@ -12,44 +13,56 @@ posthog.init(publicEnv().posthogKey, {
   persistence: 'cookie',
 });
 
+export interface RouterContext {
+  queryClient: QueryClient;
+}
+
 export function createRouter() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        // With SSR, we usually want to set some default staleTime
+        // above 0 to avoid refetching immediately on the client
+        staleTime: 60 * 1000,
+      },
+    },
+  });
+
+  const routerContext: RouterContext = {
+    queryClient,
+  };
 
   const router = createTanStackRouter({
     routeTree,
     defaultPreload: 'intent',
-
-    context: {
-      queryClient,
-    },
-    // On the server, dehydrate the loader client so the router
-    // can serialize it and send it to the client for us
-    dehydrate: () => {
-      return {
-        queryClientState: dehydrate(queryClient),
-      };
-    },
-    // On the client, hydrate the loader client with the data
-    // we dehydrated on the server
-    hydrate: (dehydrated) => {
-      hydrate(queryClient, dehydrated.queryClientState);
-    },
+    context: routerContext,
     Wrap: ({ children }) => {
       return (
-        <QueryClientProvider client={queryClient}>
-          <tsr.ReactQueryProvider>
-            <PostHogProvider client={posthog}>{children}</PostHogProvider>
-          </tsr.ReactQueryProvider>
-        </QueryClientProvider>
+        <tsr.ReactQueryProvider>
+          <PostHogProvider client={posthog}>{children}</PostHogProvider>
+        </tsr.ReactQueryProvider>
       );
     },
   });
 
-  return router;
+  // expose router and query client to window for use outside React (e.g. for Better Auth)
+  if (typeof window !== 'undefined') {
+    window.getRouter = () => router;
+    window.getQueryClient = () => queryClient;
+  }
+
+  return routerWithQueryClient(router, queryClient);
 }
 
 declare module '@tanstack/react-router' {
   interface Register {
     router: ReturnType<typeof createRouter>;
+  }
+}
+
+declare global {
+  interface Window {
+    getRouter: () => ReturnType<typeof createRouter>;
+    getQueryClient: () => QueryClient;
   }
 }

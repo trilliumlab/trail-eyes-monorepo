@@ -1,19 +1,14 @@
 import { publicEnv } from '@repo/env';
 import { ThemeProvider } from '@repo/ui/components/theme';
-// @ts-expect-error
 import styles from '@repo/ui/globals.css?url';
-import { QueryClient } from '@tanstack/react-query';
-import { createRootRoute, createRootRouteWithContext } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
 import { Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
+import type { RouterContext } from '~/router';
 
-export interface RootContext {
-  queryClient: QueryClient;
-}
-
-export const Route = createRootRouteWithContext<RootContext>()({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -34,38 +29,37 @@ function RootComponent() {
   );
 }
 
-const queryClient = new QueryClient();
-
 function RootDocument({ children }: React.PropsWithChildren) {
-  const TanStackRouterDevtools =
+  const RouterDevtools =
     publicEnv().mode === 'production'
-      ? () => null // Render nothing in production
-      : React.lazy(async () => {
-          // Lazy load in development
-          const { TanStackRouterDevtools } = await import('@tanstack/router-devtools');
-          return { default: TanStackRouterDevtools };
-        });
-  const ReactQueryDevtools =
+      ? () => null
+      : React.lazy(() =>
+          import('@tanstack/router-devtools').then((mod) => ({
+            default: mod.TanStackRouterDevtools,
+          })),
+        );
+
+  const QueryDevtools =
     publicEnv().mode === 'production'
-      ? () => null // Render nothing in production
-      : React.lazy(async () => {
-          // Lazy load in development
-          const { ReactQueryDevtools } = await import('@tanstack/react-query-devtools');
-          return { default: ReactQueryDevtools };
-        });
+      ? () => null
+      : React.lazy(() =>
+          import('@tanstack/react-query-devtools').then((mod) => ({
+            default: mod.ReactQueryDevtools,
+          })),
+        );
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <Meta />
       </head>
-      <body>
+      <body className="antialiased">
         <ThemeProvider>
-          {children}
+          {/* {children} */}
         </ThemeProvider>
         <React.Suspense>
-          <ReactQueryDevtools />
-          <TanStackRouterDevtools />
+          <RouterDevtools />
+          <QueryDevtools />
         </React.Suspense>
         <ScrollRestoration />
         <Scripts />
