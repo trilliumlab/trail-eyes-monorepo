@@ -5,7 +5,7 @@ import styles from '@repo/ui/globals.css?url';
 import { QueryClient } from '@tanstack/react-query';
 import { createRootRoute, createRootRouteWithContext } from '@tanstack/react-router';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
-import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
+import { Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
 
@@ -14,12 +14,14 @@ export interface RootContext {
 }
 
 export const Route = createRootRouteWithContext<RootContext>()({
-  meta: () => [
-    { charSet: 'utf-8' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { title: 'TrailEyes Auth' },
-  ],
-  links: () => [{ rel: 'stylesheet', href: styles }],
+  head: () => ({
+    meta: [
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: 'TrailEyes Auth' },
+    ],
+    links: [{ rel: 'stylesheet', href: styles }],
+  }),
   component: RootComponent,
   notFoundComponent: () => <NotFound homepage="/register" />,
 });
@@ -53,12 +55,12 @@ function RootDocument({ children }: React.PropsWithChildren) {
         });
 
   return (
-    <Html lang="en" suppressHydrationWarning>
-      <Head>
+    <html lang="en" suppressHydrationWarning>
+      <head>
         <Meta />
-      </Head>
-      <Body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      </head>
+      <body>
+        <ThemeProvider>
           {children}
         </ThemeProvider>
         <React.Suspense>
@@ -67,7 +69,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
         </React.Suspense>
         <ScrollRestoration />
         <Scripts />
-      </Body>
-    </Html>
+      </body>
+    </html>
   );
 }

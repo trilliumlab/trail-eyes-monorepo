@@ -5,17 +5,19 @@ import styles from '@repo/ui/globals.css?url';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRootRoute } from '@tanstack/react-router';
 import { Outlet, ScrollRestoration } from '@tanstack/react-router';
-import { Body, Head, Html, Meta, Scripts } from '@tanstack/start';
+import { Meta, Scripts } from '@tanstack/start';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
 
 export const Route = createRootRoute({
-  meta: () => [
-    { charSet: 'utf-8' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-    { title: 'TrailEyes Panel' },
-  ],
-  links: () => [{ rel: 'stylesheet', href: styles }],
+  head: () => ({
+    meta: [
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: 'TrailEyes Panel' },
+    ],
+    links: [{ rel: 'stylesheet', href: styles }],
+  }),
   component: RootComponent,
   notFoundComponent: () => <NotFound homepage="/" />,
 });
@@ -49,13 +51,13 @@ function RootDocument({ children }: React.PropsWithChildren) {
         });
 
   return (
-    <Html lang="en" suppressHydrationWarning>
-      <Head>
+    <html lang="en" suppressHydrationWarning>
+      <head>
         <Meta />
-      </Head>
-      <Body>
+      </head>
+      <body className="antialiased">
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider>
             {children}
           </ThemeProvider>
           <React.Suspense>
@@ -65,7 +67,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
-      </Body>
-    </Html>
+      </body>
+    </html>
   );
 }
