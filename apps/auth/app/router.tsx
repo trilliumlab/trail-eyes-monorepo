@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider, dehydrate, hydrate } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { tsr } from '~/tsr';
-import { routeTree } from './routeTree.gen';
+import { routeTree } from './route-tree.gen';
 import { posthog } from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 import { publicEnv } from '@repo/env';
