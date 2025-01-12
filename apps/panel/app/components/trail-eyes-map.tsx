@@ -23,8 +23,8 @@ import { Separator } from '@repo/ui/components/separator';
 import { Expand, Minus, Plus, Shrink } from 'lucide-react';
 
 export function TrailEyesMap() {
-  const { resolvedTheme } = useTheme();
-  const darkMode = resolvedTheme === 'dark';
+  const theme = useTheme();
+  const darkMode = theme.resolved === 'dark';
 
   const routesLayer: LineLayer = {
     id: 'routes',
@@ -121,8 +121,8 @@ export function TrailEyesMap() {
           zoom: 11.5,
         }}
         mapStyle={
-          resolvedTheme === 'dark' || resolvedTheme === 'light'
-            ? `${publicEnv().backendUrl}/styles/${resolvedTheme}.json?key=${publicEnv().protoApiKey}`
+          theme.resolved === 'dark' || theme.resolved === 'light'
+            ? `${publicEnv().backendUrl}/styles/${theme.resolved}.json?key=${publicEnv().protoApiKey}`
             : undefined
         }
         interactiveLayerIds={['routes-hit']}
