@@ -7,11 +7,42 @@ import {
   UserNotFoundError,
 } from '@repo/database/errors/auth';
 import { initServer } from '@ts-rest/fastify';
+import { os, ORPCError } from '@orpc/server';
 import {
   internalServerErrorResponse,
   invalidCredentialsResponse,
   invalidSessionResponse,
 } from '~/responses';
+import { pub } from '~/pub';
+
+export const authRouterr = pub.auth.router({
+  register: pub.auth.register.handler(async ({ input, context, errors }) => {
+    try {
+      const user = await db.createUser(input);
+
+      // Once user is created, create a session
+      // FIXME: Figure out why session confirmation is not persisted
+      const session = await lucia.createSession(user.id, { confirmed: true });
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      reply.header('set-cookie', sessionCookie.serialize());
+    } catch (e) {
+      if (e instanceof RegistrationConflictError) {
+        return errors.REGISTRATION_CONFLICT({});
+      }
+      console.error(e);
+      // TODO
+      // return internalServerErrorResponse(e);
+    }
+  }),
+  login: pub.auth.login.handler(({ input, context, errors }) => {}),
+  getEnabledSecondFactors: pub.auth.getEnabledSecondFactors.handler(
+    ({ input, context, errors }) => {},
+  ),
+  getSessionMeta: pub.auth.getSessionMeta.handler(({ input, context, errors }) => {}),
+  getVerificationMeta: pub.auth.getVerificationMeta.handler(({ input, context, errors }) => {}),
+  sendVerification: pub.auth.sendVerification.handler(({ input, context, errors }) => {}),
+  verifyEmail: pub.auth.verifyEmail.handler(({ input, context, errors }) => {}),
+});
 
 const s = initServer();
 
