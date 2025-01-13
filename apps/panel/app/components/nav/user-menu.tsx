@@ -18,7 +18,7 @@ import { useTheme } from '@repo/ui/components/theme';
 import { CircleUser } from 'lucide-react';
 
 export function UserMenu() {
-  const { theme, setTheme } = useTheme();
+  const theme = useTheme();
 
   return (
     <DropdownMenu>
@@ -35,7 +35,10 @@ export function UserMenu() {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Color Theme</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+            <DropdownMenuRadioGroup
+              value={theme.value}
+              onValueChange={theme.set as (theme: string) => void}
+            >
               <DropdownMenuRadioItem indicator="checkmark" value="light">
                 Light
               </DropdownMenuRadioItem>

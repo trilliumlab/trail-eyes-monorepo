@@ -26,7 +26,7 @@
     "vinxi": "^0.5.1",
     "lucide-react": "^0.469.0",
     "react-map-gl": "^7.1.8",
-    "maplibre-gl": "^5.0.0",
+    "maplibre-gl": "^4.7.1",
     "vite-env-only": "^3.0.3"
   },
   "devDependencies": {

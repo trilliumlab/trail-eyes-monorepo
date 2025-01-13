@@ -54,9 +54,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
         <Meta />
       </head>
       <body className="antialiased">
-        <ThemeProvider>
-          {/* {children} */}
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
         <React.Suspense>
           <RouterDevtools />
           <QueryDevtools />
