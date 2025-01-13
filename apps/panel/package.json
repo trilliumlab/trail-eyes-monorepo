@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vinxi dev --port 3001 --host",
     "build": "vinxi build",
-    "start": "vinxi start --port 3001"
+    "start": "PORT=3001 bun run .output/server/index.mjs"
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
