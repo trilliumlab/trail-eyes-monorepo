@@ -42,6 +42,8 @@ export const PublicEnvSchema = z.object({
 });
 
 export const PrivateEnvSchema = z.object({
+  // packages/auth
+  BETTER_AUTH_SECRET: z.string(),
   // packages/database
   DB_NAME: z.string(),
   DB_HOST: z.string(),
