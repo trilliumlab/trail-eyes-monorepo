@@ -1,16 +1,14 @@
-import { authContract } from './contracts/auth';
 import { geojsonContract } from './contracts/geojson';
 import { spritesContract } from './contracts/sprites';
 import { stylesContract } from './contracts/styles';
 // import { ErrorResponseBaseSchema } from './models/base';
 import { oc } from '@orpc/contract';
 
-export const contract = oc.router({
-  auth: authContract,
+export const contract = {
   geojson: geojsonContract,
   sprites: spritesContract,
   styles: stylesContract,
-});
+};
 
 // const c = initContract();
 

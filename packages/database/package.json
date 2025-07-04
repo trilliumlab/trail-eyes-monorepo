@@ -28,7 +28,8 @@
     "normalize-url": "^8.0.1",
     "import-meta-resolve": "^4.1.0",
     "lucia": "^3.2.0",
-    "@formkit/tempo": "^0.1.2"
+    "@formkit/tempo": "^0.1.2",
+    "better-auth": "^1.2.12"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

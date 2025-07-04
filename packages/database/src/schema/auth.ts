@@ -1,101 +1,80 @@
+import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
-import { boolean, integer, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
-
-export const roleEnum = pgEnum('role', ['developer', 'superAdmin', 'admin', 'volunteer', 'member']);
 
 export const users = pgTable('users', {
-  id: text('id')
-    .$default(() => createId())
-    .primaryKey(),
-  email: text('email').unique().notNull(),
-  firstName: text('first_name').notNull(),
-  lastName: text('last_name').notNull(),
-  verified: boolean('verified').default(false).notNull(),
-  role: roleEnum('role').default('member').notNull(),
-  inviteDate: timestamp('invite_data', { withTimezone: true }),
-  registrationDate: timestamp('registration_date', { withTimezone: true }).defaultNow().notNull(),
-  lastUpdateDate: timestamp('last_update_date', { withTimezone: true }).defaultNow().notNull(),
-  lastLoginDate: timestamp('last_login_date', { withTimezone: true }).defaultNow().notNull(),
-});
-
-export const emailMfaCodes = pgTable('email_mfa_codes', {
-  id: text('id')
-    .$default(() => createId())
-    .primaryKey(),
-  userId: text('user_id')
-    .references(() => users.id)
+  id: text('id').primaryKey().$defaultFn(createId),
+  name: text('name').notNull(),
+  email: text('email').notNull().unique(),
+  emailVerified: boolean('email_verified')
+    .$defaultFn(() => false)
     .notNull(),
-  code: varchar('code', { length: 6 }).notNull(),
-  attempts: integer('attempts').default(0).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  allowRefreshAt: timestamp('allow_refresh_at', { withTimezone: true }).notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-});
-
-export const emailMfa = pgTable('email_mfa', {
-  userId: text('user_id')
-    .references(() => users.id)
-    .primaryKey(),
-  attempts: integer('attempts').default(0).notNull(),
-  lastAttempt: timestamp('last_attempt', { withTimezone: true }).defaultNow().notNull(),
-});
-
-export const emailVerificationCodes = pgTable('email_verification_codes', {
-  userId: text('user_id')
-    .references(() => users.id)
-    .primaryKey(),
-  code: varchar('code', { length: 6 }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  allowRefreshAt: timestamp('allow_refresh_at', { withTimezone: true }).notNull(),
-  autoRefreshAt: timestamp('auto_refresh_at', { withTimezone: true }).notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-});
-
-export const invites = pgTable('invites', {
-  id: text('id')
-    .$default(() => createId())
-    .primaryKey(),
-  email: text('email').unique().notNull(),
-  firstName: text('first_name').notNull(),
-  lastName: text('last_name').notNull(),
-  role: roleEnum('role').default('member').notNull(),
-  inviteDate: timestamp('registration_date', { withTimezone: true }).defaultNow().notNull(),
-});
-
-export const loginTokens = pgTable('login_tokens', {
-  id: text('id')
-    .$default(() => createId())
-    .primaryKey(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => users.id),
-  token: text('token').notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-});
-
-export const passwords = pgTable('passwords', {
-  userId: text('user_id')
-    .references(() => users.id)
-    .primaryKey(),
-  hash: text('hash').notNull(),
+  image: text('image'),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  })
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  })
+    .$defaultFn(() => /* @__PURE__ */ new Date())
+    .notNull(),
 });
 
 export const sessions = pgTable('sessions', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$defaultFn(createId),
+  expiresAt: timestamp('expires_at').notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  }).notNull(),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  }).notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
   userId: text('user_id')
     .notNull()
-    .references(() => users.id),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  confirmed: boolean('confirmed').default(false).notNull(),
+    .references(() => users.id, { onDelete: 'cascade' }),
 });
 
-export const totpMfa = pgTable('totp_mfa', {
+export const accounts = pgTable('accounts', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  accountId: text('account_id').notNull(),
+  providerId: text('provider_id').notNull(),
   userId: text('user_id')
-    .references(() => users.id)
-    .primaryKey(),
-  secret: text('secret').notNull(),
-  attempts: integer('attempts').default(0).notNull(),
-  lastAttempt: timestamp('last_attempt', { withTimezone: true }).defaultNow().notNull(),
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  idToken: text('id_token'),
+  accessTokenExpiresAt: timestamp('access_token_expires_at', {
+    withTimezone: true,
+  }),
+  refreshTokenExpiresAt: timestamp('refresh_token_expires_at', {
+    withTimezone: true,
+  }),
+  scope: text('scope'),
+  password: text('password'),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  }).notNull(),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  }).notNull(),
+});
+
+export const verifications = pgTable('verifications', {
+  id: text('id').primaryKey().$defaultFn(createId),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: timestamp('expires_at', {
+    withTimezone: true,
+  }).notNull(),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  }).$defaultFn(() => /* @__PURE__ */ new Date()),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  }).$defaultFn(() => /* @__PURE__ */ new Date()),
 });

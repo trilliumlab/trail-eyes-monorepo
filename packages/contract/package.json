@@ -9,9 +9,9 @@
   "dependencies": {
     "@repo/database": "workspace:*",
     "@repo/zod-utils": "workspace:*",
-    "zod": "^3.23.8",
-    "@orpc/contract": "^0.29.0",
-    "@orpc/zod": "^0.29.0"
+    "zod": "^3.25.71",
+    "@orpc/contract": "^1.6.3",
+    "@orpc/zod": "^1.6.3"
   },
   "devDependencies": {
     "@types/bun": "latest",

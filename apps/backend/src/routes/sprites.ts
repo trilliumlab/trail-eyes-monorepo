@@ -1,15 +1,18 @@
-import { contract } from '@repo/contract';
-import { initServer } from '@ts-rest/fastify';
+import { pub } from '../orpc';
 
-const s = initServer();
-
-export const spritesRouter = s.router(contract.sprites, {
-  getSpriteJson: async ({ params: { path }, reply }) => {
-    const file = Bun.file(`../../data/sprites/out/${path}.json`);
-    return reply.send(file.stream());
-  },
-  getSpritePng: async ({ params: { path }, reply }) => {
-    const file = Bun.file(`../../data/sprites/out/${path}.png`);
-    return reply.send(file.stream());
-  },
+export const getSpriteJson = pub.sprites.getSpriteJson.handler(async ({ input, context }) => {
+  const file = Bun.file(`../../data/sprites/out/${input.path}.json`);
+  const json = await file.json();
+  return json;
 });
+
+export const getSpritePng = pub.sprites.getSpritePng.handler(async ({ input, context }) => {
+  const file = Bun.file(`../../data/sprites/out/${input.path}.png`);
+  // return context.reply.send(file.stream());
+  return file;
+});
+
+export const spritesRouter = {
+  getSpriteJson,
+  getSpritePng,
+};

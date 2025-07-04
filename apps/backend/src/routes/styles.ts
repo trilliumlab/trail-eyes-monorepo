@@ -1,8 +1,6 @@
-import { contract } from '@repo/contract';
 import { publicEnv } from '@repo/env';
-import { initServer } from '@ts-rest/fastify';
+import { pub } from '../orpc';
 import normalizeUrl from 'normalize-url';
-
 import dark from '~data/styles/dark.json';
 import light from '~data/styles/light.json';
 
@@ -34,13 +32,15 @@ function createTheme(key: string, theme: 'dark' | 'light' = 'light', mobile = fa
   };
 }
 
-const s = initServer();
-
-export const stylesRouter = s.router(contract.styles, {
-  getLightStyle: async ({ query: { key, mobile } }) => {
-    return { status: 200, body: createTheme(key, 'light', mobile) };
-  },
-  getDarkStyle: async ({ query: { key, mobile } }) => {
-    return { status: 200, body: createTheme(key, 'dark', mobile) };
-  },
+export const getLightStyle = pub.styles.getLightStyle.handler(async ({ input }) => {
+  return createTheme(input.key, 'light', input.mobile);
 });
+
+export const getDarkStyle = pub.styles.getDarkStyle.handler(async ({ input }) => {
+  return createTheme(input.key, 'dark', input.mobile);
+});
+
+export const stylesRouter = {
+  getLightStyle,
+  getDarkStyle,
+};
