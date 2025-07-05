@@ -6,6 +6,7 @@ import { createRootRouteWithContext, HeadContent } from '@tanstack/react-router'
 import { Outlet, Scripts } from '@tanstack/react-router';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
+import { Toaster } from '@repo/ui/components/sonner';
 import type { RouterContext } from '~/router';
 
 import styles from '~/globals.css?url';
@@ -58,7 +59,10 @@ function RootDocument({ children }: React.PropsWithChildren) {
         <HeadContent />
       </head>
       <body className="antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
         <React.Suspense>
           <RouterDevtools />
           <QueryDevtools />
