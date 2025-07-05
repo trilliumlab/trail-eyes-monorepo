@@ -10,7 +10,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { Link } from '@repo/ui/components/link';
 import { LoginForm } from '~/components/login/login-form';
 import { RedirectSearchSchema } from '~/models/redirect';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 import { externalRedirect } from '~/util/external-redirect';
 import type { ErrorResponse } from '@ts-rest/react-query/v5';
 import type { contract } from '@repo/contract';

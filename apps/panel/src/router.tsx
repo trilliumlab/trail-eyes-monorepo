@@ -36,6 +36,7 @@ export function createRouter() {
     routeTree,
     context: routerContext,
     defaultPreload: 'intent',
+    scrollRestoration: true,
     // Wrap: ({ children }) => {
     //   return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
     // },

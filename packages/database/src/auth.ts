@@ -3,6 +3,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { openAPI } from "better-auth/plugins"
 import { mailer } from '@repo/email';
+import { privateEnv } from '@repo/env';
 
 export const auth = betterAuth({
   emailAndPassword: {
@@ -17,11 +18,15 @@ export const auth = betterAuth({
         expirationString: '1 hour',
       });
     },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600 // 1 hour
   },
   database: drizzleAdapter(client, {
     provider: "pg",
     usePlural: true,
   }),
+  secret: privateEnv().betterAuthSecret,
   basePath: '/auth',
   plugins: [
     openAPI(),

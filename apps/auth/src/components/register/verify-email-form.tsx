@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 
 export function VerifyEmailForm({ redirectUrl }: { redirectUrl: string }) {
   const [disabled, setDisabled] = useState(false);

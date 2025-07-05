@@ -10,7 +10,7 @@ import {
 import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import type { ErrorResponse } from '@ts-rest/react-query/v5';
 import { RedirectSearchSchema } from '~/models/redirect';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 import { externalRedirect } from '~/util/external-redirect';
 
 export const Route = createFileRoute('/choose-mfa')({

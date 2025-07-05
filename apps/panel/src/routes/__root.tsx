@@ -1,24 +1,26 @@
+/// <reference types="vite/client" />
 import { publicEnv } from '@repo/env';
 import { ThemeProvider } from '@repo/ui/components/theme';
-import styles from '@repo/ui/globals.css?url';
-import { createRootRouteWithContext } from '@tanstack/react-router';
-import { Outlet, ScrollRestoration } from '@tanstack/react-router';
-import { Meta, Scripts } from '@tanstack/start';
+import { QueryClient } from '@tanstack/react-query';
+import { createRootRouteWithContext, HeadContent } from '@tanstack/react-router';
+import { Outlet, Scripts } from '@tanstack/react-router';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
 import type { RouterContext } from '~/router';
+
+import styles from '@repo/ui/globals.css?url';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'TrailEyes Auth' },
+      { title: 'TrailEyes Panel' },
     ],
     links: [{ rel: 'stylesheet', href: styles }],
   }),
   component: RootComponent,
-  notFoundComponent: () => <NotFound homepage="/register" />,
+  notFoundComponent: () => <NotFound homepage="/" />,
 });
 
 function RootComponent() {
@@ -29,12 +31,14 @@ function RootComponent() {
   );
 }
 
+const queryClient = new QueryClient();
+
 function RootDocument({ children }: React.PropsWithChildren) {
   const RouterDevtools =
     publicEnv().mode === 'production'
       ? () => null
       : React.lazy(() =>
-          import('@tanstack/router-devtools').then((mod) => ({
+          import('@tanstack/react-router-devtools').then((mod) => ({
             default: mod.TanStackRouterDevtools,
           })),
         );
@@ -51,7 +55,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Meta />
+        <HeadContent />
       </head>
       <body className="antialiased">
         <ThemeProvider>{children}</ThemeProvider>
@@ -59,7 +63,6 @@ function RootDocument({ children }: React.PropsWithChildren) {
           <RouterDevtools />
           <QueryDevtools />
         </React.Suspense>
-        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

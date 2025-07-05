@@ -17,7 +17,7 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 
 export function RegisterForm({ redirectUrl }: { redirectUrl: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);

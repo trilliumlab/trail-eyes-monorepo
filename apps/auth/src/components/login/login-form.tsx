@@ -18,7 +18,7 @@ import { LoaderCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 
 export function LoginForm({ redirectUrl }: { redirectUrl: string }) {
   const navigate = useNavigate();

@@ -36,7 +36,7 @@ const rpcHandler = new RPCHandler(router, {
 // const 
 
 Bun.serve({
-  port: 3000,
+  port: 8000,
   async fetch(request: Request) {
     // Handle oRPC rpc requests
     const { matched: rpcMatched, response: rpcResponse } = await rpcHandler.handle(request)
@@ -44,7 +44,7 @@ Bun.serve({
       return rpcResponse
     }
 
-    // Handle oRPC openapi requests
+    // Handle oRPC openapi requests (TODO)
 
     // Handle better-auth requests
     const authResponse = await auth.handler(request);
@@ -56,7 +56,7 @@ Bun.serve({
   }
 })
 
-console.log('Server is running on port 3000');
+console.log('Server is running on port 8000');
 
 // const app = fastify();
 

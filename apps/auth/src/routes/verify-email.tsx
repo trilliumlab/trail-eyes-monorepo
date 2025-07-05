@@ -11,7 +11,7 @@ import type { ErrorResponse } from '@ts-rest/react-query/v5';
 import { VerifyEmailForm } from '~/components/register/verify-email-form';
 import { ResendCountdown } from '~/components/resend-countdown';
 import { RedirectSearchSchema } from '~/models/redirect';
-import { tsr } from '~/tsr';
+import { tsr } from '~/backend';
 import { externalRedirect } from '~/util/external-redirect';
 
 export const Route = createFileRoute('/verify-email')({
