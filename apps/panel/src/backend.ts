@@ -3,33 +3,25 @@ import type { ContractRouterClient } from '@orpc/contract';
 import { publicEnv } from '@repo/env';
 import { RPCLink } from '@orpc/client/fetch';
 import { createORPCClient } from '@orpc/client';
-// import { createTanstackQueryUtils } from '@orpc/tanstack-query'
+import { createTanstackQueryUtils } from '@orpc/tanstack-query'
+import { createIsomorphicFn } from '@tanstack/react-start'
+import { getHeaders } from '@tanstack/react-start/server'
+import { createAuthClient } from "better-auth/react"
 
-const link = new RPCLink({
-  url: publicEnv().backendUrl,
-});
+export const authClient = createAuthClient({
+  baseURL: `${publicEnv().backendUrl}/auth`
+}) as ReturnType<typeof createAuthClient>
+
+const getClientLink = createIsomorphicFn()
+  .client(() => new RPCLink({
+    url: publicEnv().backendUrl,
+  }))
+  .server(() => new RPCLink({
+    url: publicEnv().backendUrl,
+    headers: getHeaders(),
+  }));
+
+const link = getClientLink();
 
 export const client: ContractRouterClient<typeof contract> = createORPCClient(link);
-
-// export const queryClient = createTanstackQueryUtils(client);
-
-// export const backend = initQueryClient(contract, {
-//   baseUrl: publicEnv().backendUrl,
-//   api: isServer
-//     ? async (args) => {
-//         // Lazy import so not imported on the client
-//         const { getHeaders, setHeaders } = await import('vinxi/http');
-//         // Add request headers from client
-//         const response = await tsRestFetchApi({
-//           ...args,
-//           headers: {
-//             ...args.headers,
-//             ...getHeaders(),
-//           },
-//         });
-//         // Write response headers to client
-//         setHeaders(Object.fromEntries(response.headers));
-//         return response;
-//       }
-//     : undefined,
-// });
+export const queryClient = createTanstackQueryUtils(client);

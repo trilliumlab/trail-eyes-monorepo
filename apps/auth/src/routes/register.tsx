@@ -8,7 +8,7 @@ import {
 import { Link } from '@repo/ui/components/link';
 import { Separator } from '@repo/ui/components/separator';
 import { createFileRoute } from '@tanstack/react-router';
-import { RegisterForm } from '~/components/register/register-form';
+// import { RegisterForm } from '~/components/register/register-form';
 import { RedirectSearchSchema } from '~/models/redirect';
 
 export const Route = createFileRoute('/register')({
@@ -27,7 +27,7 @@ function Register() {
           <CardDescription>Enter your information to create an account</CardDescription>
         </CardHeader>
         <CardContent>
-          <RegisterForm redirectUrl={redirectUrl} />
+          {/* <RegisterForm redirectUrl={redirectUrl} /> */}
           <Separator className="mt-6" />
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}

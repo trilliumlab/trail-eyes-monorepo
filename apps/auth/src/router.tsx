@@ -1,7 +1,7 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { routerWithQueryClient } from '@tanstack/react-router-with-query';
-import { tsr } from '~/backend';
+// import { tsr } from '~/backend';
 import { routeTree } from './route-tree.gen';
 import { posthog } from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
@@ -39,9 +39,9 @@ export function createRouter() {
     scrollRestoration: true,
     Wrap: ({ children }) => {
       return (
-        <tsr.ReactQueryProvider>
+        <QueryClientProvider client={queryClient}>
           <PostHogProvider client={posthog}>{children}</PostHogProvider>
-        </tsr.ReactQueryProvider>
+        </QueryClientProvider>
       );
     },
   });

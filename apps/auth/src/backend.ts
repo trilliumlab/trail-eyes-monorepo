@@ -4,11 +4,25 @@ import { publicEnv } from '@repo/env';
 import { RPCLink } from '@orpc/client/fetch';
 import { createORPCClient } from '@orpc/client';
 import { createTanstackQueryUtils } from '@orpc/tanstack-query'
-// import { serverOnly$ } from 'vite-env-only/macros';
-// import { getHeaders, setHeaders } from 'vinxi/http';
+import { createIsomorphicFn } from '@tanstack/react-start'
+import { getHeaders } from '@tanstack/react-start/server'
+import { createAuthClient } from "better-auth/react"
 
-const link = new RPCLink({
-  url: publicEnv().backendUrl,
+export const authClient = createAuthClient({
+  baseURL: `${publicEnv().backendUrl}/auth`
+}) as ReturnType<typeof createAuthClient>
+
+const getClientLink = createIsomorphicFn()
+  .client(() => new RPCLink({
+    url: publicEnv().backendUrl,
+  }))
+  .server(() => new RPCLink({
+    url: publicEnv().backendUrl,
+    headers: getHeaders(),
+  }));
+
+const link = getClientLink();
+
   // headers: serverOnly$(async (args) => {
   //   // Add request headers from client
   //   const response = await tsRestFetchApi({
@@ -22,7 +36,7 @@ const link = new RPCLink({
   //   setHeaders(Object.fromEntries(Object.entries(response.headers)));
   //   return response;
   // }),
-});
+// });
 
 export const client: ContractRouterClient<typeof contract> = createORPCClient(link);
 
