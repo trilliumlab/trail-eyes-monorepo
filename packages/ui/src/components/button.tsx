@@ -39,75 +39,84 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const [isAnimating, setIsAnimating] = React.useState(false);
-    const [isPressed, setIsPressed] = React.useState(false);
-    const timerRef = React.useRef<NodeJS.Timer | undefined>(undefined);
+const Button = (
+  {
+    ref,
+    className,
+    variant,
+    size,
+    asChild = false,
+    ...props
+  }: ButtonProps & {
+    ref: React.RefObject<HTMLButtonElement>;
+  }
+) => {
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  const [isPressed, setIsPressed] = React.useState(false);
+  const timerRef = React.useRef<NodeJS.Timer | undefined>(undefined);
 
-    // On press, set animation to true for duration of animation
-    // Store the press state to not duplicate animations during a press if multiple events fired.
-    function handlePress() {
-      if (!isPressed) {
-        setIsPressed(true);
-        setIsAnimating(true);
-        clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
-          setIsAnimating(false);
-        }, animationDuration);
-      }
+  // On press, set animation to true for duration of animation
+  // Store the press state to not duplicate animations during a press if multiple events fired.
+  function handlePress() {
+    if (!isPressed) {
+      setIsPressed(true);
+      setIsAnimating(true);
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        setIsAnimating(false);
+      }, animationDuration);
     }
+  }
 
-    function handleRelease() {
-      setIsPressed(false);
-    }
+  function handleRelease() {
+    setIsPressed(false);
+  }
 
-    // Clear timer on unmount
-    React.useEffect(() => () => clearTimeout(timerRef.current), []);
+  // Clear timer on unmount
+  React.useEffect(() => () => clearTimeout(timerRef.current), []);
 
-    const Comp = asChild ? Slot : 'button';
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        data-active={isAnimating || isPressed}
-        ref={ref}
-        {...props}
-        onMouseDown={(e) => {
+  const Comp = asChild ? Slot : 'button';
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      data-active={isAnimating || isPressed}
+      ref={ref}
+      {...props}
+      onMouseDown={(e) => {
+        handlePress();
+        props.onMouseDown?.(e);
+      }}
+      onTouchStart={(e) => {
+        handlePress();
+        props.onTouchStart?.(e);
+      }}
+      onMouseUp={(e) => {
+        handleRelease();
+        props.onMouseUp?.(e);
+      }}
+      onMouseLeave={(e) => {
+        handleRelease();
+        props.onMouseLeave?.(e);
+      }}
+      onTouchEnd={(e) => {
+        handleRelease();
+        props.onTouchEnd?.(e);
+      }}
+      onKeyDown={(e) => {
+        if (e.code === 'Enter' || e.code === 'Space') {
           handlePress();
-          props.onMouseDown?.(e);
-        }}
-        onTouchStart={(e) => {
-          handlePress();
-          props.onTouchStart?.(e);
-        }}
-        onMouseUp={(e) => {
+        }
+        props.onKeyDown?.(e);
+      }}
+      onKeyUp={(e) => {
+        if (e.code === 'Enter' || e.code === 'Space') {
           handleRelease();
-          props.onMouseUp?.(e);
-        }}
-        onMouseLeave={(e) => {
-          handleRelease();
-          props.onMouseLeave?.(e);
-        }}
-        onTouchEnd={(e) => {
-          handleRelease();
-          props.onTouchEnd?.(e);
-        }}
-        onKeyDown={(e) => {
-          if (e.code === 'Enter' || e.code === 'Space') {
-            handlePress();
-          }
-          props.onKeyDown?.(e);
-        }}
-        onKeyUp={(e) => {
-          if (e.code === 'Enter' || e.code === 'Space') {
-            handleRelease();
-          }
-          props.onKeyUp?.(e);
-        }}
-      />
-    );
-  },
-);
+        }
+        props.onKeyUp?.(e);
+      }}
+    />
+  );
+};
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };

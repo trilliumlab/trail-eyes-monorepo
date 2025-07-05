@@ -8,7 +8,7 @@ import * as React from 'react';
 import NotFound from '~/components/not-found';
 import type { RouterContext } from '~/router';
 
-import styles from '@repo/ui/globals.css?url';
+import styles from '~/globals.css?url';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({

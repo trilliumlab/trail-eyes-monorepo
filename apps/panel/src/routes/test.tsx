@@ -1,3 +1,4 @@
+// import { Button } from '@repo/ui/components/button';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/test')({
@@ -5,5 +6,5 @@ export const Route = createFileRoute('/test')({
 });
 
 function RouteComponent() {
-  return <div>Hello "/test"!</div>;
+  return <div className="bg-card border rounded-2xl w-40 p-4">ASD</div>;
 }
