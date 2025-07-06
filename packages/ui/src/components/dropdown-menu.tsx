@@ -122,8 +122,11 @@ function DropdownMenuRadioGroup({
 function DropdownMenuRadioItem({
   className,
   children,
+  indicator = "circle",
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem>) {
+}: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem> & {
+  indicator?: "checkmark" | "circle"
+}) {
   return (
     <DropdownMenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
@@ -135,7 +138,11 @@ function DropdownMenuRadioItem({
     >
       <span className="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
+          {indicator === 'circle' ? (
           <CircleIcon className="size-2 fill-current" />
+        ) : (
+          <CheckIcon className="size-4" />
+        )}
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
