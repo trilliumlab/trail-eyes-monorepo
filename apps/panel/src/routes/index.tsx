@@ -190,7 +190,7 @@ function Dashboard() {
               </Table>
             </CardContent>
           </Card>
-          <Card className="xl:col-span-2 overflow-clip min-h-[32rem]">
+          <Card className="xl:col-span-2 p-0 overflow-clip min-h-[32rem]">
             <TrailEyesMap />
           </Card>
         </div>

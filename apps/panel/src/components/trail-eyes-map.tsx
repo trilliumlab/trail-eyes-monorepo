@@ -112,7 +112,7 @@ export function TrailEyesMap() {
   const [activeRoute, setActiveRoute] = useState<number>();
 
   return (
-    <div ref={containerRef} className="h-full w-full select-none relative">
+    <div ref={containerRef} className="size-full select-none relative">
       <MapComponent
         ref={mapRef}
         initialViewState={{
@@ -195,20 +195,18 @@ function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void })
     <div className="absolute right-0 m-2 grid">
       {document.fullscreenEnabled && (
         <Button
-          variant="outline"
           size="icon"
           onClick={onFullscreenToggle}
-          className="border-border-map bg-card mb-2"
+          className="border-border-map mb-2"
         >
           {isFullscreen ? <Shrink className="h-4 w-4" /> : <Expand className="h-4 w-4" />}
         </Button>
       )}
 
       <Button
-        variant="outline"
         size="icon"
         onClick={() => map?.zoomIn()}
-        className="border-border-map bg-card rounded-b-none border-b-0 z-10"
+        className="border-border-map rounded-b-none border-b-0 z-10"
       >
         <Plus className="h-4 w-4" />
       </Button>
@@ -218,10 +216,9 @@ function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void })
         <div className="absolute right-0 left-0 h-[5px] -top-[3px] mx-[1px] bg-accent" />
       </div>
       <Button
-        variant="outline"
         size="icon"
         onClick={() => map?.zoomOut()}
-        className="border-border-map bg-card rounded-t-none border-t-0 z-10"
+        className="border-border-map rounded-t-none border-t-0 z-10"
       >
         <Minus className="h-4 w-4" />
       </Button>

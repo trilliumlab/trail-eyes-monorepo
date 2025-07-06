@@ -3,10 +3,12 @@ import { z } from 'zod';
 import { StylesQuerySchema } from '~/models/styles';
 
 export const getLightStyleContract = oc
+  .route({ method: 'GET', path: '/light.json' })
   .input(StylesQuerySchema)
   .output(z.record(z.any()));
 
 export const getDarkStyleContract = oc
+  .route({ method: 'GET', path: '/dark.json' })
   .input(StylesQuerySchema)
   .output(z.record(z.any()));
 

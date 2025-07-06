@@ -12,6 +12,7 @@ import { stylesRouter } from './routes/styles';
 import { auth } from '@repo/database/auth';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { OpenAPIHandler } from '@orpc/openapi/fetch';
 
 const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
 
@@ -30,7 +31,14 @@ const rpcHandler = new RPCHandler(router, {
   ]
 })
 
-// const openApiHandler = new OpenApi
+const openApiHandler = new OpenAPIHandler(router, {
+  plugins: [
+    new CORSPlugin({
+      origin: allowedOrigins
+    }),
+    new ResponseHeadersPlugin()
+  ]
+})
 
 const app = new Hono();
 
@@ -43,12 +51,21 @@ app.use('*', cors({
   credentials: true,
 }));
 
+// Handle oRPC rest requests
+app.use('*', async (c, next) => {
+  const { matched, response } = await openApiHandler.handle(c.req.raw);
+  if (matched) {
+    return c.newResponse(response.body, response);
+  }
+  
+  return next();
+})
+
 // Handle oRPC rpc requests
 app.use('/rpc/*', async (c, next) => {
   const { matched, response } = await rpcHandler.handle(c.req.raw, {
     prefix: '/rpc',
   });
-
   if (matched) {
     return c.newResponse(response.body, response);
   }

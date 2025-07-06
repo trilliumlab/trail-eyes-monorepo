@@ -10,7 +10,7 @@
     "@repo/database": "workspace:*",
     "@repo/zod-utils": "workspace:*",
     "zod": "^3.25.71",
-    "@orpc/contract": "^1.6.4",
+    "@orpc/contract": "^1.6.6",
     "@orpc/zod": "^1.6.4"
   },
   "devDependencies": {
