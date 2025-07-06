@@ -1,21 +1,20 @@
 /// <reference types="vite/client" />
 import { publicEnv } from '@repo/env';
-import { ThemeProvider } from '@repo/ui/components/theme';
 import { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, HeadContent } from '@tanstack/react-router';
 import { Outlet, Scripts } from '@tanstack/react-router';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
-import { Toaster } from '@repo/ui/components/sonner';
 import type { RouterContext } from '~/router';
 
 import styles from '~/globals.css?url';
+import { Providers } from '~/providers';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, viewport-fit=cover, initial-scale=1' },
       { title: 'TrailEyes Panel' },
     ],
     links: [{ rel: 'stylesheet', href: styles }],
@@ -59,10 +58,11 @@ function RootDocument({ children }: React.PropsWithChildren) {
         <HeadContent />
       </head>
       <body className="antialiased">
-        <ThemeProvider>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <Providers>
+          <div className="flex min-h-svh flex-col">
+            {children}
+          </div>
+        </Providers>
         <React.Suspense>
           <RouterDevtools />
           <QueryDevtools />

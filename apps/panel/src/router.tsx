@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 import { routeTree } from './route-tree.gen';
@@ -37,9 +37,10 @@ export function createRouter() {
     context: routerContext,
     defaultPreload: 'intent',
     scrollRestoration: true,
-    // Wrap: ({ children }) => {
-    //   return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
-    // },
+    Wrap: ({ children }) => {
+      return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+      // return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
+    },
   });
 
   // expose router and query client to window for use outside React (e.g. for Better Auth)

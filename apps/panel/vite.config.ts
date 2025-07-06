@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { envOnlyMacros } from 'vite-env-only';
 import { join } from 'node:path';
@@ -9,10 +10,14 @@ const config = {
 } as const;
 
 export default defineConfig({
+  ssr: {
+    noExternal: [
+    ],
+  },
   plugins: [
     tsconfigPaths(),
     envOnlyMacros(),
-    // tailwindcss(), sentry(), ...
+    tailwindcss(),
     tanstackStart({
       target: 'bun',
       tsr: {

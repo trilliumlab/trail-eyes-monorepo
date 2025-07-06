@@ -18,7 +18,7 @@ const getClientLink = createIsomorphicFn()
   }))
   .server(() => new RPCLink({
     url: publicEnv().backendUrl,
-    headers: getHeaders(),
+    // headers: getHeaders(),
   }));
 
 const link = getClientLink();
