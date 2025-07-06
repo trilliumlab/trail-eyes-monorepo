@@ -13,6 +13,8 @@ import { auth } from '@repo/database/auth';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
+import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
+import { ZodToJsonSchemaConverter } from '@orpc/zod';
 
 const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
 
@@ -36,7 +38,18 @@ const openApiHandler = new OpenAPIHandler(router, {
     new CORSPlugin({
       origin: allowedOrigins
     }),
-    new ResponseHeadersPlugin()
+    new ResponseHeadersPlugin(),
+    new OpenAPIReferencePlugin({
+      schemaConverters: [
+        new ZodToJsonSchemaConverter(),
+      ],
+      specGenerateOptions: {
+        info: {
+          title: 'TrailEyes API',
+          version: '0.0.1',
+        },
+      },
+    }),
   ]
 })
 
@@ -57,7 +70,7 @@ app.use('*', async (c, next) => {
   if (matched) {
     return c.newResponse(response.body, response);
   }
-  
+
   return next();
 })
 

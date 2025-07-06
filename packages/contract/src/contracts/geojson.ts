@@ -2,11 +2,19 @@ import { oc } from '@orpc/contract';
 import { z } from 'zod';
 
 export const getRoutesContract = oc
-  .route({ method: 'GET', path: '/routes.json' })
+  .route({ 
+    method: 'GET', 
+    path: '/routes.json',
+    summary: 'Get all routes as GeoJSON',
+  })
   .output(z.record(z.any()));
 
 export const getStartMarkersContract = oc
-  .route({ method: 'GET', path: '/start-markers.json' })
+  .route({ 
+    method: 'GET',
+    path: '/start-markers.json',
+    summary: 'Get all start markers as GeoJSON',
+  })
   .output(z.record(z.any()));
 
 export const geojsonContract = {

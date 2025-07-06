@@ -4,12 +4,20 @@ import { z } from 'zod';
 import { SpriteJsonSchema, SpritePathSchema } from '~/models/sprites';
 
 export const getSpriteJsonContract = oc
-  .route({ method: 'GET', path: '/{path}.json' })
+  .route({
+    method: 'GET',
+    path: '/{path}.json',
+    summary: 'Get a sprite as JSON',
+  })
   .input(z.object({ path: SpritePathSchema }))
   .output(SpriteJsonSchema);
 
 export const getSpritePngContract = oc
-  .route({ method: 'GET', path: '/{path}.png' })
+  .route({
+    method: 'GET',
+    path: '/{path}.png',
+    summary: 'Get a sprite as PNG',
+  })
   .input(z.object({ path: SpritePathSchema }))
   .output(oz.blob());
   // .type('image/*')
