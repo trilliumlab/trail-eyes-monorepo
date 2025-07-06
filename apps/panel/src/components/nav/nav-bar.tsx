@@ -1,17 +1,25 @@
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
-import { Link } from '@repo/ui/components/link';
+import { Link } from '@tanstack/react-router';
 import { Sheet, SheetContent, SheetTrigger } from '@repo/ui/components/sheet';
-import type { LinkComponent } from '@tanstack/react-router';
+import { useLocation, type LinkComponent } from '@tanstack/react-router';
 import { Menu, Package2, Search } from 'lucide-react';
-import { UserMenu } from './user-menu';
+import { cn } from '@repo/ui/lib/utils';
+import { UserButton } from '@daveyplate/better-auth-ui';
+import { ThemeMenu } from './theme-menu';
 
 const NavLink: LinkComponent<'a'> = ({ className, ...props }) => {
+  const location = useLocation();
+
+  const selected = location.pathname === props.to;
+
   return (
     <Link
       {...props}
-      className="text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap no-underline"
-      activeProps={{ className: 'text-foreground' }}
+      className={cn(
+        "text-muted-foreground transition-colors hover:text-foreground whitespace-nowrap no-underline",
+        selected && "text-foreground/90"
+      )}
     />
   );
 };
@@ -30,7 +38,7 @@ export function NavBar() {
   return (
     <header className="z-30 sticky top-0 flex h-16 items-center gap-4 border-b bg-gradient-to-b from-background via-background/50 to-background/50 backdrop-blur-md px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <Link to="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+        <Link to="/" className="flex items-center gap-2 text-lg font-semibold md:text-base">
           <Package2 className="h-6 w-6" />
           <span className="sr-only">TrailEyes Panel</span>
         </Link>
@@ -44,8 +52,8 @@ export function NavBar() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
-          <nav className="grid gap-6 text-lg font-medium">
-            <Link to="#" className="flex items-center gap-2 text-lg font-semibold">
+          <nav className="grid gap-4 m-4 text-lg font-medium">
+            <Link to="/" className="flex items-center gap-2 text-lg font-semibold">
               <Package2 className="h-6 w-6" />
               <span className="sr-only">TrailEyes Panel</span>
             </Link>
@@ -64,7 +72,8 @@ export function NavBar() {
             />
           </div>
         </form>
-        <UserMenu />
+        <ThemeMenu />
+        <UserButton size="icon" />
       </div>
     </header>
   );

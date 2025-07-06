@@ -1,7 +1,7 @@
 import { AuthQueryProvider } from "@daveyplate/better-auth-tanstack"
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack"
+import { Link } from "@tanstack/react-router";
 import { useRouter } from "@tanstack/react-router"
-import { Link } from "@repo/ui/components/link";
 import type { ReactNode } from "react"
 import { Toaster } from "@repo/ui/components/sonner";
 import { authClient } from "./backend";

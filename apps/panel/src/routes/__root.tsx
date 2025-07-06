@@ -9,6 +9,7 @@ import type { RouterContext } from '~/router';
 
 import styles from '~/globals.css?url';
 import { Providers } from '~/providers';
+import { NavBar } from '~/components/nav/nav-bar';
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
@@ -60,6 +61,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
       <body className="antialiased">
         <Providers>
           <div className="flex min-h-svh flex-col">
+            <NavBar />
             {children}
           </div>
         </Providers>

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { useTheme } from '@repo/ui/components/theme';
-import { CircleUser } from 'lucide-react';
+import { UserIcon } from 'lucide-react';
 
 export function UserMenu() {
   const theme = useTheme();
@@ -23,8 +23,8 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="icon" className="rounded-full">
-          <CircleUser className="h-5 w-5" />
+        <Button variant="secondary" size="icon" className="size-8 rounded-full">
+          <UserIcon className="size-4" />
           <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
