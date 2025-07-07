@@ -11,9 +11,23 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root';
+import { Route as UnconfirmedImport } from './routes/unconfirmed';
+import { Route as ConfirmedImport } from './routes/confirmed';
 import { Route as IndexImport } from './routes/index';
 
 // Create/Update Routes
+
+const UnconfirmedRoute = UnconfirmedImport.update({
+  id: '/unconfirmed',
+  path: '/unconfirmed',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ConfirmedRoute = ConfirmedImport.update({
+  id: '/confirmed',
+  path: '/confirmed',
+  getParentRoute: () => rootRoute,
+} as any);
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +46,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    '/confirmed': {
+      id: '/confirmed';
+      path: '/confirmed';
+      fullPath: '/confirmed';
+      preLoaderRoute: typeof ConfirmedImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/unconfirmed': {
+      id: '/unconfirmed';
+      path: '/unconfirmed';
+      fullPath: '/unconfirmed';
+      preLoaderRoute: typeof UnconfirmedImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -39,32 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/';
+  fullPaths: '/' | '/confirmed' | '/unconfirmed';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/';
-  id: '__root__' | '/';
+  to: '/' | '/confirmed' | '/unconfirmed';
+  id: '__root__' | '/' | '/confirmed' | '/unconfirmed';
   fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  ConfirmedRoute: typeof ConfirmedRoute;
+  UnconfirmedRoute: typeof UnconfirmedRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfirmedRoute: ConfirmedRoute,
+  UnconfirmedRoute: UnconfirmedRoute,
 };
 
 export const routeTree = rootRoute
@@ -77,11 +115,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/confirmed",
+        "/unconfirmed"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/confirmed": {
+      "filePath": "confirmed.tsx"
+    },
+    "/unconfirmed": {
+      "filePath": "unconfirmed.tsx"
     }
   }
 }
