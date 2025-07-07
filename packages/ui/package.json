@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./tailwind.config": "./tailwind.config.ts",
     "./postcss.config": "./postcss.config.ts",
     "./globals.css": "./src/globals.css",
     "./lib/*": "./src/lib/*.ts",
