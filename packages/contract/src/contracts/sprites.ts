@@ -1,30 +1,18 @@
 import { oc } from '@orpc/contract';
-import { oz } from '@orpc/zod';
 import { z } from 'zod';
 import { SpriteJsonSchema, SpritePathSchema } from '~/models/sprites';
 
-export const getSpriteJsonContract = oc
+export const getSpriteContract = oc
   .route({
     method: 'GET',
-    path: '/{path}.json',
-    summary: 'Get a sprite as JSON',
+    path: '/{path}',
+    summary: 'Get a sprite JSON/PNG',
   })
   .input(z.object({ path: SpritePathSchema }))
-  .output(SpriteJsonSchema);
-
-export const getSpritePngContract = oc
-  .route({
-    method: 'GET',
-    path: '/{path}.png',
-    summary: 'Get a sprite as PNG',
-  })
-  .input(z.object({ path: SpritePathSchema }))
-  .output(oz.blob());
-  // .type('image/*')
+  .output(z.union([SpriteJsonSchema, z.instanceof(Blob)]));
 
 export const spritesContract = {
-  getSpriteJson: getSpriteJsonContract,
-  getSpritePng: getSpritePngContract,
+  getSprite: getSpriteContract,
 };
 
 // const c = initContract();
