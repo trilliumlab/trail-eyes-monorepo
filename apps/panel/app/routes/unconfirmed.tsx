@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import type { ReportInsert } from '../../../../packages/database/src/models/reports';
+import type { ReportInsert } from '@repo/database/models/reports';
 import { Button } from '@repo/ui/components/button';
 import {
   Card,
