@@ -5,7 +5,7 @@ import { openAPI } from "better-auth/plugins"
 import { mailer } from '@repo/email';
 import { privateEnv, publicEnv } from '@repo/env';
 
-const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
+const allowedOrigins = [publicEnv().panelUrl, publicEnv().backendUrl];
 
 export const auth = betterAuth({
   emailAndPassword: {

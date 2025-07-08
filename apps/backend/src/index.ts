@@ -16,7 +16,7 @@ import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { ZodToJsonSchemaConverter } from '@orpc/zod';
 
-const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
+const allowedOrigins = [publicEnv().panelUrl, publicEnv().backendUrl];
 
 const router = pub.router({
   geojson: geojsonRouter,
