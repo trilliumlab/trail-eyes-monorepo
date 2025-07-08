@@ -5,8 +5,7 @@ import { VerificationCode } from './_components/verification-code';
 
 export interface OtpEmailProps {
   code: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   expirationString: string;
 }
 
@@ -22,8 +21,7 @@ const resetUrl = 'reset';
  */
 export default function OtpEmail({
   code = '123456',
-  firstName = 'Jane',
-  lastName = 'Doe',
+  name = 'Jane Doe',
   expirationString = '15 minutes',
 }: OtpEmailProps) {
   const previewText = `Your TrailEyes verification code is ${code}`;
@@ -43,7 +41,7 @@ export default function OtpEmail({
         <CardFooter>
           This email was intended for{' '}
           <span className="text-foreground">
-            {firstName} {lastName}
+            {name}
           </span>
           . If you did not request this code, an attacker may know your credentials:{' '}
           <a className="muted-link" href={resetUrl}>

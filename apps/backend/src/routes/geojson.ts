@@ -1,9 +1,7 @@
-import { contract } from '@repo/contract';
 import { db } from '@repo/database';
 import { memoize } from '@repo/util';
-import { initServer } from '@ts-rest/fastify';
+import { pub } from '../orpc';
 import type { Feature, FeatureCollection } from 'geojson';
-
 import startMarkers from '~data/routes/start-markers.json';
 
 const routesJsonMemo = memoize(
@@ -37,12 +35,15 @@ const routesJsonMemo = memoize(
   },
 );
 
-const s = initServer();
-export const geojsonRouter = s.router(contract.geojson, {
-  getRoutes: async () => {
-    return { status: 200, body: await routesJsonMemo() };
-  },
-  getStartMarkers: async () => {
-    return { status: 200, body: startMarkers };
-  },
+export const getRoutes = pub.geojson.getRoutes.handler(async () => {
+  return await routesJsonMemo();
 });
+
+export const getStartMarkers = pub.geojson.getStartMarkers.handler(async () => {
+  return startMarkers;
+});
+
+export const geojsonRouter = {
+  getRoutes,
+  getStartMarkers,
+};

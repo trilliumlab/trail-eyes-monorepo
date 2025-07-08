@@ -4,11 +4,9 @@ import { EmailBase } from './_components/email-base';
 import { ThemedButton } from './_components/themed-button';
 
 export interface InviteEmailProps {
-  firstName: string;
-  lastName: string;
+  name: string;
   inviteRole: string;
-  invitedByFirstName: string;
-  invitedByLastName: string;
+  invitedByName: string;
   invitedByEmail: string;
 }
 
@@ -17,24 +15,20 @@ const signupUrl = 'https://traileyes.net/signup';
 /**
  * Represents an email for inviting users to TrailEyes.
  *
- * @param firstName - The first name of the user being invited.
- * @param lastName - The last name of the user being invited.
+ * @param name - The full name of the user being invited.
  * @param inviteRole - The role for which the user is being invited.
- * @param invitedByFirstName - The first name of the user who sent the invitation.
- * @param invitedByLastName - The last name of the user who sent the invitation.
+ * @param invitedByName - The full name of the user who sent the invitation.
  * @param invitedByEmail - The email address of the user who sent the invitation.
  *
  * @returns The rendered invitation email.
  */
 export default function InviteEmail({
-  firstName = 'Jane',
-  lastName = 'Doe',
+  name = 'Jane Doe',
   inviteRole = 'volunteer',
-  invitedByFirstName = 'John',
-  invitedByLastName = 'Doe',
+  invitedByName = 'John Doe',
   invitedByEmail = 'johndoe@gmail.com',
 }: InviteEmailProps) {
-  const previewText = `${invitedByFirstName} ${invitedByLastName} has invited you to TrailEyes as a ${inviteRole}.`;
+  const previewText = `${invitedByName} has invited you to TrailEyes as a ${inviteRole}.`;
 
   return (
     <EmailBase previewText={previewText}>
@@ -45,7 +39,7 @@ export default function InviteEmail({
         <CardContent>
           <Text className="text-black text-sm leading-6">
             <strong>
-              {invitedByFirstName} {invitedByLastName}
+              {invitedByName}
             </strong>{' '}
             (
             <Link href={`mailto:${invitedByEmail}`} className="text-blue-600 no-underline">
@@ -57,7 +51,7 @@ export default function InviteEmail({
             <ThemedButton href={signupUrl}>Create an account</ThemedButton>
           </Section>
           <Text className="text-black text-xs leading-6">
-            or copy and paste this URL into your browser:{' '}
+            Or paste this link into your browser:{' '}
             <Link href={signupUrl} className="text-blue-600 no-underline">
               {signupUrl}
             </Link>
@@ -66,7 +60,7 @@ export default function InviteEmail({
         <CardFooter>
           This invitation was intended for{' '}
           <span className="text-black">
-            {firstName} {lastName}
+            {name}
           </span>
           . If you were not expecting this invitation, you can safely ignore this email.
         </CardFooter>

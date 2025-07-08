@@ -1,84 +1,44 @@
-import { publicEnv } from '@repo/env';
-import { eq, gt } from 'drizzle-orm';
-import { type Adapter, Lucia, Session } from 'lucia';
-import type { z } from 'zod';
 import { client } from './db-client';
-import { SessionSelectSchema, UserSelectSchema } from './models/auth';
-import { sessions, users } from './schema/auth';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { openAPI } from "better-auth/plugins"
+import { mailer } from '@repo/email';
+import { privateEnv, publicEnv } from '@repo/env';
 
-/**
- * A lucia auth adapter with a custom Drizzle backend.
- */
-const AuthAdapter = {
-  async deleteExpiredSessions() {
-    await client.delete(sessions).where(gt(sessions.expiresAt, new Date()));
-  },
-  async deleteSession(sessionId) {
-    await client.delete(sessions).where(eq(sessions.id, sessionId));
-  },
-  async deleteUserSessions(userId) {
-    await client.delete(sessions).where(eq(sessions.userId, userId));
-  },
-  async getSessionAndUser(sessionId) {
-    const session = await client.query.sessions.findFirst({
-      where: eq(sessions.id, sessionId),
-    });
-    if (!session) {
-      return [null, null];
-    }
-    const user = await client.query.users.findFirst({
-      where: eq(users.id, session.userId),
-    });
-    if (!user) {
-      return [null, null];
-    }
-    return [
-      { ...session, attributes: session } ?? null,
-      {
-        id: user.id,
-        attributes: user,
-      } ?? null,
-    ];
-  },
-  async getUserSessions(userId) {
-    const userSessions = await client.query.sessions.findMany({
-      where: eq(sessions.userId, userId),
-    });
-    return userSessions.map((s) => ({ ...s, attributes: s }));
-  },
-  async setSession(session) {
-    await client.insert(sessions).values(session);
-  },
-  async updateSessionExpiration(sessionId, expiresAt) {
-    await client.update(sessions).set({ expiresAt }).where(eq(sessions.id, sessionId));
-  },
-} satisfies Adapter;
+const allowedOrigins = [publicEnv().authUrl, publicEnv().panelUrl, publicEnv().backendUrl];
 
-export const lucia = new Lucia(AuthAdapter, {
-  sessionCookie: {
-    attributes: {
-      secure:
-        publicEnv().backendUrl.startsWith('https://') &&
-        publicEnv().authUrl.startsWith('https://') &&
-        publicEnv().panelUrl.startsWith('https://'),
+export const auth = betterAuth({
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+  },
+  trustedOrigins: allowedOrigins,
+  emailVerification: {
+    sendVerificationEmail: async ( { user, url, token }, request) => {
+      // TODO: This is a hack to set the callbackURL to the correct origin,
+      // If we ever need to redirect to a different origin, we need to change this properly
+      const newUrl = new URL(url);
+      const callbackUrl = newUrl.searchParams.get('callbackURL');
+      const absoluteCallbackUrl = publicEnv().panelUrl + callbackUrl;
+      newUrl.searchParams.set('callbackURL', absoluteCallbackUrl);
+
+      await mailer.sendVerification(user.email, {
+        url: newUrl.toString(),
+        name: user.name,
+        expirationString: '1 hour',
+      });
     },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    expiresIn: 3600 // 1 hour
   },
-  getUserAttributes: (attributes) => attributes,
-  getSessionAttributes: (attributes) => attributes,
+  database: drizzleAdapter(client, {
+    provider: "pg",
+    usePlural: true,
+  }),
+  secret: privateEnv().betterAuthSecret,
+  basePath: '/auth',
+  plugins: [
+    openAPI(),
+  ]
 });
-
-const DatabaseUserAttributesSchema = UserSelectSchema.omit({ id: true });
-const DatabaseSessionAttributesSchema = SessionSelectSchema.omit({
-  id: true,
-  userId: true,
-  expiresAt: true,
-  createdAt: true,
-});
-
-declare module 'lucia' {
-  interface Register {
-    Lucia: typeof lucia;
-    DatabaseUserAttributes: z.infer<typeof DatabaseUserAttributesSchema>;
-    DatabaseSessionAttributes: z.infer<typeof DatabaseSessionAttributesSchema>;
-  }
-}

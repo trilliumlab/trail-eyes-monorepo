@@ -1,6 +1,7 @@
 import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 import { lineString } from 'drizzle-postgis/models';
 
+
 export const routes = pgTable('routes', {
   id: serial('id').primaryKey(),
   originalId: text('original_id').unique(),

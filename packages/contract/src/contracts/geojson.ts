@@ -1,54 +1,49 @@
-import { initContract } from '@ts-rest/core';
+import { oc } from '@orpc/contract';
 import { z } from 'zod';
 
-const c = initContract();
+export const getRoutesContract = oc
+  .route({ 
+    method: 'GET', 
+    path: '/routes.json',
+    summary: 'Get all routes as GeoJSON',
+  })
+  .output(z.record(z.any()));
 
-export const geojsonContract = c.router(
-  {
-    getRoutes: {
-      method: 'GET',
-      path: '/routes.json',
-      summary: 'Get all routes as GeoJSON',
-      responses: {
-        200: z.record(z.any()),
-      },
-    },
-    getStartMarkers: {
-      method: 'GET',
-      path: '/start-markers.json',
-      summary: 'Get start markers as GeoJSON',
-      responses: {
-        200: z.record(z.any()),
-      },
-    },
-  },
-  {
-    pathPrefix: '/geojson',
-  },
-);
+export const getStartMarkersContract = oc
+  .route({ 
+    method: 'GET',
+    path: '/start-markers.json',
+    summary: 'Get all start markers as GeoJSON',
+  })
+  .output(z.record(z.any()));
 
-// export const routesRoute = createRoute({
-//     method: 'get',
-//     path: '/routes.json',
-//     summary: 'Get all routes as GeoJSON',
-//     description: 'Get all routes as GeoJSON',
-//     tags: ['geojson'],
-//     responses: {
-//       200: {
-//         description: 'All routes as GeoJSON',
+export const geojsonContract = {
+  getRoutes: getRoutesContract,
+  getStartMarkers: getStartMarkersContract,
+};
+
+// const c = initContract();
+
+// export const geojsonContract = c.router(
+//   {
+//     getRoutes: {
+//       method: 'GET',
+//       path: '/routes.json',
+//       summary: 'Get all routes as GeoJSON',
+//       responses: {
+//         200: z.record(z.any()),
 //       },
 //     },
-//   });
-
-//   export const startMarkersRoute = createRoute({
-//     method: 'get',
-//     path: '/start-markers.json',
-//     summary: 'Get start markers as GeoJSON',
-//     description: 'Get start markers as GeoJSON',
-//     tags: ['geojson'],
-//     responses: {
-//       200: {
-//         description: 'Start markers as GeoJSON',
+//     getStartMarkers: {
+//       method: 'GET',
+//       path: '/start-markers.json',
+//       summary: 'Get start markers as GeoJSON',
+//       responses: {
+//         200: z.record(z.any()),
 //       },
 //     },
-//   });
+//   },
+//   {
+//     pathPrefix: '/geojson',
+//   },
+// );

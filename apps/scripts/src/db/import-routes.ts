@@ -27,21 +27,34 @@ if (!(await routesFile.exists())) {
 const routes: FeatureCollection = await routesFile.json();
 console.log(`Loaded routes json with ${routes.features.length} entries.`);
 
+const dbRoutes = await db.getAllRoutes();
+
 for (const [i, route] of routes.features.entries()) {
   if (route.geometry.type === 'LineString') {
+    const existingRoute = dbRoutes.find((r) => r.originalId === route.id?.toString());
+    if (existingRoute) {
+      console.log(`Route ${i}: Skipping, already exists in db.`);
+      continue;
+    }
+
     console.log(`Route ${i}: Fetching elevation.`);
     const geometry = await addElevationToLine(route.geometry);
     console.log(`Route ${i}: Elevation added, inserting into db.`);
 
-    await db.addRoute({
-      originalId: route.id?.toString(),
-      description: route.properties?.description,
-      creator: route.properties?.creator,
-      title: route.properties?.title,
-      stroke: route.properties?.stroke,
-      updated: new Date(route.properties?.updated),
-      geometry: geometry,
-    });
+    // TODO: Upsert instead of insert
+    try {
+      await db.addRoute({
+        originalId: route.id?.toString(),
+        description: route.properties?.description,
+        creator: route.properties?.creator,
+        title: route.properties?.title,
+        stroke: route.properties?.stroke,
+        updated: new Date(route.properties?.updated),
+        geometry: geometry,
+      });
+    } catch (e) {
+      console.error(`Route ${i}: Error inserting into db: ${e}`);
+    }
   }
 }
 
