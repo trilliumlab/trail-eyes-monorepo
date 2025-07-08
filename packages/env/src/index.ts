@@ -31,7 +31,6 @@ export const PublicEnvSchema = z.object({
   VITE_APP_NAME: z.string(),
   VITE_BACKEND_URL: z.string().url(),
   VITE_PANEL_URL: z.string().url(),
-  VITE_AUTH_URL: z.string().url(),
   VITE_PROTO_API_KEY: z.string(),
   // Analytics
   VITE_POSTHOG_HOST: z.string().url(),
@@ -42,6 +41,8 @@ export const PublicEnvSchema = z.object({
 });
 
 export const PrivateEnvSchema = z.object({
+  // packages/auth
+  BETTER_AUTH_SECRET: z.string(),
   // packages/database
   DB_NAME: z.string(),
   DB_HOST: z.string(),

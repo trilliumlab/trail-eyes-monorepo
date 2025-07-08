@@ -4,8 +4,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["app/*"],
-   //   "@repo/*": ["packages/*"]
+      "~/*": ["src/*"]
     }
   },
   "references": [
