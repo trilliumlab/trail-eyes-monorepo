@@ -41,7 +41,7 @@ const reportsRefine = {
     type: z.literal('Point'),
   }),
 };
-export const ReportInsertSchema = createInsertSchema(reports, reportsRefine);
-export const ReportSelectSchema = createSelectSchema(reports, reportsRefine);
+export const ReportInsertSchema = createInsertSchema(reports, reportsRefine).extend({});
+export const ReportSelectSchema = createSelectSchema(reports, reportsRefine).extend({});
 export type ReportInsert = z.infer<typeof ReportInsertSchema>;
 export type ReportSelect = z.infer<typeof ReportSelectSchema>;

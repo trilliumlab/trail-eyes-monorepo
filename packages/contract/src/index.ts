@@ -1,11 +1,12 @@
 import { geojsonContract } from './contracts/geojson';
+import { reportsContract } from './contracts/reports';
 import { spritesContract } from './contracts/sprites';
 import { stylesContract } from './contracts/styles';
-// import { ErrorResponseBaseSchema } from './models/base';
 import { oc } from '@orpc/contract';
 
 export const contract = {
   geojson: oc.prefix('/geojson').router(geojsonContract),
+  reports: oc.prefix('/reports').router(reportsContract),
   sprites: oc.prefix('/sprites').router(spritesContract),
   styles: oc.prefix('/styles').router(stylesContract),
 };

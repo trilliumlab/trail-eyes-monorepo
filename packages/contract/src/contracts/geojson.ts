@@ -1,4 +1,5 @@
 import { oc } from '@orpc/contract';
+// TODO: Use zod v4 here
 import { z } from 'zod';
 
 export const getRoutesContract = oc

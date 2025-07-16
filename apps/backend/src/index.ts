@@ -1,6 +1,5 @@
 import { RPCHandler } from '@orpc/server/fetch'
 import { CORSPlugin } from '@orpc/server/plugins'
-
 import { ResponseHeadersPlugin } from '@orpc/server/plugins'
 
 import { pub } from './orpc';
@@ -15,11 +14,13 @@ import { cors } from 'hono/cors';
 import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { ZodToJsonSchemaConverter } from '@orpc/zod';
+import { reportsRouter } from './routes/reports';
 
 const allowedOrigins = [publicEnv().panelUrl, publicEnv().backendUrl];
 
 const router = pub.router({
   geojson: geojsonRouter,
+  reports: reportsRouter,
   sprites: spritesRouter,
   styles: stylesRouter,
 })
