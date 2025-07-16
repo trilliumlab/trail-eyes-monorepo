@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root';
+import { Route as UnconfirmedRouteImport } from './routes/unconfirmed';
+import { Route as ConfirmedRouteImport } from './routes/confirmed';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as AuthPathnameRouteImport } from './routes/auth/$pathname';
 
+const UnconfirmedRoute = UnconfirmedRouteImport.update({
+  id: '/unconfirmed',
+  path: '/unconfirmed',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ConfirmedRoute = ConfirmedRouteImport.update({
+  id: '/confirmed',
+  path: '/confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +37,54 @@ const AuthPathnameRoute = AuthPathnameRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/confirmed': typeof ConfirmedRoute;
+  '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/auth/$pathname';
+  fullPaths: '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/auth/$pathname';
-  id: '__root__' | '/' | '/auth/$pathname';
+  to: '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
+  id: '__root__' | '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  ConfirmedRoute: typeof ConfirmedRoute;
+  UnconfirmedRoute: typeof UnconfirmedRoute;
   AuthPathnameRoute: typeof AuthPathnameRoute;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unconfirmed': {
+      id: '/unconfirmed';
+      path: '/unconfirmed';
+      fullPath: '/unconfirmed';
+      preLoaderRoute: typeof UnconfirmedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/confirmed': {
+      id: '/confirmed';
+      path: '/confirmed';
+      fullPath: '/confirmed';
+      preLoaderRoute: typeof ConfirmedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
       id: '/';
       path: '/';
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfirmedRoute: ConfirmedRoute,
+  UnconfirmedRoute: UnconfirmedRoute,
   AuthPathnameRoute: AuthPathnameRoute,
 };
 export const routeTree = rootRouteImport
