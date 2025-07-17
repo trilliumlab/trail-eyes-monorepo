@@ -35,6 +35,65 @@ const routesJsonMemo = memoize(
   },
 );
 
+/*
+
+(parameter) input: {
+    creatorDeviceId: string;
+    category: "other" | "fallenTree" | "drainage" | "erosion" | "structureFailure" | "damagedSign" | "seasonal";
+    route: number;
+    trail: number;
+    geometry: {
+        coordinates: [number, number, number];
+        type: "Point";
+    };
+    id?: number | undefined;
+    localId?: string | null | undefined;
+    creatorUserId?: string | null | undefined;
+    image?: string | null | undefined;
+    blurHash?: string | null | undefined;
+    status?: "open" | "confirmed" | "inProgress" | "closed" | undefined;
+    reportedAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+}
+
+*/
+
+const reportsJsonMemo = memoize(
+  async () => {
+    const reports = await db.getAllReports();
+    const features = reports.map(
+      (report) =>
+        ({
+          id: report.id,
+          type: 'Feature',
+          properties: {
+            creatorDeviceId: report.creatorDeviceId,
+            category: report.category,
+            route: report.route,
+            trail: report.trail,
+            localId: report.localId,
+            image: report.image,
+            blurHash: report.blurHash,
+            creatorUserId: report.creatorUserId,
+            status: report.status,
+            reportedAt: report.reportedAt.getMilliseconds().toString(),
+            updatedAt: report.updatedAt.getMilliseconds().toString(),
+          },
+          geometry: report.geometry,
+        }) satisfies Feature,
+    );
+
+    return {
+      type: 'FeatureCollection',
+      features: features,
+    } satisfies FeatureCollection;
+  },
+  {
+    refreshMilliseconds: 5 * 60 * 1000,
+    expiresMilliseconds: 15 * 60 * 1000,
+  },
+);
+
 export const getRoutes = pub.geojson.getRoutes.handler(async () => {
   return await routesJsonMemo();
 });
@@ -43,7 +102,12 @@ export const getStartMarkers = pub.geojson.getStartMarkers.handler(async () => {
   return startMarkers;
 });
 
+export const getReports = pub.geojson.getReports.handler(async () => {
+  return await reportsJsonMemo();
+});
+
 export const geojsonRouter = {
   getRoutes,
   getStartMarkers,
+  getReports,
 };

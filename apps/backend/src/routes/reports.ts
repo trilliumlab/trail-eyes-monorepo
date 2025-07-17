@@ -7,5 +7,28 @@ export const postReport = pub.reports.postReport.handler(async ({input, context}
 });
 
 export const reportsRouter = {
-  postReport: postReport
+  postReport: postReport,
 };
+
+/*
+
+(parameter) input: {
+    creatorDeviceId: string;
+    category: "other" | "fallenTree" | "drainage" | "erosion" | "structureFailure" | "damagedSign" | "seasonal";
+    route: number;
+    trail: number;
+    geometry: {
+        coordinates: [number, number, number];
+        type: "Point";
+    };
+    id?: number | undefined;
+    localId?: string | null | undefined;
+    creatorUserId?: string | null | undefined;
+    image?: string | null | undefined;
+    blurHash?: string | null | undefined;
+    status?: "open" | "confirmed" | "inProgress" | "closed" | undefined;
+    reportedAt?: Date | undefined;
+    updatedAt?: Date | undefined;
+}
+
+*/

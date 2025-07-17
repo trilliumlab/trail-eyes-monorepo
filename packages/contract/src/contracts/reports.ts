@@ -11,5 +11,5 @@ export const postReportContract = oc
   .input(ReportInsertSchema);
 
 export const reportsContract = {
-    postReport: postReportContract,
+  postReport: postReportContract,
 }

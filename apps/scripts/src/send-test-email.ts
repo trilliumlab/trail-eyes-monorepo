@@ -16,10 +16,8 @@ if (process.argv.length !== 3) {
 const email = process.argv[2]!;
 
 await mailer.sendInvite(email, {
-  firstName: 'Tester',
-  lastName: 'McTesterface',
+  name: 'Tester McTesterface',
   inviteRole: 'admin',
-  invitedByFirstName: 'Inviter',
-  invitedByLastName: 'Inviterface',
+  invitedByName: 'Inviter McInviterface',
   invitedByEmail: 'inviter@example.com',
 });
