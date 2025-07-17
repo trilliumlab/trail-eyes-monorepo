@@ -28,7 +28,7 @@
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.525.0",
-    "@tanstack/react-router": "^1.125.0",
+    "@tanstack/react-router": "^1.128.0",
     "react": "^19.1.0",
     "react-hook-form": "^7.60.0",
     "tailwind-merge": "^3.3.1",

@@ -10,7 +10,7 @@ const routesRefine = {
     type: z.literal('LineString'),
   }),
 };
-export const RouteInsertSchema = createInsertSchema(routes, routesRefine);
-export const RouteSelectSchema = createSelectSchema(routes, routesRefine);
+export const RouteInsertSchema = createInsertSchema(routes, routesRefine).extend({});
+export const RouteSelectSchema = createSelectSchema(routes, routesRefine).extend({});
 export type RouteInsert = z.infer<typeof RouteInsertSchema>;
 export type RouteSelect = z.infer<typeof RouteSelectSchema>;
