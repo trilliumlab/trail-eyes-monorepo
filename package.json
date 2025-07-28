@@ -23,7 +23,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.4",
-    "typescript": "^5.8.3"
+    "typescript": "5.9.0-beta"
   },
   "packageManager": "bun@1.1.22",
   "workspaces": ["apps/*", "packages/*"]
