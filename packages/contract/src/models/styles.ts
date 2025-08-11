@@ -3,5 +3,5 @@ import { z } from 'zod';
 
 export const StylesQuerySchema = z.object({
   key: z.string(),
-  mobile: tez.coerce.boolean().default(false),
+  mobile: z.coerce.boolean().default(false),
 });
