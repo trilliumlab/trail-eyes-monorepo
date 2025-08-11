@@ -4,7 +4,7 @@
   "main": "./src/index.ts",
   "module": "src/index.ts",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
+    "dev": "bun run --watch src/index.ts | pino-pretty",
     "start": "bun run src/index.ts",
     "test": "bun test test"
   },
@@ -14,7 +14,7 @@
     "@repo/database": "workspace:*",
     "@repo/zod-utils": "workspace:*",
     "@repo/contract": "workspace:*",
-    "zod": "^3.25.74",
+    "zod": "^4.0.17",
     "hono": "^4.8.4",
     "@orpc/server": "^1.8.0",
     "@orpc/openapi": "^1.8.0",

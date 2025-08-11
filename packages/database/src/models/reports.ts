@@ -1,5 +1,5 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 import { type categoryEnum, hazards, reports, type statusEnum } from '~/schema/reports';
 import type { PgEnumToObject } from '~/utils';
 

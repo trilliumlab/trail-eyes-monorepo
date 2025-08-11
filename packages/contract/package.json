@@ -9,7 +9,7 @@
   "dependencies": {
     "@repo/database": "workspace:*",
     "@repo/zod-utils": "workspace:*",
-    "zod": "^3.25.74",
+    "zod": "^4.0.17",
     "@orpc/contract": "^1.8.0",
     "@orpc/zod": "^1.8.0"
   },
