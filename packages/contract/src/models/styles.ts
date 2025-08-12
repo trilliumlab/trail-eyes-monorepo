@@ -1,7 +1,6 @@
-import { tez } from '@repo/zod-utils';
 import { z } from 'zod';
 
 export const StylesQuerySchema = z.object({
   key: z.string(),
-  mobile: z.coerce.boolean().default(false),
+  mobile: z.stringbool().default(false),
 });
