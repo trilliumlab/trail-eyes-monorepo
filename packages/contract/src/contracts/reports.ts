@@ -1,10 +1,10 @@
 import { oc } from '@orpc/contract';
 import { ReportInsertSchema } from '@repo/database/models/reports';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 export const postReportContract = oc
-  .route({ 
-    method: 'POST', 
+  .route({
+    method: 'POST',
     path: '/report',
     summary: 'Submit a new report',
   })
@@ -12,4 +12,4 @@ export const postReportContract = oc
 
 export const reportsContract = {
   postReport: postReportContract,
-}
+};

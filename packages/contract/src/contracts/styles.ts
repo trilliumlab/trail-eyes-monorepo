@@ -9,16 +9,16 @@ export const getLightStyleContract = oc
     summary: 'Get light style',
   })
   .input(StylesQuerySchema)
-  .output(z.record(z.any()));
+  .output(z.record(z.string(), z.any()));
 
 export const getDarkStyleContract = oc
-  .route({ 
+  .route({
     method: 'GET',
     path: '/dark.json',
     summary: 'Get dark style',
   })
   .input(StylesQuerySchema)
-  .output(z.record(z.any()));
+  .output(z.record(z.string(), z.any()));
 
 export const stylesContract = {
   getLightStyle: getLightStyleContract,

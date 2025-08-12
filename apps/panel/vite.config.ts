@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { envOnlyMacros } from 'vite-env-only';
 import { join } from 'node:path';
+import viteReact from '@vitejs/plugin-react';
 
 const config = {
   srcDirectory: 'src',
@@ -11,33 +12,22 @@ const config = {
 
 export default defineConfig({
   ssr: {
-    noExternal: [
-    ],
+    noExternal: [],
   },
   plugins: [
     tsconfigPaths(),
     envOnlyMacros(),
     tailwindcss(),
     tanstackStart({
+      customViteReactPlugin: true,
       target: 'bun',
       tsr: {
         srcDirectory: config.srcDirectory,
         generatedRouteTree: join(config.srcDirectory, 'route-tree.gen.ts'),
         quoteStyle: 'single',
         semicolons: true,
-        // customScaffolding: {
-        //   routeTemplate: [
-        //     '%%tsrImports%%\n\n',
-        //     '%%tsrExportStart%%{\n component: RouteComponent\n }%%tsrExportEnd%%\n\n',
-        //     'function RouteComponent() { return "Hello %%tsrPath%%!" }\n',
-        //   ].join(''),
-        //   apiTemplate: [
-        //     'import { json } from "@tanstack/start";\n',
-        //     '%%tsrImports%%\n\n',
-        //     '%%tsrExportStart%%{ GET: ({ request, params }) => { return json({ message:\'Hello "%%tsrPath%%"!\' }) }}%%tsrExportEnd%%\n',
-        //   ].join(''),
-        // },
       },
     }),
+    viteReact(),
   ],
 });
