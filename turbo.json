@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["DB_*", "SMTP_*", "VITE_*", "BETTER_AUTH_*"],
+  "globalEnv": ["DB_*", "SMTP_*", "VITE_*", "BETTER_AUTH_*", "STORAGE_DIRECTORY"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

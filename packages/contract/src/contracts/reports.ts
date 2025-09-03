@@ -18,12 +18,22 @@ export const postImageContract = oc
   })
   .input(
     z.object({
-      imageUuid: z.string(),
+      imageUuid: z.uuid(),
       image: z.instanceof(Blob),
     }),
   );
 
+export const getImageContract = oc
+  .route({
+    method: 'GET',
+    path: '/image/{imageUuid}',
+    summary: 'Get an image for a report',
+  })
+  .input(z.object({ imageUuid: z.uuid() }))
+  .output(z.instanceof(Blob));
+
 export const reportsContract = {
   postReport: postReportContract,
   postImage: postImageContract,
+  getImage: getImageContract,
 };
