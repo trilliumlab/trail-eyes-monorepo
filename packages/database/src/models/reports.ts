@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { type categoryEnum, hazards, reports, type statusEnum } from '~/schema/reports';
+import { type categoryEnum, reports, type statusEnum } from '~/schema/reports';
 import type { PgEnumToObject } from '~/utils';
 
 // Category enum
@@ -21,18 +21,6 @@ export const statusEnumValues = {
   closed: 'Closed',
   inProgress: 'In progress',
 } as const satisfies PgEnumToObject<typeof statusEnum>;
-
-// Hazards
-const hazardsRefine = {
-  geometry: z.object({
-    coordinates: z.tuple([z.number(), z.number(), z.number()]),
-    type: z.literal('Point'),
-  }),
-};
-export const HazardInsertSchema = createInsertSchema(hazards, hazardsRefine);
-export const HazardSelectSchema = createSelectSchema(hazards, hazardsRefine);
-export type HazardInsert = z.infer<typeof HazardInsertSchema>;
-export type HazardSelect = z.infer<typeof HazardSelectSchema>;
 
 // Reports
 const reportsRefine = {

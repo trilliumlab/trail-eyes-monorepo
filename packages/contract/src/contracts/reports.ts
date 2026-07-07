@@ -10,6 +10,30 @@ export const postReportContract = oc
   })
   .input(ReportInsertSchema);
 
+export const postImageContract = oc
+  .route({
+    method: 'POST',
+    path: '/image/{imageUuid}',
+    summary: 'Submit an image for a report',
+  })
+  .input(
+    z.object({
+      imageUuid: z.uuid(),
+      image: z.instanceof(Blob),
+    }),
+  );
+
+export const getImageContract = oc
+  .route({
+    method: 'GET',
+    path: '/image/{imageUuid}',
+    summary: 'Get an image for a report',
+  })
+  .input(z.object({ imageUuid: z.uuid() }))
+  .output(z.instanceof(Blob));
+
 export const reportsContract = {
   postReport: postReportContract,
+  postImage: postImageContract,
+  getImage: getImageContract,
 };
