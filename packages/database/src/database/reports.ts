@@ -34,3 +34,19 @@ export async function isImageReferenced(imageUuid: string) {
 export async function getAllReports() {
   return (await client.query.reports.findMany()) as ReportSelect[];
 }
+
+/**
+ * Updates the status of a report identified by its client-generated localId.
+ *
+ * @param localId - The UUID (`localId`) of the report to update.
+ * @param status - The new status to set.
+ * @returns The updated report, or null if no report matched the given localId.
+ */
+export async function updateReportStatus(localId: string, status: ReportSelect['status']) {
+  const [updated] = await client
+    .update(reports)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(reports.localId, localId))
+    .returning();
+  return (updated ?? null) as ReportSelect | null;
+}
