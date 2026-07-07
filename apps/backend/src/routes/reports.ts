@@ -111,10 +111,24 @@ export const getImage = pub.reports.getImage.handler(async ({ input, context }) 
   return imageFile;
 });
 
+// Update a report's status (open / confirmed / inProgress / closed).
+// NOTE (proposal — needs Elliot's sign-off): this is `pub` to match every other
+// procedure here, but changing status is really an admin/volunteer action from the
+// panel. Once panel auth is wired (`authed` in orpc.ts), this should move behind it.
+export const updateReportStatus = pub.reports.updateReportStatus.handler(async ({ input }) => {
+  const updated = await db.updateReportStatus(input.localId, input.status);
+  if (!updated) {
+    // TODO: use oRPC's typed errors (like postImage above) once error handling is settled.
+    throw new Error('Report not found');
+  }
+  return updated;
+});
+
 export const reportsRouter = {
   postReport: postReport,
   postImage: postImage,
   getImage: getImage,
+  updateReportStatus: updateReportStatus,
 };
 
 /*
