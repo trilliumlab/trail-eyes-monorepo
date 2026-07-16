@@ -6,8 +6,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "zod": "^3.25.74",
-    "string-ts": "^2.2.0"
+    "zod": "^4.0.17",
+    "string-ts": "^2.2.1"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -8,7 +8,7 @@ export const getRoutesContract = oc
     path: '/routes.json',
     summary: 'Get all routes as GeoJSON',
   })
-  .output(z.record(z.any()));
+  .output(z.record(z.any(), z.any()));
 
 export const getStartMarkersContract = oc
   .route({
@@ -16,7 +16,7 @@ export const getStartMarkersContract = oc
     path: '/start-markers.json',
     summary: 'Get all start markers as GeoJSON',
   })
-  .output(z.record(z.any()));
+  .output(z.record(z.any(), z.any()));
 
 export const getReportsContract = oc
   .route({
@@ -24,7 +24,7 @@ export const getReportsContract = oc
     path: '/reports.json',
     summary: 'Get all reports as GeoJSON',
   })
-  .output(z.record(z.any()));
+  .output(z.record(z.string(), z.any()));
 
 export const geojsonContract = {
   getRoutes: getRoutesContract,

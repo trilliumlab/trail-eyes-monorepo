@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@repo/zod-utils": "workspace:*",
-    "zod": "^3.25.74",
+    "zod": "^4.0.17",
     "string-ts": "^2.2.0"
   },
   "devDependencies": {
