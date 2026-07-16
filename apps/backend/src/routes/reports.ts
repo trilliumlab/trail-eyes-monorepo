@@ -1,14 +1,23 @@
 import { db } from '@repo/database';
 import { pub } from '../orpc';
 import { privateEnv } from '@repo/env';
-import { mkdir, exists, writeFile, rename } from 'node:fs/promises';
+import { access, mkdir, rename } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 
 // Ensure the image directory exists
 const imageDirectoryPath = `${privateEnv().storageDirectory}/images`;
 
+async function pathExists(path: string): Promise<boolean> {
+  try {
+    await access(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // ensure directory exists
-if (!(await exists(imageDirectoryPath))) {
+if (!(await pathExists(imageDirectoryPath))) {
   await mkdir(imageDirectoryPath, { recursive: true });
 }
 
@@ -76,12 +85,12 @@ async function atomicWriteFile(filePath: string, data: ArrayBuffer): Promise<voi
   }
 }
 
-export const postReport = pub.reports.postReport.handler(async ({ input, context }) => {
+export const postReport = pub.reports.postReport.handler(async ({ input }) => {
   return await db.addReport(input);
 });
-*/
 
-export const postImage = pub.reports.postImage.handler(async ({ input, context }) => {
+
+export const postImage = pub.reports.postImage.handler(async ({ input }) => {
   // TODO: figure out how oRPC error handling works
   // Since the images use bring your own uuid, we only allow images to be uploaded if a report with the image uuid has already been created.
   // This prevents images not associated with any report from being uploaded.
@@ -104,7 +113,7 @@ export const postImage = pub.reports.postImage.handler(async ({ input, context }
   await atomicWriteFile(`${imageDirectoryPath}/${input.imageUuid}`, arrayBuffer);
 });
 
-export const getImage = pub.reports.getImage.handler(async ({ input, context }) => {
+export const getImage = pub.reports.getImage.handler(async ({ input }) => {
   const imageFile = Bun.file(`${imageDirectoryPath}/${input.imageUuid}`);
   if (!(await imageFile.exists())) {
     throw new Error('Image not found');
