@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { client } from '~/db-client';
-import type { ReportInsert, ReportSelect } from '~/models/reports';
-import { reports } from '~/schema/reports';
+import type { ReportInsert, ReportSelect, ReportUpdateInsert, ReportUpdateSelect } from '~/models/reports';
+import { reportUpdates, reports } from '~/schema/reports';
 
 /**
  * Adds a report to the database.
@@ -33,4 +33,15 @@ export async function isImageReferenced(imageUuid: string) {
  */
 export async function getAllReports() {
   return (await client.query.reports.findMany()) as ReportSelect[];
+}
+
+export async function addReportUpdate(update: ReportUpdateInsert) {
+  const [reportUpdate] = await client.insert(reportUpdates).values(update).returning();
+  return reportUpdate as ReportUpdateSelect;
+}
+
+export async function getReportUpdates(reportLocalId: string) {
+  return (await client.query.reportUpdates.findMany({
+    where: eq(reportUpdates.reportLocalId, reportLocalId),
+  })) as ReportUpdateSelect[];
 }

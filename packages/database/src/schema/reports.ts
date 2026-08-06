@@ -1,5 +1,4 @@
-import { pgEnum } from 'drizzle-orm/pg-core';
-import { integer, pgTable, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgTable, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { point } from 'drizzle-postgis/models';
 
 export const categoryEnum = pgEnum('category', [
@@ -12,6 +11,7 @@ export const categoryEnum = pgEnum('category', [
   'seasonal',
 ]);
 export const statusEnum = pgEnum('status', ['open', 'confirmed', 'inProgress', 'closed']);
+export const reportUpdateStateEnum = pgEnum('report_update_state', ['present', 'cleared']);
 
 export const reports = pgTable('reports', {
   id: serial('id').primaryKey(),
@@ -29,4 +29,16 @@ export const reports = pgTable('reports', {
   geometry: point('geometry', { is3D: true, srid: 4326 }).notNull(),
   description: text('description'),
   locationDescription: text('location_description'),
+});
+
+export const reportUpdates = pgTable('report_updates', {
+  id: serial('id').primaryKey(),
+  reportLocalId: uuid('report_local_id')
+    .notNull()
+    .references(() => reports.localId, { onDelete: 'cascade' }),
+  creatorDeviceId: text('creator_device_id').notNull(),
+  state: reportUpdateStateEnum('state').notNull(),
+  image: text('image'),
+  blurHash: text('blur_hash'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 });

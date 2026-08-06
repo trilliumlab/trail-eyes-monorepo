@@ -121,10 +121,26 @@ export const getImage = pub.reports.getImage.handler(async ({ input }) => {
   return imageFile;
 });
 
+export const postReportUpdate = pub.reports.postReportUpdate.handler(async ({ input }) => {
+  return await db.addReportUpdate({
+    reportLocalId: input.localId,
+    creatorDeviceId: input.creatorDeviceId,
+    state: input.state,
+    image: input.image,
+    blurHash: input.blurHash,
+  });
+});
+
+export const getReportUpdates = pub.reports.getReportUpdates.handler(async ({ input }) => {
+  return await db.getReportUpdates(input.localId);
+}); 
+
 export const reportsRouter = {
   postReport: postReport,
   postImage: postImage,
   getImage: getImage,
+  postReportUpdate: postReportUpdate,
+  getReportUpdates: getReportUpdates,
 };
 
 /*

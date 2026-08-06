@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { type categoryEnum, reports, type statusEnum } from '~/schema/reports';
+import { type categoryEnum, reportUpdates, reports, type statusEnum } from '~/schema/reports';
 import type { PgEnumToObject } from '~/utils';
 
 // Category enum
@@ -33,3 +33,8 @@ export const ReportInsertSchema = createInsertSchema(reports, reportsRefine).ext
 export const ReportSelectSchema = createSelectSchema(reports, reportsRefine).extend({});
 export type ReportInsert = z.infer<typeof ReportInsertSchema>;
 export type ReportSelect = z.infer<typeof ReportSelectSchema>;
+
+export const ReportUpdateInsertSchema = createInsertSchema(reportUpdates).extend({});
+export const ReportUpdateSelectSchema = createSelectSchema(reportUpdates).extend({});
+export type ReportUpdateInsert = z.infer<typeof ReportUpdateInsertSchema>;
+export type ReportUpdateSelect = z.infer<typeof ReportUpdateSelectSchema>;

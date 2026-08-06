@@ -1,5 +1,5 @@
 import { oc } from '@orpc/contract';
-import { ReportInsertSchema } from '@repo/database/models/reports';
+import { ReportInsertSchema, ReportUpdateSelectSchema } from '@repo/database/models/reports';
 import { z } from 'zod';
 
 export const postReportContract = oc
@@ -32,8 +32,36 @@ export const getImageContract = oc
   .input(z.object({ imageUuid: z.uuid() }))
   .output(z.instanceof(Blob));
 
+export const postReportUpdateContract = oc
+  .route({
+    method: 'POST',
+    path: '/report/{localId}/update',
+    summary: 'Submit an update for a report',
+  })
+  .input(
+    z.object({
+      localId: z.uuid(),
+      creatorDeviceId: z.string().min(1),
+      state: z.enum(['present', 'cleared']),
+      image: z.uuid().nullable().optional(),
+      blurHash: z.string().nullable().optional(),
+    }),
+  )
+  .output(ReportUpdateSelectSchema);
+
+export const getReportUpdatesContract = oc
+  .route({
+    method: 'GET',
+    path: '/report/{localId}/updates',
+    summary: 'Get updates for a report',
+  })
+  .input(z.object({ localId: z.uuid() }))
+  .output(z.array(ReportUpdateSelectSchema));
+
 export const reportsContract = {
   postReport: postReportContract,
   postImage: postImageContract,
   getImage: getImageContract,
+  postReportUpdate: postReportUpdateContract,
+  getReportUpdates: getReportUpdatesContract,
 };
