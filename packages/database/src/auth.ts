@@ -4,6 +4,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { openAPI } from "better-auth/plugins"
 import { mailer } from '@repo/email';
 import { privateEnv, publicEnv } from '@repo/env';
+import { z } from 'zod';
 
 const allowedOrigins = [publicEnv().panelUrl, publicEnv().backendUrl];
 
@@ -11,6 +12,18 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+  },
+  user: {
+    additionalFields: {
+      tier: {
+        type: 'string',
+        required: true,
+        input: true,
+        validator: {
+          input: z.enum(['2', '3']),
+        },
+      },
+    },
   },
   trustedOrigins: allowedOrigins,
   emailVerification: {

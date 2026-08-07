@@ -1,5 +1,8 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, integer, pgEnum } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
+
+// Tier 1 users don't have accounts, so account holders are always tier 2 or 3.
+export const accountTierEnum = pgEnum('account_tier', ['2', '3']);
 
 export const users = pgTable('users', {
   id: text('id').primaryKey().$defaultFn(createId),
@@ -9,6 +12,7 @@ export const users = pgTable('users', {
     .$defaultFn(() => false)
     .notNull(),
   image: text('image'),
+  tier: accountTierEnum('tier').notNull(),
   createdAt: timestamp('created_at', {
     withTimezone: true,
   })
