@@ -6,11 +6,18 @@
     "x": 0,
     "y": 0
   },
+  "report_unconfirmed": {
+    "height": 32,
+    "pixelRatio": 2,
+    "width": 32,
+    "x": 32,
+    "y": 0
+  },
   "townspot": {
     "height": 20,
     "pixelRatio": 2,
     "width": 20,
-    "x": 32,
-    "y": 0
+    "x": 0,
+    "y": 32
   }
 }

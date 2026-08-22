@@ -93,6 +93,28 @@ export function TrailEyesMap() {
       'icon-opacity': 0.75,
     },
   };
+
+  const confirmedReportsLayer: SymbolLayer = {
+    id: 'confirmed-reports',
+    type: 'symbol',
+    source: 'confirmed-reports',
+    layout: {
+      'icon-image': 'report_active',
+      'icon-size': 1,
+      'icon-allow-overlap': true,
+    },
+  };
+
+  const unconfirmedReportsLayer: SymbolLayer = {
+    id: 'unconfirmed-reports',
+    type: 'symbol',
+    source: 'unconfirmed-reports',
+    layout: {
+      'icon-image': 'report_unconfirmed',
+      'icon-size': 1,
+      'icon-allow-overlap': true,
+    },
+  };
   const hoverArrowLayer: SymbolLayer = {
     ...arrowLayer,
     id: 'route-arrows-hover',
@@ -110,6 +132,53 @@ export function TrailEyesMap() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [activeRoute, setActiveRoute] = useState<number>();
+
+  const [confirmedReports, setConfirmedReports] = useState<GeoJSON.FeatureCollection>({
+    type: 'FeatureCollection',
+    features: [],
+  });
+
+  const [unconfirmedReports, setUnconfirmedReports] = useState<GeoJSON.FeatureCollection>({
+    type: 'FeatureCollection',
+    features: [],
+  });
+
+  useEffect(() => {
+    async function loadReports() {
+      const response = await fetch(`${publicEnv().backendUrl}/reports/report`, {
+        cache: 'no-store',
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const reports = await response.json();
+
+      const toFeature = (report: any) => ({
+        id: report.id,
+        type: 'Feature',
+        properties: report,
+        geometry: report.geometry,
+      });
+
+      setConfirmedReports({
+        type: 'FeatureCollection',
+        features: reports
+          .filter((report: any) => report.status === 'confirmed')
+          .map(toFeature),
+      });
+
+      setUnconfirmedReports({
+        type: 'FeatureCollection',
+        features: reports
+          .filter((report: any) => report.status !== 'confirmed' && report.status !== 'closed')
+          .map(toFeature),
+      });
+    }
+
+    loadReports();
+  }, []);
 
   return (
     <div ref={containerRef} className="size-full select-none relative">
@@ -162,6 +231,15 @@ export function TrailEyesMap() {
         >
           <Layer {...startMarkers} />
         </Source>
+
+        <Source id="confirmed-reports" type="geojson" data={confirmedReports}>
+          <Layer {...confirmedReportsLayer} />
+        </Source>
+
+        <Source id="unconfirmed-reports" type="geojson" data={unconfirmedReports}>
+          <Layer {...unconfirmedReportsLayer} />
+        </Source>
+        
         <MapControls
           onFullscreenToggle={() => {
             if (document.fullscreenElement) {
