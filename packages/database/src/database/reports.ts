@@ -26,13 +26,21 @@ export async function isImageReferenced(imageUuid: string) {
   return !!report;
 }
 
-/**
- * Retrieves all reports from the database.
- *
- * @returns A promise that resolves to an array of reports.
- */
 export async function getAllReports() {
   return (await client.query.reports.findMany()) as ReportSelect[];
+}
+
+export async function updateReportStatus(
+  localId: string,
+  status: ReportSelect['status'],
+) {
+  const [report] = await client
+    .update(reports)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(reports.localId, localId))
+    .returning();
+
+  return report as ReportSelect | undefined;
 }
 
 export async function addReportUpdate(update: ReportUpdateInsert) {

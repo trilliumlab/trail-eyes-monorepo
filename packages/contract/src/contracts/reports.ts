@@ -1,5 +1,5 @@
 import { oc } from '@orpc/contract';
-import { ReportInsertSchema, ReportUpdateSelectSchema } from '@repo/database/models/reports';
+import {ReportInsertSchema, ReportSelectSchema, ReportUpdateSelectSchema,} from '@repo/database/models/reports';
 import { z } from 'zod';
 
 export const postReportContract = oc
@@ -58,10 +58,34 @@ export const getReportUpdatesContract = oc
   .input(z.object({ localId: z.uuid() }))
   .output(z.array(ReportUpdateSelectSchema));
 
+export const patchReportStatusContract = oc
+  .route({
+    method: 'PATCH',
+    path: '/report/{localId}/status',
+    summary: 'Update report status',
+  })
+  .input(
+    z.object({
+      localId: z.uuid(),
+      status: z.enum(['open', 'confirmed', 'inProgress', 'closed']),
+    }),
+  )
+  .output(ReportSelectSchema);
+
+export const getReportsContract = oc
+  .route({
+    method: 'GET',
+    path: '/report',
+    summary: 'Get all reports',
+  })
+  .output(z.array(ReportSelectSchema));
+
 export const reportsContract = {
+  getReports: getReportsContract,
   postReport: postReportContract,
   postImage: postImageContract,
   getImage: getImageContract,
   postReportUpdate: postReportUpdateContract,
   getReportUpdates: getReportUpdatesContract,
+  patchReportStatus: patchReportStatusContract,
 };

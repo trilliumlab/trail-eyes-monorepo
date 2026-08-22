@@ -135,13 +135,31 @@ export const getReportUpdates = pub.reports.getReportUpdates.handler(async ({ in
   return await db.getReportUpdates(input.localId);
 }); 
 
+export const patchReportStatus = pub.reports.patchReportStatus.handler(async ({ input }) => {
+  const report = await db.updateReportStatus(input.localId, input.status);
+
+  if (!report) {
+    throw new Error('Report not found');
+  }
+
+  return report;
+});
+
+export const getReports = pub.reports.getReports.handler(async () => {
+  return await db.getAllReports();
+});
+
 export const reportsRouter = {
+  getReports: getReports,
   postReport: postReport,
   postImage: postImage,
   getImage: getImage,
   postReportUpdate: postReportUpdate,
   getReportUpdates: getReportUpdates,
+  patchReportStatus: patchReportStatus,
 };
+
+
 
 /*
 

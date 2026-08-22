@@ -36,7 +36,9 @@ const routesJsonMemo = memoize(
 );
 
 async function reportsJson() {
-  const reports = await db.getAllReports();
+  const reports = (await db.getAllReports()).filter(
+    (report) => report.status === 'confirmed',
+  );
   const features = reports.map(
     (report) =>
       ({

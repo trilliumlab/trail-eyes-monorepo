@@ -63,7 +63,7 @@ app.use(
   cors({
     origin: allowedOrigins,
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    allowMethods: ['POST', 'GET', 'PATCH', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: true,
@@ -104,6 +104,7 @@ app.on(['POST', 'GET'], '/auth/*', async (c, next) => {
 
 export default {
   port: 8000,
+  hostname: '0.0.0.0',
   fetch: app.fetch,
 };
 
