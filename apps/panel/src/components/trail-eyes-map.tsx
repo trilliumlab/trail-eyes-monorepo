@@ -1,8 +1,11 @@
 'use client';
 
 import { publicEnv } from '@repo/env';
+import { Button } from '@repo/ui/components/button';
+import { Separator } from '@repo/ui/components/separator';
 import { useTheme } from '@repo/ui/components/theme';
-import { useEffect, useRef, useState } from 'react';
+import { Expand, Minus, Plus, Shrink } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   type CircleLayer,
   Layer,
@@ -18,11 +21,32 @@ import {
 import 'maplibre-gl/dist/maplibre-gl.css';
 // Custom dark mode for ui elements
 import './trail-eyes-map.css';
-import { Button } from '@repo/ui/components/button';
-import { Separator } from '@repo/ui/components/separator';
-import { Expand, Minus, Plus, Shrink } from 'lucide-react';
 
-export function TrailEyesMap() {
+export type MapReport = {
+  id: number | string;
+  localId: string;
+  status: string;
+  geometry: {
+    type: 'Point';
+    coordinates: [number, number] | [number, number, number];
+  };
+};
+
+type TrailEyesMapProps = {
+  reports?: MapReport[];
+  selectedReportId?: string;
+  onReportSelect?: (report: MapReport) => void;
+  className?: string;
+  focusZoom?: number;
+};
+
+export function TrailEyesMap({
+  reports,
+  selectedReportId,
+  onReportSelect,
+  className = '',
+  focusZoom = 15,
+}: TrailEyesMapProps = {}) {
   const theme = useTheme();
   const darkMode = theme.resolved === 'dark';
 
@@ -102,6 +126,7 @@ export function TrailEyesMap() {
       'icon-image': 'report_active',
       'icon-size': 1,
       'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
     },
   };
 
@@ -113,6 +138,7 @@ export function TrailEyesMap() {
       'icon-image': 'report_unconfirmed',
       'icon-size': 1,
       'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
     },
   };
   const hoverArrowLayer: SymbolLayer = {
@@ -132,18 +158,13 @@ export function TrailEyesMap() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [activeRoute, setActiveRoute] = useState<number>();
-
-  const [confirmedReports, setConfirmedReports] = useState<GeoJSON.FeatureCollection>({
-    type: 'FeatureCollection',
-    features: [],
-  });
-
-  const [unconfirmedReports, setUnconfirmedReports] = useState<GeoJSON.FeatureCollection>({
-    type: 'FeatureCollection',
-    features: [],
-  });
+  const [fetchedReports, setFetchedReports] = useState<MapReport[]>([]);
 
   useEffect(() => {
+    if (reports) {
+      return;
+    }
+
     async function loadReports() {
       const response = await fetch(`${publicEnv().backendUrl}/reports/report`, {
         cache: 'no-store',
@@ -153,35 +174,48 @@ export function TrailEyesMap() {
         return;
       }
 
-      const reports = await response.json();
-
-      const toFeature = (report: any) => ({
-        id: report.id,
-        type: 'Feature',
-        properties: report,
-        geometry: report.geometry,
-      });
-
-      setConfirmedReports({
-        type: 'FeatureCollection',
-        features: reports
-          .filter((report: any) => report.status === 'confirmed')
-          .map(toFeature),
-      });
-
-      setUnconfirmedReports({
-        type: 'FeatureCollection',
-        features: reports
-          .filter((report: any) => report.status !== 'confirmed' && report.status !== 'closed')
-          .map(toFeature),
-      });
+      setFetchedReports(await response.json());
     }
 
     loadReports();
-  }, []);
+  }, [reports]);
+
+  const mapReports = reports ?? fetchedReports;
+
+  const confirmedReports = useMemo(
+    () => reportsToFeatureCollection(mapReports.filter((report) => report.status === 'confirmed')),
+    [mapReports],
+  );
+
+  const unconfirmedReports = useMemo(
+    () =>
+      reportsToFeatureCollection(
+        mapReports.filter((report) => report.status !== 'confirmed' && report.status !== 'closed'),
+      ),
+    [mapReports],
+  );
+
+  useEffect(() => {
+    if (!selectedReportId) {
+      return;
+    }
+
+    const selectedReport = mapReports.find((report) => report.localId === selectedReportId);
+    const coordinates = selectedReport?.geometry.coordinates;
+    if (!coordinates || coordinates.length < 2) {
+      return;
+    }
+
+    mapRef.current?.flyTo({
+      center: [coordinates[0], coordinates[1]],
+      zoom: focusZoom,
+      duration: 700,
+      essential: true,
+    });
+  }, [focusZoom, mapReports, selectedReportId]);
 
   return (
-    <div ref={containerRef} className="size-full select-none relative">
+    <div ref={containerRef} className={`relative size-full select-none ${className}`}>
       <MapComponent
         ref={mapRef}
         initialViewState={{
@@ -194,17 +228,31 @@ export function TrailEyesMap() {
             ? `${publicEnv().backendUrl}/styles/${theme.resolved}.json?key=${publicEnv().protoApiKey}`
             : undefined
         }
-        interactiveLayerIds={['routes-hit']}
+        interactiveLayerIds={['routes-hit', 'confirmed-reports', 'unconfirmed-reports']}
+        onClick={(event) => {
+          const reportFeature = event.features?.find(
+            (feature) =>
+              feature.layer.id === 'confirmed-reports' ||
+              feature.layer.id === 'unconfirmed-reports',
+          );
+          const localId = reportFeature?.properties?.localId;
+          const selectedReport = mapReports.find((report) => report.localId === localId);
+          if (selectedReport) {
+            onReportSelect?.(selectedReport);
+          }
+        }}
         onMouseMove={(event) => {
           const map = mapRef.current;
-          if (event.features && event.features.length > 0) {
-            const id = event.features[0]?.id as number | undefined;
+          const routeFeature = event.features?.find((feature) => feature.layer.id === 'routes-hit');
+
+          if (routeFeature) {
+            const id = routeFeature.id as number | undefined;
             if (id) {
               if (map) {
                 if (id !== activeRoute && activeRoute) {
                   map.setFeatureState({ source: 'routes', id: activeRoute }, { hover: false });
                 }
-                map.setFeatureState({ source: 'routes', id: id }, { hover: true });
+                map.setFeatureState({ source: 'routes', id }, { hover: true });
               }
               setActiveRoute(id);
             }
@@ -239,7 +287,7 @@ export function TrailEyesMap() {
         <Source id="unconfirmed-reports" type="geojson" data={unconfirmedReports}>
           <Layer {...unconfirmedReportsLayer} />
         </Source>
-        
+
         <MapControls
           onFullscreenToggle={() => {
             if (document.fullscreenElement) {
@@ -252,6 +300,27 @@ export function TrailEyesMap() {
       </MapComponent>
     </div>
   );
+}
+
+function reportsToFeatureCollection(reports: MapReport[]): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: reports.map((report) => {
+      const [longitude, latitude, elevation] = report.geometry.coordinates;
+      const coordinates: GeoJSON.Position =
+        typeof elevation === 'number' ? [longitude, latitude, elevation] : [longitude, latitude];
+
+      return {
+        id: report.id,
+        type: 'Feature',
+        properties: report,
+        geometry: {
+          type: 'Point',
+          coordinates,
+        },
+      } satisfies GeoJSON.Feature;
+    }),
+  };
 }
 
 function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void }) {
@@ -272,11 +341,7 @@ function MapControls({ onFullscreenToggle }: { onFullscreenToggle: () => void })
   return (
     <div className="absolute right-0 m-2 grid">
       {document.fullscreenEnabled && (
-        <Button
-          size="icon"
-          onClick={onFullscreenToggle}
-          className="border-border-map mb-2"
-        >
+        <Button size="icon" onClick={onFullscreenToggle} className="border-border-map mb-2">
           {isFullscreen ? <Shrink className="h-4 w-4" /> : <Expand className="h-4 w-4" />}
         </Button>
       )}

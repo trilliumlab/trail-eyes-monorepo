@@ -1,37 +1,29 @@
+import { publicEnv } from '@repo/env';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import type { ReportInsert } from '@repo/database/models/reports';
 import {
   AlertTriangle,
   Check,
   Clock,
   Copy,
+  type LucideIcon,
   MapPin,
   Route as RouteIcon,
-  Search,
   ShieldAlert,
   Smartphone,
   User,
   X,
-  type LucideIcon,
 } from 'lucide-react';
-import { publicEnv } from '@repo/env';
 import { useEffect, useMemo, useState } from 'react';
+import { type MapReport, TrailEyesMap } from '~/components/trail-eyes-map';
 
 export const Route = createFileRoute('/unconfirmed')({
   component: RouteComponent,
 });
 
-type ReviewReport = {
-  id: number | string;
-  localId: string;
+type ReviewReport = MapReport & {
   creatorDeviceId: string;
   creatorUserId: string | null;
   category: string;
@@ -39,13 +31,8 @@ type ReviewReport = {
   trail: number;
   image: string | null;
   blurHash: string | null;
-  status: string;
   reportedAt: string | Date | null;
   updatedAt: string | Date | null;
-  geometry: {
-    type: 'Point';
-    coordinates: [number, number, number?];
-  };
 };
 
 const categoryStyles: Record<
@@ -97,12 +84,11 @@ function RouteComponent() {
 
         const fetchedReports: ReviewReport[] = await response.json();
 
-        const unconfirmedReports = fetchedReports.filter(
-          (report) => report.status !== 'confirmed' && report.status !== 'closed',
+        setReports(
+          fetchedReports.filter(
+            (report) => report.status !== 'confirmed' && report.status !== 'closed',
+          ),
         );
-
-        setReports(unconfirmedReports);
-        setSelectedId(unconfirmedReports[0]?.localId ?? '');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load reports');
       } finally {
@@ -114,7 +100,7 @@ function RouteComponent() {
   }, []);
 
   const selectedReport = useMemo(
-    () => reports.find((report) => report.localId === selectedId) ?? reports[0],
+    () => reports.find((report) => report.localId === selectedId),
     [reports, selectedId],
   );
 
@@ -144,7 +130,7 @@ function RouteComponent() {
       );
 
       setReports(remainingReports);
-      setSelectedId(remainingReports[0]?.localId ?? '');
+      setSelectedId('');
 
       await navigate({ to: '/confirmed' });
     } catch (err) {
@@ -176,56 +162,72 @@ function RouteComponent() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[25rem_1fr]">
-          <section className="space-y-3">
-            {reports.map((report) => {
-              const style = getCategoryStyle(report.category);
-              const Icon = style.icon;
-              const isSelected = report.localId === selectedReport?.localId;
+        <div className="grid gap-6 xl:grid-cols-[minmax(24rem,34rem)_1fr]">
+          <section className="space-y-4">
+            <div className="space-y-3">
+              {reports.map((report) => {
+                const style = getCategoryStyle(report.category);
+                const Icon = style.icon;
+                const isSelected = report.localId === selectedReport?.localId;
 
-              return (
-                <button
-                  key={report.localId}
-                  type="button"
-                  onClick={() => setSelectedId(report.localId)}
-                  className={`w-full rounded-lg border p-4 text-left transition hover:bg-accent/40 ${
-                    isSelected ? 'border-primary bg-primary/10' : 'bg-card'
-                  }`}
-                >
-                  <div className="flex gap-4">
-                    <div
-                      className={`flex size-14 shrink-0 items-center justify-center rounded-md border ${style.accent}`}
-                    >
-                      <Icon className="size-6" />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="font-semibold">{style.label}</h3>
-                          <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                            <MapPin className="size-3.5" />
-                            Route {report.route} / Trail {report.trail}
-                          </p>
-                        </div>
-                        <StatusBadge status={report.status} />
+                return (
+                  <button
+                    key={report.localId}
+                    type="button"
+                    onClick={() => setSelectedId(report.localId)}
+                    className={`w-full rounded-lg border p-4 text-left transition hover:bg-accent/40 ${
+                      isSelected ? 'border-primary bg-primary/10' : 'bg-card'
+                    }`}
+                  >
+                    <div className="flex gap-4">
+                      <div
+                        className={`flex size-14 shrink-0 items-center justify-center rounded-md border ${style.accent}`}
+                      >
+                        <Icon className="size-6" />
                       </div>
 
-                      <p className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock className="size-3.5" />
-                        Reported {formatTime(report.reportedAt)}
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <h3 className="font-semibold">{style.label}</h3>
+                            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                              <MapPin className="size-3.5" />
+                              Route {report.route} / Trail {report.trail}
+                            </p>
+                          </div>
+                          <StatusBadge status={report.status} />
+                        </div>
+
+                        <p className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
+                          <Clock className="size-3.5" />
+                          Reported {formatTime(report.reportedAt)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+            </div>
+
+            {selectedReport ? (
+              <ReportDetail report={selectedReport} onApprove={approveReport} />
+            ) : (
+              <Card>
+                <CardContent className="p-6 text-sm text-muted-foreground">
+                  Select a report from the list or click an amber marker on the map.
+                </CardContent>
+              </Card>
+            )}
           </section>
 
-          {selectedReport && (
-            <ReportDetail report={selectedReport} onApprove={approveReport} />
-          )}
-
+          <Card className="min-h-[32rem] overflow-hidden p-0 xl:sticky xl:top-6 xl:h-[calc(100vh-8rem)]">
+            <TrailEyesMap
+              reports={reports}
+              selectedReportId={selectedId}
+              onReportSelect={(report) => setSelectedId(report.localId)}
+              focusZoom={15}
+            />
+          </Card>
         </div>
       )}
     </main>
@@ -237,7 +239,7 @@ function ReportDetail({
   onApprove,
 }: {
   report: ReviewReport;
-  onApprove: (report: ReviewReport) => void;
+  onApprove: (report: ReviewReport) => Promise<void>;
 }) {
   const style = getCategoryStyle(report.category);
   const Icon = style.icon;
@@ -269,32 +271,20 @@ function ReportDetail({
       </CardHeader>
 
       <CardContent className="space-y-6 p-6">
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Photo
-            </h3>
-            <div className="flex aspect-video items-center justify-center overflow-hidden rounded-lg border bg-muted">
-              {report.image ? (
-                <img
-                  src={`${publicEnv().backendUrl}/reports/image/${report.image}`}
-                  alt={`${style.label} report`}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="text-sm text-muted-foreground">No photo attached</div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Location
-            </h3>
-            <div className="relative aspect-video overflow-hidden rounded-lg border bg-[radial-gradient(circle_at_30%_20%,rgba(34,197,94,0.24),transparent_28%),linear-gradient(135deg,rgba(15,23,42,0.9),rgba(6,78,59,0.35))]">
-              <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:32px_32px]" />
-              <MapPin className="absolute left-1/2 top-1/2 size-10 -translate-x-1/2 -translate-y-1/2 text-primary" />
-            </div>
+        <div>
+          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Photo
+          </h3>
+          <div className="flex aspect-video items-center justify-center overflow-hidden rounded-lg border bg-muted">
+            {report.image ? (
+              <img
+                src={`${publicEnv().backendUrl}/reports/image/${report.image}`}
+                alt={`${style.label} report`}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="text-sm text-muted-foreground">No photo attached</div>
+            )}
           </div>
         </div>
 
@@ -316,7 +306,7 @@ function ReportDetail({
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button   variant="destructive" className="sm:w-36">
+          <Button variant="destructive" className="sm:w-36">
             <X className="size-4" />
             Reject
           </Button>
@@ -328,7 +318,6 @@ function ReportDetail({
             <Check className="size-4" />
             Approve
           </Button>
-
         </div>
       </CardContent>
     </Card>
@@ -380,18 +369,18 @@ function StatusBadge({ status }: { status: ReviewReport['status'] }) {
 }
 
 function getCategoryStyle(category: ReviewReport['category']) {
-  return categoryStyles[String(category)] ?? {
-    label: formatCategory(String(category)),
-    icon: AlertTriangle,
-    accent: 'border-muted bg-muted text-muted-foreground',
-    badge: 'border-muted bg-muted text-muted-foreground',
-  };
+  return (
+    categoryStyles[String(category)] ?? {
+      label: formatCategory(String(category)),
+      icon: AlertTriangle,
+      accent: 'border-muted bg-muted text-muted-foreground',
+      badge: 'border-muted bg-muted text-muted-foreground',
+    }
+  );
 }
 
 function formatCategory(category: string) {
-  return category
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, (char) => char.toUpperCase());
+  return category.replace(/([A-Z])/g, ' $1').replace(/^./, (char) => char.toUpperCase());
 }
 
 function formatTime(date: Date | string | number | null | undefined) {
