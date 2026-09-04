@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ReportCardList } from '~/components/report-card-list';
+import { requireStaff } from '~/lib/require-staff';
 
 export const Route = createFileRoute('/unconfirmed')({
+  beforeLoad: requireStaff,
   component: RouteComponent,
 });
 

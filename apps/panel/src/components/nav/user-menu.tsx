@@ -15,10 +15,13 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { useTheme } from '@repo/ui/components/theme';
+import { useRouter } from '@tanstack/react-router';
 import { UserIcon } from 'lucide-react';
+import { authClient } from '~/backend';
 
 export function UserMenu() {
   const theme = useTheme();
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -52,7 +55,14 @@ export function UserMenu() {
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            await authClient.signOut();
+            router.navigate({ to: '/auth/$pathname', params: { pathname: 'sign-in' } });
+          }}
+        >
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

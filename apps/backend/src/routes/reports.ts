@@ -1,5 +1,5 @@
 import { db } from '@repo/database';
-import { authed, pub } from '../orpc';
+import { pub, staffOnly } from '../orpc';
 import { privateEnv } from '@repo/env';
 import { invalidateReportsCache } from './geojson';
 import { mkdir, exists, writeFile, rename } from 'node:fs/promises';
@@ -83,7 +83,7 @@ export const postReport = pub.reports.postReport.handler(async ({ input, context
   return result;
 });
 
-export const patchReportStatus = authed.reports.patchReportStatus.handler(async ({ input }) => {
+export const patchReportStatus = staffOnly.reports.patchReportStatus.handler(async ({ input }) => {
   await db.updateReportStatus(input.id, input.status);
   invalidateReportsCache();
 });

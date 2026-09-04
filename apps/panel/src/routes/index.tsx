@@ -24,8 +24,10 @@ import {
   statusEnumValues,
   type ReportFeature,
 } from '~/components/report-card-list';
+import { requireStaff } from '~/lib/require-staff';
 
 export const Route = createFileRoute('/')({
+  beforeLoad: requireStaff,
   component: Dashboard,
 });
 

@@ -2,7 +2,7 @@
 import { publicEnv } from '@repo/env';
 import { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, HeadContent } from '@tanstack/react-router';
-import { Outlet, Scripts } from '@tanstack/react-router';
+import { Outlet, Scripts, useRouterState } from '@tanstack/react-router';
 import * as React from 'react';
 import NotFound from '~/components/not-found';
 import type { RouterContext } from '~/router';
@@ -34,7 +34,15 @@ function RootComponent() {
 
 const queryClient = new QueryClient();
 
+// Pages a non-staff (or logged-out) visitor can land on - these must not show
+// the admin nav bar, since that would expose the panel's existence/structure
+// to people who have no access to it.
+const publicPagePrefixes = ['/email-verified', '/unauthorized', '/auth/'];
+
 function RootDocument({ children }: React.PropsWithChildren) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isPublicPage = publicPagePrefixes.some((p) => pathname.startsWith(p));
+
   const RouterDevtools =
     publicEnv().mode === 'production'
       ? () => null
@@ -61,7 +69,7 @@ function RootDocument({ children }: React.PropsWithChildren) {
       <body className="antialiased">
         <Providers>
           <div className="flex min-h-svh flex-col">
-            <NavBar />
+            {!isPublicPage && <NavBar />}
             {children}
           </div>
         </Providers>
