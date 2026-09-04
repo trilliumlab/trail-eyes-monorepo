@@ -1,6 +1,7 @@
 import { db } from '@repo/database';
-import { pub } from '../orpc';
+import { authed, pub } from '../orpc';
 import { privateEnv } from '@repo/env';
+import { invalidateReportsCache } from './geojson';
 import { mkdir, exists, writeFile, rename } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 
@@ -77,7 +78,14 @@ async function atomicWriteFile(filePath: string, data: ArrayBuffer): Promise<voi
 }
 
 export const postReport = pub.reports.postReport.handler(async ({ input, context }) => {
-  return await db.addReport(input);
+  const result = await db.addReport(input);
+  invalidateReportsCache();
+  return result;
+});
+
+export const patchReportStatus = authed.reports.patchReportStatus.handler(async ({ input }) => {
+  await db.updateReportStatus(input.id, input.status);
+  invalidateReportsCache();
 });
 
 export const postImage = pub.reports.postImage.handler(async ({ input, context }) => {
@@ -115,6 +123,7 @@ export const reportsRouter = {
   postReport: postReport,
   postImage: postImage,
   getImage: getImage,
+  patchReportStatus: patchReportStatus,
 };
 
 /*

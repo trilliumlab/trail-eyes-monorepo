@@ -15,6 +15,7 @@ import { OpenAPIHandler } from '@orpc/openapi/fetch';
 import { OpenAPIReferencePlugin } from '@orpc/openapi/plugins';
 import { ZodToJsonSchemaConverter } from '@orpc/zod/zod4';
 import { reportsRouter } from './routes/reports';
+import { usersRouter } from './routes/users';
 import { onError } from '@orpc/server';
 import { logger } from './logger';
 
@@ -25,6 +26,7 @@ const router = pub.router({
   reports: reportsRouter,
   sprites: spritesRouter,
   styles: stylesRouter,
+  users: usersRouter,
 });
 
 const rpcHandler = new RPCHandler(router, {
@@ -63,7 +65,7 @@ app.use(
   cors({
     origin: allowedOrigins,
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['POST', 'GET', 'OPTIONS'],
+    allowMethods: ['POST', 'GET', 'PATCH', 'OPTIONS'],
     exposeHeaders: ['Content-Length'],
     maxAge: 600,
     credentials: true,
@@ -72,7 +74,9 @@ app.use(
 
 // Handle oRPC rest requests
 app.use('*', async (c, next) => {
-  const { matched, response } = await openApiHandler.handle(c.req.raw);
+  const { matched, response } = await openApiHandler.handle(c.req.raw, {
+    context: { headers: c.req.raw.headers },
+  });
   if (matched) {
     return c.newResponse(response.body, response);
   }
@@ -84,6 +88,7 @@ app.use('*', async (c, next) => {
 app.use('/rpc/*', async (c, next) => {
   const { matched, response } = await rpcHandler.handle(c.req.raw, {
     prefix: '/rpc',
+    context: { headers: c.req.raw.headers },
   });
   if (matched) {
     return c.newResponse(response.body, response);

@@ -2,6 +2,7 @@ import { geojsonContract } from './contracts/geojson';
 import { reportsContract } from './contracts/reports';
 import { spritesContract } from './contracts/sprites';
 import { stylesContract } from './contracts/styles';
+import { usersContract } from './contracts/users';
 import { oc } from '@orpc/contract';
 
 export const contract = {
@@ -9,6 +10,7 @@ export const contract = {
   reports: oc.prefix('/reports').router(reportsContract),
   sprites: oc.prefix('/sprites').router(spritesContract),
   styles: oc.prefix('/styles').router(stylesContract),
+  users: oc.prefix('/users').router(usersContract),
 };
 
 // const c = initContract();

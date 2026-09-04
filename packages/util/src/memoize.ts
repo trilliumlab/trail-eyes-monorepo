@@ -46,28 +46,21 @@ export function memoize<TArgs extends unknown[], TReturn>(
 
   function setCache(cacheKey: string, data: TReturn) {
     cache.set(cacheKey, {
-      refreshAt: refreshMilliseconds
-        ? new Date(new Date().getMilliseconds() + refreshMilliseconds)
-        : undefined,
-      expiresAt: expiresMilliseconds
-        ? new Date(new Date().getMilliseconds() + expiresMilliseconds)
-        : undefined,
+      refreshAt: refreshMilliseconds ? new Date(Date.now() + refreshMilliseconds) : undefined,
+      expiresAt: expiresMilliseconds ? new Date(Date.now() + expiresMilliseconds) : undefined,
       data,
     });
   }
 
-  return (...fnArgs: TArgs) => {
+  const memoized = (...fnArgs: TArgs) => {
     const cacheKey = createCacheKeyFromArgs(fnArgs);
 
     const entry = cache.get(cacheKey);
     if (entry) {
-      if (entry.expiresAt && new Date().getMilliseconds() > entry.expiresAt.getMilliseconds()) {
+      if (entry.expiresAt && Date.now() > entry.expiresAt.getTime()) {
         // Then our cache expired, so need to recall and return new result.
         // This is default behaviour
-      } else if (
-        entry.refreshAt &&
-        new Date().getMilliseconds() > entry.refreshAt.getMilliseconds()
-      ) {
+      } else if (entry.refreshAt && Date.now() > entry.refreshAt.getTime()) {
         // Then our cache should be refreshed, but we can return the old result.
         const asyncFn = fn.call(undefined, ...fnArgs);
         setCache(cacheKey, asyncFn);
@@ -82,4 +75,11 @@ export function memoize<TArgs extends unknown[], TReturn>(
     setCache(cacheKey, asyncFn);
     return asyncFn;
   };
+
+  // Forces the next call (for any arguments) to recompute rather than
+  // serving a cached/stale value. Used when the underlying data is known to
+  // have changed (e.g. a write elsewhere invalidates a read-side cache).
+  memoized.invalidate = () => cache.clear();
+
+  return memoized;
 }

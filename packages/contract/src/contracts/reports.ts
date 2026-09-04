@@ -32,8 +32,22 @@ export const getImageContract = oc
   .input(z.object({ imageUuid: z.uuid() }))
   .output(z.instanceof(Blob));
 
+export const patchReportStatusContract = oc
+  .route({
+    method: 'PATCH',
+    path: '/report/{id}/status',
+    summary: 'Approve/decline a report by updating its status. Requires a logged-in session.',
+  })
+  .input(
+    z.object({
+      id: z.coerce.number(),
+      status: z.enum(['open', 'confirmed', 'inProgress', 'closed']),
+    }),
+  );
+
 export const reportsContract = {
   postReport: postReportContract,
   postImage: postImageContract,
   getImage: getImageContract,
+  patchReportStatus: patchReportStatusContract,
 };
