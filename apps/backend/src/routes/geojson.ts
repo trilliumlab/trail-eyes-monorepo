@@ -37,7 +37,7 @@ const routesJsonMemo = memoize(
 
 const reportsJsonMemo = memoize(
   async () => {
-    const reports = await db.getAllReports();
+    const reports = await db.getAllReportsWithCreatorEmail();
     const features = reports.map(
       (report) =>
         ({
@@ -52,6 +52,8 @@ const reportsJsonMemo = memoize(
             image: report.image,
             blurHash: report.blurHash,
             creatorUserId: report.creatorUserId,
+            creatorEmail: report.creatorEmail,
+            description: report.description,
             status: report.status,
             reportedAt: report.reportedAt.getMilliseconds().toString(),
             updatedAt: report.updatedAt.getMilliseconds().toString(),
@@ -88,3 +90,10 @@ export const geojsonRouter = {
   getStartMarkers,
   getReports,
 };
+
+/** Forces /geojson/reports.json to refetch on next request. Call after any
+ * write to the reports table so clients don't see stale data for up to the
+ * memo's refresh window. */
+export function invalidateReportsCache() {
+  reportsJsonMemo.invalidate();
+}

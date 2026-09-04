@@ -1,5 +1,4 @@
 import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -15,177 +14,148 @@ import {
   TableHeader,
   TableRow,
 } from '@repo/ui/components/table';
-import { Link } from '@tanstack/react-router';
 import { createFileRoute } from '@tanstack/react-router';
-import { Activity, ArrowUpRight, CreditCard, DollarSign, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AlertTriangle, CheckCircle2, FileText, Users } from 'lucide-react';
+import { publicEnv } from '@repo/env';
 import { TrailEyesMap } from '~/components/trail-eyes-map';
+import {
+  categoryEnumValues,
+  statusEnumValues,
+  type ReportFeature,
+} from '~/components/report-card-list';
+import { requireStaff } from '~/lib/require-staff';
 
 export const Route = createFileRoute('/')({
+  beforeLoad: requireStaff,
   component: Dashboard,
 });
 
+const statusBadgeVariant = {
+  open: 'outline',
+  confirmed: 'default',
+  inProgress: 'secondary',
+  closed: 'secondary',
+} as const;
+
 function Dashboard() {
+  const [reports, setReports] = useState<ReportFeature[] | null>(null);
+  const [userCount, setUserCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch(`${publicEnv().backendUrl}/geojson/reports.json`)
+      .then((res) => res.json())
+      .then((data: { features: ReportFeature[] }) => setReports(data.features));
+
+    fetch(`${publicEnv().backendUrl}/users/count`)
+      .then((res) => res.json())
+      .then((data: { count: number }) => setUserCount(data.count));
+  }, []);
+
+  const openCount = reports?.filter((r) => r.properties.status === 'open').length ?? null;
+  const confirmedCount =
+    reports?.filter((r) => r.properties.status === 'confirmed').length ?? null;
+  const recentReports = reports
+    ?.slice()
+    .sort((a, b) => b.id - a.id)
+    .slice(0, 5);
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Unconfirmed Reports</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
-              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+              <div className="text-2xl font-bold">{openCount ?? '...'}</div>
+              <p className="text-xs text-muted-foreground">Awaiting review</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Subscriptions</CardTitle>
+              <CardTitle className="text-sm font-medium">Confirmed Reports</CardTitle>
+              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{confirmedCount ?? '...'}</div>
+              <p className="text-xs text-muted-foreground">Approved by staff</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Reports</CardTitle>
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{reports?.length ?? '...'}</div>
+              <p className="text-xs text-muted-foreground">All statuses</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Registered Users</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
-              <p className="text-xs text-muted-foreground">+180.1% from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
-              <p className="text-xs text-muted-foreground">+19% from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Now</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+573</div>
-              <p className="text-xs text-muted-foreground">+201 since last hour</p>
+              <div className="text-2xl font-bold">{userCount ?? '...'}</div>
+              <p className="text-xs text-muted-foreground">Accounts with sign-in</p>
             </CardContent>
           </Card>
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
           <Card>
-            <CardHeader className="flex flex-row items-center">
-              <div className="grid gap-2">
-                <CardTitle>Routes</CardTitle>
-                <CardDescription>Rapid response route status</CardDescription>
-              </div>
-              <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="." hash="#">
-                  View All
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Button>
+            <CardHeader>
+              <CardTitle>Recent Reports</CardTitle>
+              <CardDescription>Latest hazard reports, any status</CardDescription>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Route</TableHead>
-                    <TableHead className="hidden xl:table-column">Type</TableHead>
+                    <TableHead>Category</TableHead>
                     <TableHead className="hidden xl:table-column">Status</TableHead>
-                    <TableHead className="hidden xl:table-column">Date</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead className="hidden xl:table-column">Reporter</TableHead>
+                    <TableHead className="text-right">Route</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Route 14</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        liam@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-23
-                    </TableCell>
-                    <TableCell className="text-right">1</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Route 13</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        olivia@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Refund</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Declined
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-24
-                    </TableCell>
-                    <TableCell className="text-right">6</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Route 16</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        noah@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Subscription</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-25
-                    </TableCell>
-                    <TableCell className="text-right">4</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Route 11</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        emma@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-26
-                    </TableCell>
-                    <TableCell className="text-right">3</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <div className="font-medium">Route 12</div>
-                      <div className="hidden text-sm text-muted-foreground md:inline">
-                        liam@example.com
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden xl:table-column">Sale</TableCell>
-                    <TableCell className="hidden xl:table-column">
-                      <Badge className="text-xs" variant="outline">
-                        Approved
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                      2023-06-27
-                    </TableCell>
-                    <TableCell className="text-right">1</TableCell>
-                  </TableRow>
+                  {recentReports === undefined || recentReports === null ? (
+                    <TableRow>
+                      <TableCell colSpan={4}>Loading...</TableCell>
+                    </TableRow>
+                  ) : recentReports.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4}>No reports yet.</TableCell>
+                    </TableRow>
+                  ) : (
+                    recentReports.map((report) => (
+                      <TableRow key={report.id}>
+                        <TableCell>
+                          <div className="font-medium">
+                            {categoryEnumValues[report.properties.category]}
+                          </div>
+                          <div className="hidden text-sm text-muted-foreground md:inline">
+                            {report.properties.creatorEmail ?? '(anonymous)'}
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          <Badge
+                            className="text-xs"
+                            variant={statusBadgeVariant[report.properties.status]}
+                          >
+                            {statusEnumValues[report.properties.status]}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden xl:table-column">
+                          {report.properties.creatorEmail ?? '(anonymous)'}
+                        </TableCell>
+                        <TableCell className="text-right">{report.properties.route}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </CardContent>

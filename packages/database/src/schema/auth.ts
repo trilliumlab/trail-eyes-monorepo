@@ -1,5 +1,9 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, integer, pgEnum } from 'drizzle-orm/pg-core';
 import { createId } from '@paralleldrive/cuid2';
+
+// Tier 1 users don't have accounts, so account holders are tier 2 (hiker), 3
+// (park staff), or 4 (admin - never created via signup, see auth.ts).
+export const accountTierEnum = pgEnum('account_tier', ['2', '3', '4']);
 
 export const users = pgTable('users', {
   id: text('id').primaryKey().$defaultFn(createId),
@@ -9,6 +13,11 @@ export const users = pgTable('users', {
     .$defaultFn(() => false)
     .notNull(),
   image: text('image'),
+  tier: accountTierEnum('tier').notNull(),
+  // Only meaningful for tier 3 (staff) - an admin must approve a staff
+  // signup (after email verification) before it gets staff privileges.
+  // Ignored for tiers 2 and 4.
+  staffApproved: boolean('staff_approved').$defaultFn(() => false).notNull(),
   createdAt: timestamp('created_at', {
     withTimezone: true,
   })

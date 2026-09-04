@@ -7,6 +7,7 @@ import { Menu, Package2, Search } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 import { UserButton } from '@daveyplate/better-auth-ui';
 import { ThemeMenu } from './theme-menu';
+import { authClient } from '~/backend';
 
 const NavLink: LinkComponent<'a'> = ({ className, ...props }) => {
   const location = useLocation();
@@ -25,11 +26,15 @@ const NavLink: LinkComponent<'a'> = ({ className, ...props }) => {
 };
 
 function NavLinks() {
+  const { data: session } = authClient.useSession();
+  const isAdmin = (session?.user as { tier?: string } | undefined)?.tier === '4';
+
   return (
     <>
       <NavLink to="/">Dashboard</NavLink>
       <NavLink to="/confirmed">Confirmed Reports</NavLink>
       <NavLink to="/unconfirmed">Unconfirmed Reports</NavLink>
+      {isAdmin && <NavLink to="/pending-staff">Pending Staff</NavLink>}
     </>
   );
 }

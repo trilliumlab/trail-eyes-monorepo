@@ -10,6 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as UnconfirmedRouteImport } from './routes/unconfirmed';
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized';
+import { Route as PendingStaffRouteImport } from './routes/pending-staff';
+import { Route as EmailVerifiedRouteImport } from './routes/email-verified';
 import { Route as ConfirmedRouteImport } from './routes/confirmed';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as AuthPathnameRouteImport } from './routes/auth/$pathname';
@@ -17,6 +20,21 @@ import { Route as AuthPathnameRouteImport } from './routes/auth/$pathname';
 const UnconfirmedRoute = UnconfirmedRouteImport.update({
   id: '/unconfirmed',
   path: '/unconfirmed',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const PendingStaffRoute = PendingStaffRouteImport.update({
+  id: '/pending-staff',
+  path: '/pending-staff',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const EmailVerifiedRoute = EmailVerifiedRouteImport.update({
+  id: '/email-verified',
+  path: '/email-verified',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ConfirmedRoute = ConfirmedRouteImport.update({
@@ -38,12 +56,18 @@ const AuthPathnameRoute = AuthPathnameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/confirmed': typeof ConfirmedRoute;
+  '/email-verified': typeof EmailVerifiedRoute;
+  '/pending-staff': typeof PendingStaffRoute;
+  '/unauthorized': typeof UnauthorizedRoute;
   '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/confirmed': typeof ConfirmedRoute;
+  '/email-verified': typeof EmailVerifiedRoute;
+  '/pending-staff': typeof PendingStaffRoute;
+  '/unauthorized': typeof UnauthorizedRoute;
   '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
@@ -51,20 +75,48 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
   '/confirmed': typeof ConfirmedRoute;
+  '/email-verified': typeof EmailVerifiedRoute;
+  '/pending-staff': typeof PendingStaffRoute;
+  '/unauthorized': typeof UnauthorizedRoute;
   '/unconfirmed': typeof UnconfirmedRoute;
   '/auth/$pathname': typeof AuthPathnameRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
+  fullPaths:
+    | '/'
+    | '/confirmed'
+    | '/email-verified'
+    | '/pending-staff'
+    | '/unauthorized'
+    | '/unconfirmed'
+    | '/auth/$pathname';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
-  id: '__root__' | '/' | '/confirmed' | '/unconfirmed' | '/auth/$pathname';
+  to:
+    | '/'
+    | '/confirmed'
+    | '/email-verified'
+    | '/pending-staff'
+    | '/unauthorized'
+    | '/unconfirmed'
+    | '/auth/$pathname';
+  id:
+    | '__root__'
+    | '/'
+    | '/confirmed'
+    | '/email-verified'
+    | '/pending-staff'
+    | '/unauthorized'
+    | '/unconfirmed'
+    | '/auth/$pathname';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   ConfirmedRoute: typeof ConfirmedRoute;
+  EmailVerifiedRoute: typeof EmailVerifiedRoute;
+  PendingStaffRoute: typeof PendingStaffRoute;
+  UnauthorizedRoute: typeof UnauthorizedRoute;
   UnconfirmedRoute: typeof UnconfirmedRoute;
   AuthPathnameRoute: typeof AuthPathnameRoute;
 }
@@ -76,6 +128,27 @@ declare module '@tanstack/react-router' {
       path: '/unconfirmed';
       fullPath: '/unconfirmed';
       preLoaderRoute: typeof UnconfirmedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/unauthorized': {
+      id: '/unauthorized';
+      path: '/unauthorized';
+      fullPath: '/unauthorized';
+      preLoaderRoute: typeof UnauthorizedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/pending-staff': {
+      id: '/pending-staff';
+      path: '/pending-staff';
+      fullPath: '/pending-staff';
+      preLoaderRoute: typeof PendingStaffRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/email-verified': {
+      id: '/email-verified';
+      path: '/email-verified';
+      fullPath: '/email-verified';
+      preLoaderRoute: typeof EmailVerifiedRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/confirmed': {
@@ -105,6 +178,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfirmedRoute: ConfirmedRoute,
+  EmailVerifiedRoute: EmailVerifiedRoute,
+  PendingStaffRoute: PendingStaffRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   UnconfirmedRoute: UnconfirmedRoute,
   AuthPathnameRoute: AuthPathnameRoute,
 };

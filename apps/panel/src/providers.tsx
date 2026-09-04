@@ -18,6 +18,16 @@ export function Providers({ children }: { children: ReactNode }) {
                         navigate={(href) => router.navigate({ href })}
                         replace={(href) => router.navigate({ href, replace: true })}
                         Link={({ href, ...props }) => <Link to={href} {...props} />}
+                        signUpFields={["name", "tier"]}
+                        additionalFields={{
+                            tier: {
+                                label: "Account Tier",
+                                placeholder: "2 or 3",
+                                required: true,
+                                type: "string",
+                                validate: async (value) => value === "2" || value === "3",
+                            },
+                        }}
                     >
                         {children}
 
