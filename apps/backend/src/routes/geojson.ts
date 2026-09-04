@@ -52,6 +52,7 @@ const reportsJsonMemo = memoize(
             image: report.image,
             blurHash: report.blurHash,
             creatorUserId: report.creatorUserId,
+            description: report.description,
             status: report.status,
             reportedAt: report.reportedAt.getMilliseconds().toString(),
             updatedAt: report.updatedAt.getMilliseconds().toString(),
